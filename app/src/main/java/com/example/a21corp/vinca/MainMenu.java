@@ -17,6 +17,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_main_menu);
         create = (Button) findViewById(R.id.newProjectButton);
         load = (Button) findViewById(R.id.loadMenuButton);
+        
     }
 
 

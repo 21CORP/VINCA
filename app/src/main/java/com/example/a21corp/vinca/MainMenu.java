@@ -8,12 +8,15 @@ import android.widget.Button;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
+    Button create;
+    Button load;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        Button create = (Button) findViewById(R.id.newProjectButton);
-        Button load = (Button) findViewById(R.id.loadMenuButton);
+        create = (Button) findViewById(R.id.newProjectButton);
+        load = (Button) findViewById(R.id.loadMenuButton);
     }
 
 

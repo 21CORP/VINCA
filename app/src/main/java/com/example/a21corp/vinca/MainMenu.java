@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca;
 
 import android.content.Intent;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,10 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         create = (Button) findViewById(R.id.newProjectButton);
+        create.setOnClickListener(this);
         load = (Button) findViewById(R.id.loadMenuButton);
+        load.setOnClickListener(this);
+
     }
 
 

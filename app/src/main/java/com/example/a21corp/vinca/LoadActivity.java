@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,17 +20,31 @@ import java.util.Date;
 
 public class LoadActivity extends AppCompatActivity {
 
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
-        LoadAdapter adapter = new LoadAdapter();
+        LoadAdapter listadapter = new LoadAdapter();
+        RecentLoadAdapter recentAdapter = new RecentLoadAdapter();
         ListView view = (ListView)findViewById(R.id.listRecent);
-        view.setAdapter(adapter);
+        ListView view2 = (ListView)findViewById(R.id.listAll);
+        view2.setAdapter(listadapter);
+        view.setAdapter(recentAdapter);
     }
-    public class LoadAdapter extends BaseAdapter
+    public class RecentLoadAdapter extends LoadAdapter
     {
-        private String[] names = {"Proj 1", "test2", "Proj", "Vinca"};
+        RecentLoadAdapter(){
+            String[] newNames = new String[3];
+            System.arraycopy(names, 0, newNames, 0, 3);
+            names = newNames;
+        }
+    }
+    public class LoadAdapter extends BaseAdapter implements View.OnClickListener
+    {
+
+
+        protected String[] names = {"Proj 1", "test2", "Proj", "Vinca", "Vinca2", "Festival 666", "Meeting", "Birthday party", "Recipe 2", "App development", "Software"};
 
 
         @Override
@@ -50,14 +66,39 @@ public class LoadActivity extends AppCompatActivity {
             if(convertView==null)
             {
                 convertView = getLayoutInflater().inflate(R.layout.loadmenulistelements, null);
+                ImageButton delete = (ImageButton)convertView.findViewById(R.id.deleteButton);
+                ImageButton open = (ImageButton)convertView.findViewById(R.id.editButton);
+                delete.setOnClickListener(this);
+                open.setOnClickListener(this);
+                delete.setTag( R.id.LOAD_MENU_DELETE, new Integer(1)); //1 == should delete
+                delete.setTag(R.id.LOAD_MENU_ROW_ELEMENT, convertView);
+                open.setTag(R.id.LOAD_MENU_OPEN, new Integer(1));
+                open.setTag(R.id.LOAD_MENU_ROW_ELEMENT, convertView);
             }
             TextView titel = (TextView)convertView.findViewById(R.id.elementName);
             titel.setText(names[position]);
             TextView date = (TextView)convertView.findViewById(R.id.elementDate);
-            date.setText(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-            Button delete = (Button)convertView.findViewById(R.id.elementDelete);
-            Button open = (Button)convertView.findViewById(R.id.elementLoad);
+            Calendar c = Calendar.getInstance();
+
+            date.setText(dateFormatter.format(c.getTime()));
+
             return convertView;
+        }
+
+        @Override
+        public void onClick(View view) {
+            View row = (View)view.getTag(R.id.LOAD_MENU_ROW_ELEMENT);
+            TextView name = (TextView)row.findViewById(R.id.elementName);
+            Toast toast;
+            if((Integer)view.getTag(R.id.LOAD_MENU_DELETE)!=null)
+            {
+                toast = Toast.makeText(getApplicationContext(), name.getText() + " is now deleted", Toast.LENGTH_SHORT);
+            }
+            else
+            {
+                toast = Toast.makeText(getApplicationContext(), name.getText() + " is now  \"opened\"", Toast.LENGTH_SHORT);
+            }
+            toast.show();
         }
     }
 }

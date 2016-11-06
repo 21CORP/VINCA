@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="LOAD_MENU_DELETE"/>
+    <item type="id" name="LOAD_MENU_OPEN"/>
+    <item type="id" name="LOAD_MENU_ROW_ELEMENT"/>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/White" >
+
+
+
+
+
+    <TextView
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create"
+        android:height="60dp"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:text="Create new Project"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/diller"
+        android:text="or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittextname"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        android:text="Import"
+        android:background="@color/White"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:layout_below="@+id/diller"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/edittextname"
+        android:hint="Project name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:backgroundTint="#ffea4d"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:inputType="textCapSentences"
+        android:layout_below="@+id/create"
+        android:layout_centerHorizontal="true">
+        <requestFocus />
+
+    </EditText>
+
+
+
+
+</RelativeLayout>

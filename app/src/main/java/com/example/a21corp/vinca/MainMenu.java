@@ -28,7 +28,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.newProjectButton:{
-                //startActivity(new Intent(this, CreateMenu));
+                CreateMenuPopUp p = new CreateMenuPopUp();
+                p.show(getFragmentManager(),"pop");
                 break;
             }
             case R.id.loadMenuButton:{

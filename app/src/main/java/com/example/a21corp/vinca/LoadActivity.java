@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import java.util.Date;
 
 
 
-public class LoadActivity extends AppCompatActivity {
+public class LoadActivity extends AppCompatActivity implements View.OnClickListener {
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     @Override
@@ -29,9 +30,18 @@ public class LoadActivity extends AppCompatActivity {
         RecentLoadAdapter recentAdapter = new RecentLoadAdapter();
         ListView view = (ListView)findViewById(R.id.listRecent);
         ListView view2 = (ListView)findViewById(R.id.listAll);
+        FloatingActionButton floatAButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatAButton.setOnClickListener(this);
         view2.setAdapter(listadapter);
         view.setAdapter(recentAdapter);
     }
+
+    @Override
+    public void onClick(View v) {
+        CreateMenuPopUp p = new CreateMenuPopUp();
+        p.show(getFragmentManager(),"pop");
+    }
+
     public class RecentLoadAdapter extends LoadAdapter
     {
         RecentLoadAdapter(){

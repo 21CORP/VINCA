@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/White" >
 
 
-
-
-
     <TextView
-        android:background="@color/colorPrimaryDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/create"
-        android:height="60dp"
-        android:textColor="@android:color/background_light"
-        android:textSize="20sp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:text="Create new Project"
-        tools:ignore="RtlCompat" />
-
-    <TextView
-        android:id="@+id/diller"
+        android:id="@+id/imgview"
         android:text="or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,15 +15,6 @@
         android:layout_centerHorizontal="true"
         />
 
-    <Button
-        android:text="Import"
-        android:background="@color/White"
-        android:layout_width="171dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        android:layout_below="@+id/diller"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
 
     <EditText
         android:id="@+id/edittextname"
@@ -48,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:backgroundTint="#ffea4d"
+        android:backgroundTint="#303f9f"
         android:layout_marginTop="42dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
@@ -59,6 +33,44 @@
 
     </EditText>
 
+    <TextView
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create"
+        android:height="60dp"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:height="60dp"
+        android:layout_marginStart="129dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/edittextname"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/White"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Create new Project" />
+
+
+    <Button
+        android:text="Import"
+android:textColor="@color/colorPrimaryDark"
+        android:background="@color/White"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button4"
+        android:layout_below="@+id/imgview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
 
 

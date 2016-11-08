@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.Button;
  * Created by Oliver on 04-11-2016.
  */
 
-public class CreateMenuPopUp extends DialogFragment {
+public class CreateMenuPopUp extends DialogFragment implements View.OnClickListener {
 
 Button b1;
     @Override
@@ -23,11 +24,11 @@ Button b1;
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View promptView = inflater.inflate(R.layout.dialogbox, null);
+        builder.setView(promptView);
 
+        b1 = (Button) promptView.findViewById(R.id.button4);
 
-        b1 = (Button) promptView.findViewById(R.id.button2);
-
-      // b1.setOnClickListener();
+      b1.setOnClickListener(this);
 
         //builder.setTitle("Create new Project")
               builder
@@ -44,14 +45,20 @@ Button b1;
                 });
 
 
-        builder.setView(promptView);
+
 
         return builder.create();
     }
 
 
-
-
+    @Override
+    public void onClick(View view) {
+        System.out.println("Import trykt");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        startActivity(intent);
+    }
 }
 
 

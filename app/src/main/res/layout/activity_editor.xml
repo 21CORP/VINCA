@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_editor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.a21corp.vinca.EditorActivity"
+    android:background="@color/White">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:background="@color/background_material_light_2"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_columnSpan="2">
+
+        <ImageButton
+            android:contentDescription="Return to main menu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="?android:attr/homeAsUpIndicator"
+            android:id="@+id/button_return"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="Project Skeleton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_project_name"
+            android:gravity="center_vertical"
+            android:layout_weight="7" />
+
+        <TextView
+            android:text="Saving..."
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_save_status"
+            android:layout_weight="2" />
+    </TableRow>
+
+    <LinearLayout
+        android:layout_row="1"
+        android:layout_column="2"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:background="@color/background_material_light_2">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            android:id="@+id/panel_icon_activity"
+            app:srcCompat="@drawable/activity" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            app:srcCompat="@drawable/method"
+            android:id="@+id/panel_icon_method" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            app:srcCompat="@drawable/pause"
+            android:id="@+id/panel_icon_pause" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="50dp"
+            android:maxWidth="50dp"
+            app:srcCompat="@drawable/decision"
+            android:id="@+id/panel_icon_decision" />
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:id="@+id/panel_icon_iterate">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                app:srcCompat="@drawable/iterate_left"
+                android:id="@+id/panel_icon_iterate_left" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                app:srcCompat="@drawable/iterate_right"
+                android:id="@+id/panel_icon_iterate_right" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:id="@+id/panel_icon_process">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                app:srcCompat="@drawable/process_left"
+                android:id="@+id/panel_icon_process_left" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                app:srcCompat="@drawable/process_right"
+                android:id="@+id/panel_icon_process_right" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|center_horizontal"
+            android:id="@+id/panel_icon_project">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingRight="5dp"
+                android:paddingEnd="5dp"
+                app:srcCompat="@drawable/project_start"
+                android:id="@+id/panel_icon_project_start" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:maxWidth="50dp"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                app:srcCompat="@drawable/project_end"
+                android:id="@+id/panel_icon_project_end" />
+
+        </TableRow>
+
+        <View
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_revert"
+            android:id="@+id/undo" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_rotate"
+            android:id="@+id/redo" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_upload"
+            android:id="@+id/export" />
+
+    </LinearLayout>
+
+</GridLayout>

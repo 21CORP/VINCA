@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca;
+package com.example.a21corp.vinca.Entitiy;
 
 import java.util.List;
 

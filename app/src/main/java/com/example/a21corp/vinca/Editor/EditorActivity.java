@@ -1,13 +1,10 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewGroupCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import com.example.a21corp.vinca.CustomView.ExpandableElementView;
 import com.example.a21corp.vinca.Entitiy.BaseElement;
 import com.example.a21corp.vinca.Entitiy.Element;
 import com.example.a21corp.vinca.Entitiy.Expandable;
-import com.example.a21corp.vinca.Entitiy.ProjectElement;
 import com.example.a21corp.vinca.Entitiy.Workspace;
 import com.example.a21corp.vinca.R;
 
@@ -36,6 +32,7 @@ public class EditorActivity extends AppCompatActivity
 
     //public static LinearLayout cursor;
     public static LinearLayout canvas;
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +41,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         ws = new Workspace(this);
+        gestureDetector = new GestureDetector(this, new EditorGestureDetector());
         paintCanvas();
     }
 
@@ -55,6 +53,9 @@ public class EditorActivity extends AppCompatActivity
             } else if (elem instanceof Element) {
                 canvas.addView(((Element) elem).view);
             }
+        }
+        if (ws.baseElementList.size() == 1 && ws.baseElementList.get(0) instanceof Expandable) {
+            canvas = ((Expandable) ws.baseElementList.get(0)).view;
         }
     }
 
@@ -103,6 +104,11 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         Log.d("Editor - Debug", "Clicked on " + v.toString());
+        //TODO: FIX RESPONSEBILITY!
+
+        int elementType = Integer.valueOf((String) v.getTag());
+
+        addElementToEditor(v, null, elementType);
     }
 
     @Override
@@ -137,37 +143,44 @@ public class EditorActivity extends AppCompatActivity
 
                 int elementType = Integer.valueOf((String) draggdView.getTag());
 
-                if (draggdView instanceof ElementView
-                        || draggdView instanceof ExpandableElementView) {
-                    ((ViewGroup) draggdView.getParent()).removeView(draggdView);
-                    ((ViewGroup) view).addView(draggdView);
-                } else {
-                    BaseElement newElement = null;
-                    BaseElementView newView = null;
-                    if (elementType== BaseElement.ELEMENT_PROJECT
-                            || elementType == BaseElement.ELEMENT_PROCESS
-                            || elementType == BaseElement.ELEMENT_ITERATE) {
-                        newElement = new Expandable();
-                        newView = new ExpandableElementView(this);
-                        newView.setType(this, elementType);
-                        newView.setOnDragListener(this);
-                    } else if (elementType >= 0 && elementType <= 6) {
-                        newElement = new Element();
-                        newView = new ElementView(this);
-                        newView.setType(this, elementType);
-                        newView.setOnDragListener(this);
-                    }
-                    newElement.view = newView;
-                    if (view instanceof ExpandableElementView) {
-                        ((ViewGroup) view.findViewWithTag("canvas")).addView(newView);
-                    }
-                    else {
-                        ((ViewGroup) view.getParent()).addView(newView);
-                    }
-                }
+                addElementToEditor(draggdView, view, elementType);
         }
         //This listener should always receive drag-events, so always return true!
         return true;
+    }
+
+    private void addElementToEditor(View elementView, View parent, int elementType) {
+        if (parent == null) {
+            parent = canvas;
+        }
+        if (elementView instanceof ElementView
+                || elementView instanceof ExpandableElementView) {
+            ((ViewGroup) elementView.getParent()).removeView(elementView);
+            ((ViewGroup) parent).addView(elementView);
+        } else {
+            BaseElement newElement = null;
+            BaseElementView newView = null;
+            if (elementType== BaseElement.ELEMENT_PROJECT
+                    || elementType == BaseElement.ELEMENT_PROCESS
+                    || elementType == BaseElement.ELEMENT_ITERATE) {
+                newElement = new Expandable();
+                newView = new ExpandableElementView(this);
+                newView.setType(this, elementType);
+                newView.setOnDragListener(this);
+            } else if (elementType >= 0 && elementType <= 6) {
+                newElement = new Element();
+                newView = new ElementView(this);
+                newView.setType(this, elementType);
+                newView.setOnDragListener(this);
+            }
+            newElement.view = newView;
+            if (parent instanceof ExpandableElementView) {
+                ((ViewGroup) parent.findViewWithTag("canvas")).addView(newView);
+            }
+            else {
+                ((ViewGroup) parent.getParent()).addView(newView);
+            }
+        }
     }
 
     @Override
@@ -182,18 +195,23 @@ public class EditorActivity extends AppCompatActivity
     public boolean onTouch(View view, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
             startDragAux(view);
+            return true;
         }
-        return true;
+        /**
+        else {
+            boolean consumed = gestureDetector.onTouchEvent(event);
+            Log.d("Editor - Debug", consumed ? "Consumed" : "Not consumed!");
+            if (consumed) {
+                //TODO: FIX THIS!
+                ws.addElement();
+            }
+            return consumed;
+        }
+         **/
+        return false;
     }
 
     private void startDragAux(View view) {
-
-        //TODO: Consider:
-        /**
-         * Maybe this should be done on element creation
-         * Any problem being dragListener to all elements?
-         **/
-        //view.setOnDragListener(this);
         View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(view);
         view.startDrag(null, dragShadowBuilder, view, 0);
     }

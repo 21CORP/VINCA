@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="40dp"
+    android:layout_marginLeft="@dimen/expandable_element_outer_margin"
+    android:layout_marginRight="@dimen/expandable_element_outer_margin"
+    android:background="@color/White">
+
+    <ImageView
+        android:id="@+id/border_left"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
+        app:srcCompat="@drawable/project_start"
+        android:adjustViewBounds="true"
+        android:layout_marginRight="@dimen/expandable_element_inner_margin"
+        android:layout_marginEnd="@dimen/expandable_element_inner_margin"/>
+
+    <LinearLayout
+        android:tag="canvas"
+        android:id="@+id/canvas"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/expandable_element_inner_margin"
+        android:layout_marginRight="@dimen/expandable_element_inner_margin">
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/border_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
+        app:srcCompat="@drawable/project_end"
+        android:adjustViewBounds="true"
+        android:layout_marginLeft="@dimen/expandable_element_inner_margin"
+        android:layout_marginStart="@dimen/expandable_element_inner_margin"/>
+
+</merge>

@@ -1,5 +1,4 @@
 package com.example.a21corp.vinca.Entitiy;
-
 import android.view.View;
 
 /**
@@ -7,8 +6,19 @@ import android.view.View;
  */
 
 public class BaseElement {
+
+    public static final int ELEMENT_PROJECT = 0;
+    public static final int ELEMENT_PROCESS = 1;
+    public static final int ELEMENT_ACTIVITY = 2;
+    public static final int ELEMENT_ITERATE = 3;
+    public static final int ELEMENT_METHOD = 4;
+    public static final int ELEMENT_PAUSE = 5;
+    public static final int ELEMENT_DECISION = 6;
+
     public int icon;
     public int elementID;
     //TODO: 1: Rename, 2: Make custom view
     public View view;
+
+
 }

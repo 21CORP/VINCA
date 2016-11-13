@@ -5,53 +5,77 @@
     android:id="@+id/activity_editor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.a21corp.vinca.EditorActivity"
-    android:background="@color/White">
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
-        android:background="@color/background_material_light_2"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:layout_columnSpan="2">
-
-        <ImageButton
-            android:contentDescription="Return to main menu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="?android:attr/homeAsUpIndicator"
-            android:id="@+id/button_return"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="Project Skeleton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_project_name"
-            android:gravity="center_vertical"
-            android:layout_weight="7" />
-
-        <TextView
-            android:text="Saving..."
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_save_status"
-            android:layout_weight="2" />
-    </TableRow>
+    tools:context="com.example.a21corp.vinca.Editor.EditorActivity"
+    android:background="@color/White"
+    android:rowCount="2"
+    android:columnCount="2">
 
     <LinearLayout
-        android:layout_row="1"
-        android:layout_column="2"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_columnWeight="10">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:background="@color/background_material_light_2"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="2">
+
+            <ImageButton
+                android:contentDescription="Return to main menu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="?android:attr/homeAsUpIndicator"
+                android:id="@+id/button_return"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Project Skeleton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_project_name"
+                android:gravity="center_vertical"
+                android:layout_weight="7" />
+
+            <TextView
+                android:text="Saving..."
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_save_status"
+                android:layout_weight="2" />
+        </TableRow>
+
+        <LinearLayout
+            android:id="@+id/canvas"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_row="0"
+        android:layout_column="1"
         android:gravity="top|center_horizontal"
+        android:layout_gravity="right"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:weightSum="1"
-        android:background="@color/background_material_light_2">
+        android:background="@color/background_material_light_2"
+        android:paddingTop="50dp">
 
         <ImageView
+            android:tag="2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -61,6 +85,7 @@
             app:srcCompat="@drawable/activity" />
 
         <ImageView
+            android:tag="4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -70,6 +95,7 @@
             android:id="@+id/panel_icon_method" />
 
         <ImageView
+            android:tag="5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -79,6 +105,7 @@
             android:id="@+id/panel_icon_pause" />
 
         <ImageView
+            android:tag="6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -88,6 +115,7 @@
             android:id="@+id/panel_icon_decision" />
 
         <TableRow
+            android:tag="3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="top|center_horizontal"
@@ -118,6 +146,7 @@
         </TableRow>
 
         <TableRow
+            android:tag="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="top|center_horizontal"
@@ -148,6 +177,7 @@
         </TableRow>
 
         <TableRow
+            android:tag="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="top|center_horizontal"

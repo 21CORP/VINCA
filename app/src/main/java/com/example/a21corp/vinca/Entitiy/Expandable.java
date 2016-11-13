@@ -1,5 +1,8 @@
 package com.example.a21corp.vinca.Entitiy;
 
+import com.example.a21corp.vinca.CustomView.ElementView;
+import com.example.a21corp.vinca.CustomView.ExpandableElementView;
+
 import java.util.List;
 
 /**
@@ -11,6 +14,7 @@ public class Expandable extends Element {
     //FLAG - Different from classdiagram!
     // Expandable must be able to show an open expandable and its borders (BaseElements)
     List<BaseElement> baseElementList;
+    public ExpandableElementView view;
 
 
     public boolean addElement(BaseElement element) {

@@ -1,6 +1,5 @@
-package com.example.a21corp.vinca.Editor;
+package com.example.a21corp.vinca.editor;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 

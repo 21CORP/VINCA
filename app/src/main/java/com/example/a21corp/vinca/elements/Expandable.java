@@ -1,7 +1,6 @@
-package com.example.a21corp.vinca.Entitiy;
+package com.example.a21corp.vinca.elements;
 
-import com.example.a21corp.vinca.CustomView.ElementView;
-import com.example.a21corp.vinca.CustomView.ExpandableElementView;
+import com.example.a21corp.vinca.vincaviews.ExpandableElementView;
 
 import java.util.List;
 

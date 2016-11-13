@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.CustomView;
+package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,7 +13,7 @@ import com.example.a21corp.vinca.R;
  * Created by ymuslu on 12-11-2016.
  */
 
-public class ExpandableElementView extends BaseElementView {
+public class ExpandableElementView extends ElementView {
 
     public LinearLayout canvas;
 

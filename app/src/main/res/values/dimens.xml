@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="expandable_element_outer_margin">4dp</dimen>
     <dimen name="expandable_element_inner_margin">2dp</dimen>
+    <dimen name="symbol_max_size">60dp</dimen>
+    <dimen name="large_outer_margin">40dp</dimen>
 </resources>

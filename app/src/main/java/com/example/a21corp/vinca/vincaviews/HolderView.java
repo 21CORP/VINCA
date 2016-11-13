@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.CustomView;
+package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,12 +12,9 @@ import com.example.a21corp.vinca.R;
  * Created by ymuslu on 12-11-2016.
  */
 
-public class ElementView extends BaseElementView {
+public class HolderView extends ElementView {
 
-    public String title, description;
-    public ImageView symbol;
-
-    public ElementView(Context context, AttributeSet attrs) {
+    public HolderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ExpandableElementView);
@@ -32,7 +29,7 @@ public class ElementView extends BaseElementView {
     public void setType(Context context, int elementType) {
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ElementView root = (ElementView)
+        HolderView root = (HolderView)
                 inflater.inflate(R.layout.element_view, this, true);
 
         symbol = (ImageView) root.findViewById(R.id.symbol);
@@ -55,7 +52,7 @@ public class ElementView extends BaseElementView {
         root.invalidate();
     }
 
-    public ElementView(Context context) {
+    public HolderView(Context context) {
         this(context, null);
     }
 

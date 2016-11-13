@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.Entitiy;
+package com.example.a21corp.vinca.elements;
 
 /**
  * Created by ymuslu on 12-11-2016.
@@ -6,4 +6,5 @@ package com.example.a21corp.vinca.Entitiy;
 
 public class Holder extends Element {
     boolean isOpen;
+    Node vincaMethod;
 }

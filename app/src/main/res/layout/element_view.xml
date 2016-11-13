@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="wrap_content"
-    android:layout_height="40dp"
-    android:layout_marginLeft="@dimen/expandable_element_outer_margin"
-    android:layout_marginRight="@dimen/expandable_element_outer_margin"
-    android:background="@color/White">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/symbol"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:maxHeight="40dp"
-        android:maxWidth="40dp"
+        android:maxHeight="@dimen/symbol_max_size"
+        android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/activity"
         android:adjustViewBounds="true"
-        android:layout_marginRight="@dimen/expandable_element_inner_margin"
-        android:layout_marginEnd="@dimen/expandable_element_inner_margin"/>
+        android:layout_marginRight="@dimen/expandable_element_outer_margin"
+        android:layout_marginEnd="@dimen/expandable_element_outer_margin"
+        android:layout_marginLeft="@dimen/expandable_element_outer_margin"
+        android:layout_marginStart="@dimen/expandable_element_outer_margin"/>
 
 </merge>

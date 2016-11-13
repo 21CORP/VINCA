@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.Entitiy;
+package com.example.a21corp.vinca.elements;
 import android.view.View;
 
 /**

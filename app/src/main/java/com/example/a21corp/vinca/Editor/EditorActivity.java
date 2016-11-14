@@ -8,10 +8,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.elements.Holder;
@@ -21,6 +21,7 @@ import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.vincaviews.ElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableElementView;
 import com.example.a21corp.vinca.vincaviews.HolderView;
+import com.example.a21corp.vinca.vincaviews.NodeView;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener, View.OnTouchListener {
@@ -29,7 +30,7 @@ public class EditorActivity extends AppCompatActivity
     private View processView, projectView;
     //private View undoView, redoView
     private View exportView;
-    private ImageButton backButton;
+    private ImageButton backButton, trashbin;
     private TextView projectNameBar, saveStatusBar;
     static EditorWorkspace ws = null;
 
@@ -119,9 +120,10 @@ public class EditorActivity extends AppCompatActivity
         } **/else if (view == exportView) {
             //TODO: Implement
             Log.d("Editor - Debug", "Tried to export - function unimplemented");
-        } else if (view instanceof ExpandableElementView) {
+        } else if (view instanceof ElementView) {
             cursor.setBackgroundResource(0);
-            cursor = (ExpandableElementView) view;
+            //cursor = (LinearLayout) view.findViewWithTag("canvas");
+            cursor = (ElementView) view;
             cursor.setBackgroundResource(R.color.background_material_light_2);
         } else if (view.getTag() != null){
             addElement(view);
@@ -146,13 +148,14 @@ public class EditorActivity extends AppCompatActivity
     public boolean onDrag(View view, DragEvent event) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_ENTERED:
+                cursor.setBackgroundResource(0);
                 Log.d("Editor - Debug", "Drag entered into view: " + view.toString());
                 //TODO: Fix this, should highlight border or something
                 //TODO: CustomView - isExpandable? React to drag and highlight view
                 view.setBackgroundResource(R.color.background_material_light_2);
                 if (view instanceof HolderView) {
                     ((ViewGroup) view.getParent().getParent())
-                            .setBackgroundResource(R.color.background_material_light_2);
+                            .setBackgroundResource(0);
                 }
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
@@ -163,29 +166,61 @@ public class EditorActivity extends AppCompatActivity
                     ((ViewGroup) view.getParent().getParent())
                             .setBackgroundResource(0);
                 }
+                cursor.setBackgroundResource(R.color.background_material_light_2);
                 break;
             case DragEvent.ACTION_DROP:
-                view.setBackgroundResource(0);
-                if (view instanceof HolderView) {
-                    ((ViewGroup) view.getParent().getParent())
-                            .setBackgroundResource(0);
-                }
                 View draggedView = (View) event.getLocalState();
-                int elementType = Integer.valueOf((String) draggedView.getTag());
-                View newView = ws.addElementToWorkspace(draggedView, view, elementType, this);
-                if (newView != null) {
-                    scrollView.smoothScrollTo(scrollView.getBottom() + 50,0);
+                draggedView.setVisibility(View.VISIBLE);
+                if (view == draggedView) {
+                    break;
                 }
+                view.setBackgroundResource(0);
+                if (view instanceof ExpandableElementView) {
+                    ((ViewGroup) view.getParent()).setBackgroundResource(0);
+                }
+                if (draggedView instanceof NodeView && view instanceof HolderView) {
+                    //Add VINCA Method
+                }
+                if (draggedView instanceof ElementView) {
+                    if (view instanceof ExpandableElementView) {
+                        setParent(draggedView, (ExpandableElementView) view);
+                    } else if (view instanceof ElementView) {
+                        int positionOfElement = ((ViewGroup) view.getParent()).indexOfChild(view);
+                        setParent(draggedView, (ViewGroup) view.getParent(), positionOfElement);
+                    }
+                } else if (draggedView.getTag() != null) {
+                    int elementType = Integer.valueOf((String) draggedView.getTag());
+                    View newView = ws.addElementToWorkspace(draggedView, view, elementType, this);
+                    if (newView != null) {
+                        scrollView.smoothScrollTo(scrollView.getBottom() + 50, 0);
+                    }
+                }
+                cursor.setBackgroundResource(R.color.background_material_light_2);
+                break;
         }
         //This listener should always receive drag-events, so always return true!
         return true;
     }
 
+    private void setParent(View view, ViewGroup parent, int position) {
+        ((ViewGroup) view.getParent()).removeView(view);
+        //Find canvas in parent
+        ViewGroup canvas = (ViewGroup) parent.findViewWithTag("canvas");
+        canvas.addView(view, position);
+    }
+
+    private void setParent(View view, ViewGroup parent) {
+        ((ViewGroup) view.getParent()).removeView(view);
+        //Find canvas in parent
+        ViewGroup canvas = (ViewGroup) parent.findViewWithTag("canvas");
+        canvas.addView(view);
+    }
+
     @Override
     public boolean onLongClick(View view) {
-        startDragAux(view);
-        //Symbol should no longer be visible on canvas
-        view.setVisibility(View.GONE);
+        if (view instanceof ElementView) {
+            //Show menu for title, description etc.
+        }
         return true;
     }
 
@@ -200,6 +235,9 @@ public class EditorActivity extends AppCompatActivity
     }
 
     private void startDragAux(View view) {
+        if (view instanceof ElementView) {
+            view.setVisibility(View.GONE);
+        }
         View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(view);
         view.startDrag(null, dragShadowBuilder, view, 0);
     }

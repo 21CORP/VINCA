@@ -1,17 +1,14 @@
 package com.example.a21corp.vinca;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,8 +17,6 @@ import com.example.a21corp.vinca.Editor.EditorActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
 
 
 public class LoadActivity extends AppCompatActivity implements View.OnClickListener {
@@ -40,6 +35,14 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         //floatAButton.setOnClickListener(this);
         //view2.setAdapter(listadapter);
         view.setAdapter(listadapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.v("LoadActivity", "Creating options menu");
+        getMenuInflater().inflate(R.menu.loadactivitymenu, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

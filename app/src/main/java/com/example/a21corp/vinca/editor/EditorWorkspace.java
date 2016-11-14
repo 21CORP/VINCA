@@ -23,7 +23,7 @@ public class EditorWorkspace {
 
     public List<BaseElement> baseElementList = new ArrayList<BaseElement>();
 
-    //TODO: Remove - test constuctor
+    //TODO: Remove - loadactivitymenu constuctor
     public EditorWorkspace(Context context) {
         Log.d("EditorWorkspace - Debug", "Creating workspace");
 

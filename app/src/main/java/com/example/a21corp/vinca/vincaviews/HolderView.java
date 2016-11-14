@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.example.a21corp.vinca.R;
 
 /**
- * Created by ymuslu on 12-11-2016.
+ * Created by ymuslu on 12-11-2016
  */
 
 public class HolderView extends ElementView {
@@ -37,9 +37,6 @@ public class HolderView extends ElementView {
         switch (elementType) {
             case ENUM_ACTIVITY:
                 symbol.setImageResource(R.drawable.activity);
-                break;
-            case ENUM_METHOD:
-                symbol.setImageResource(R.drawable.method);
                 break;
             case ENUM_PAUSE:
                 symbol.setImageResource(R.drawable.pause);

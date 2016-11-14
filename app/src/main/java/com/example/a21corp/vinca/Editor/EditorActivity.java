@@ -1,5 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,13 +30,12 @@ public class EditorActivity extends AppCompatActivity
     private View activityView, methodView, pauseView, decisionView, iterateView;
     private View processView, projectView;
     //private View undoView, redoView
-    private View exportView;
-    private ImageButton backButton, trashbin;
+    private ImageButton backButton, trashbin, exportView;
     private TextView projectNameBar, saveStatusBar;
     static EditorWorkspace ws = null;
 
     //public static LinearLayout cursor;
-    public static LinearLayout cursor;
+    public LinearLayout cursor;
     private HorizontalScrollView scrollView;
     private GestureDetector gestureDetector;
 
@@ -79,7 +79,8 @@ public class EditorActivity extends AppCompatActivity
         projectView = findViewById(R.id.panel_icon_project);
         //undoView = findViewById(R.id.undo);
         //redoView = findViewById(R.id.redo);
-        exportView = findViewById(R.id.export);
+        exportView = (ImageButton) findViewById(R.id.export);
+        trashbin = (ImageButton) findViewById(R.id.trashbin);
         backButton = (ImageButton) findViewById(R.id.button_return);
         projectNameBar = (TextView) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -105,6 +106,7 @@ public class EditorActivity extends AppCompatActivity
         //redoView.setOnClickListener(this);
         exportView.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        trashbin.setOnDragListener(this);
     }
 
     @Override
@@ -148,31 +150,43 @@ public class EditorActivity extends AppCompatActivity
     public boolean onDrag(View view, DragEvent event) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_ENTERED:
-                cursor.setBackgroundResource(0);
-                Log.d("Editor - Debug", "Drag entered into view: " + view.toString());
-                //TODO: Fix this, should highlight border or something
-                //TODO: CustomView - isExpandable? React to drag and highlight view
-                view.setBackgroundResource(R.color.background_material_light_2);
-                if (view instanceof HolderView) {
-                    ((ViewGroup) view.getParent().getParent())
-                            .setBackgroundResource(0);
+                if (view == trashbin) {
+                    view.setBackgroundColor(Color.RED);
+                }
+                else {
+                    cursor.setBackgroundResource(0);
+                    Log.d("Editor - Debug", "Drag entered into view: " + view.toString());
+                    //TODO: Fix this, should highlight border or something
+                    //TODO: CustomView - isExpandable? React to drag and highlight view
+                    view.setBackgroundResource(R.color.background_material_light_2);
+                    if (view instanceof HolderView) {
+                        ((ViewGroup) view.getParent().getParent())
+                                .setBackgroundResource(0);
+                    }
                 }
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
-                Log.d("Editor - Debug", "Drag exited view: " + view.getId() + view.toString());
-                //Remove the background - Doesn't matter if no background present
-                view.setBackgroundResource(0);
-                if (view instanceof HolderView) {
-                    ((ViewGroup) view.getParent().getParent())
-                            .setBackgroundResource(0);
+                if (view == trashbin) {
+                    view.setBackgroundColor(0);
+                } else {
+                    Log.d("Editor - Debug", "Drag exited view: " + view.getId() + view.toString());
+                    //Remove the background - Doesn't matter if no background present
+                    view.setBackgroundResource(0);
+                    if (view instanceof HolderView) {
+                        ((ViewGroup) view.getParent().getParent())
+                                .setBackgroundResource(0);
+                    }
+                    cursor.setBackgroundResource(R.color.background_material_light_2);
                 }
-                cursor.setBackgroundResource(R.color.background_material_light_2);
                 break;
             case DragEvent.ACTION_DROP:
                 View draggedView = (View) event.getLocalState();
                 draggedView.setVisibility(View.VISIBLE);
                 if (view == draggedView) {
                     break;
+                }
+                if (view == trashbin) {
+                    ((ViewGroup) draggedView.getParent()).removeView(draggedView);
                 }
                 view.setBackgroundResource(0);
                 if (view instanceof ExpandableElementView) {

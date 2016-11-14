@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.example.a21corp.vinca.R;
 
 /**
- * Created by ymuslu on 12-11-2016.
+ * Created by ymuslu on 12-11-2016
  */
 
 public class NodeView extends ElementView {
@@ -27,7 +27,22 @@ public class NodeView extends ElementView {
     }
 
     public void setType(Context context, int elementType) {
-        return;
+        LayoutInflater inflater = (LayoutInflater)
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        HolderView root = (HolderView)
+                inflater.inflate(R.layout.element_view, this, true);
+
+        symbol = (ImageView) root.findViewById(R.id.symbol);
+
+        //Could be an 'if'-statement right now, but will be easier to add Nodes later on like this
+        //TODO: Check if switch with 1 case is slower than simple if-statement
+        switch (elementType) {
+            case ENUM_METHOD:
+                symbol.setImageResource(R.drawable.method);
+                break;
+        }
+        //root.setVisibility(VISIBLE);
+        root.invalidate();
     }
 
     public NodeView(Context context) {

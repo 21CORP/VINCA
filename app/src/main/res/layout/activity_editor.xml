@@ -70,18 +70,21 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:id="@+id/panel"
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/top_bar"
         android:layout_toLeftOf="@id/right_margin_for_alignment"
         android:layout_toStartOf="@id/right_margin_for_alignment"
+        android:background="@color/background_material_light_2">
+
+        <LinearLayout
+        android:id="@+id/panel"
         android:gravity="top|center_horizontal"
         android:layout_gravity="end"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@color/background_material_light_2"
-        android:paddingTop="50dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:contentDescription="Activity"
@@ -250,21 +253,21 @@
                     android:id="@+id/redo" />
         -->
 
-        <ImageView
+        <ImageButton
             android:contentDescription="Export"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_upload"
             android:id="@+id/export" />
 
-        <ImageView
+        <ImageButton
             android:contentDescription="Delete"
-            android:layout_marginTop="@dimen/large_outer_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_menu_delete"
-            android:id="@+id/imageView2" />
+            android:id="@+id/trashbin" />
 
     </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

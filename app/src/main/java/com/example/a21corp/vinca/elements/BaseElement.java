@@ -2,7 +2,7 @@ package com.example.a21corp.vinca.elements;
 import android.view.View;
 
 /**
- * Created by ymuslu on 12-11-2016.
+ * Created by ymuslu on 12-11-2016
  */
 
 public class BaseElement {
@@ -17,7 +17,7 @@ public class BaseElement {
 
     public int icon;
     public int elementID;
-    //TODO: 1: Rename, 2: Make custom view
+    //TODO: 1: Rename
     public View view;
 
 

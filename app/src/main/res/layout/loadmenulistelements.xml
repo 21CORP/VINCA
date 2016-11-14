@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:showDividers="middle"
+    android:padding="8dp"
     android:divider="@drawable/seperator">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_height="match_parent"
         android:id="@+id/elementName"
         android:gravity="center_vertical"
+        android:padding="8dp"
         android:layout_weight="1"
         android:maxLines="1"
         android:textStyle="normal|bold" />
@@ -20,32 +22,10 @@
         android:text="31/09/2016"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="8dp"
         android:layout_weight="1"
         android:id="@+id/elementDate"
         android:maxLines="1"
-        android:gravity="center"
         android:textStyle="normal|bold" />
-    <ImageButton
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:background="@android:color/transparent"
-        android:id="@+id/editButton"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
-    <ImageButton
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:id="@+id/deleteButton"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </LinearLayout>

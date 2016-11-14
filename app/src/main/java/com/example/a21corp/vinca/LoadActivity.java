@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +32,14 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
         LoadAdapter listadapter = new LoadAdapter();
-        RecentLoadAdapter recentAdapter = new RecentLoadAdapter();
-        ListView view = (ListView)findViewById(R.id.listRecent);
-        ListView view2 = (ListView)findViewById(R.id.listAll);
-        FloatingActionButton floatAButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        floatAButton.setOnClickListener(this);
-        view2.setAdapter(listadapter);
-        view.setAdapter(recentAdapter);
+        ListView view = (ListView)findViewById(R.id.workspaceList);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+       // ListView view2 = (ListView)findViewById(R.id.listAll);
+        //FloatingActionButton floatAButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        //floatAButton.setOnClickListener(this);
+        //view2.setAdapter(listadapter);
+        view.setAdapter(listadapter);
     }
 
     @Override
@@ -46,14 +48,6 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         p.show(getFragmentManager(),"pop");
     }
 
-    public class RecentLoadAdapter extends LoadAdapter
-    {
-        RecentLoadAdapter(){
-            String[] newNames = new String[3];
-            System.arraycopy(names, 0, newNames, 0, 3);
-            names = newNames;
-        }
-    }
     public class LoadAdapter extends BaseAdapter implements View.OnClickListener
     {
 
@@ -80,14 +74,6 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             if(convertView==null)
             {
                 convertView = getLayoutInflater().inflate(R.layout.loadmenulistelements, null);
-                ImageButton delete = (ImageButton)convertView.findViewById(R.id.deleteButton);
-                ImageButton open = (ImageButton)convertView.findViewById(R.id.editButton);
-                delete.setOnClickListener(this);
-                open.setOnClickListener(this);
-                delete.setTag( R.id.LOAD_MENU_DELETE, new Integer(1)); //1 == should delete
-                delete.setTag(R.id.LOAD_MENU_ROW_ELEMENT, convertView);
-                open.setTag(R.id.LOAD_MENU_OPEN, new Integer(1));
-                open.setTag(R.id.LOAD_MENU_ROW_ELEMENT, convertView);
             }
             TextView titel = (TextView)convertView.findViewById(R.id.elementName);
             titel.setText(names[position]);

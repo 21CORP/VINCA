@@ -1,6 +1,8 @@
 package com.example.a21corp.vinca;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.a21corp.vinca.Editor.EditorActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -107,6 +111,9 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             else
             {
                 toast = Toast.makeText(getApplicationContext(), name.getText() + " is now  \"opened\"", Toast.LENGTH_SHORT);
+                Intent workspace = new Intent(getApplicationContext(), EditorActivity.class);
+                startActivity(workspace);
+
             }
             toast.show();
         }

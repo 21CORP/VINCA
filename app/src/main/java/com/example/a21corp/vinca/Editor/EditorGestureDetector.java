@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.editor;
+package com.example.a21corp.vinca.Editor;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;

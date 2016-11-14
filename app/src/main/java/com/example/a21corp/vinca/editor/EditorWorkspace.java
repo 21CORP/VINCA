@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.editor;
+package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
 import android.util.Log;

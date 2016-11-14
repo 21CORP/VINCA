@@ -1,4 +1,4 @@
-package com.example.a21corp.vinca.editor;
+package com.example.a21corp.vinca.Editor;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

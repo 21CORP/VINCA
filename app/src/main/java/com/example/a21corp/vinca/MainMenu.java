@@ -30,6 +30,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             case R.id.newProjectButton:{
                 CreateMenuPopUp p = new CreateMenuPopUp();
                 p.show(getFragmentManager(),"pop");
+
                 break;
             }
             case R.id.loadMenuButton:{

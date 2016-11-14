@@ -10,18 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/VINCA_theme">
         <activity android:name=".MainMenu">
-<!--        <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
-        </activity>
-        <activity android:name=".LoadActivity" />
-        <activity android:name=".Editor.EditorActivity">
-            <intent-filter>
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoadActivity" />
+        <activity android:name=".Editor.EditorActivity"/>
     </application>
 
 </manifest>

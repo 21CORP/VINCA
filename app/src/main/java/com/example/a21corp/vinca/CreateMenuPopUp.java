@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.a21corp.vinca.Editor.EditorActivity;
+
 
 /**
  * Created by Oliver on 04-11-2016.
@@ -34,7 +36,8 @@ Button b1;
               builder
                 .setPositiveButton("Create project", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // open editor
+                        Intent workspace = new Intent(getActivity(), EditorActivity.class);
+                        startActivity(workspace);
                     }
                 })
 

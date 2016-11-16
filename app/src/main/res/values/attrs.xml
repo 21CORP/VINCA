@@ -18,4 +18,7 @@
             <enum name="Decision" value="6"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="HolderView">
+        <attr name="nodes" format="integer"/>
+    </declare-styleable>
 </resources>

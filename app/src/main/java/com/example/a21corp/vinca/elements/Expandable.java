@@ -17,12 +17,17 @@ public class Expandable extends Element {
 
 
     public boolean addElement(BaseElement element) {
-        return baseElementList.add(element);
+        if (baseElementList.add(element)) {
+            view.invalidate();
+            return true;
+        }
+        return false;
     }
 
 
     public void addElement(int index, BaseElement element) {
         baseElementList.add(index, element);
+        view.invalidate();
     }
 
 

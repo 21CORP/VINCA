@@ -29,7 +29,7 @@ public class NodeView extends ElementView {
     public void setType(Context context, int elementType) {
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        HolderView root = (HolderView)
+        NodeView root = (NodeView)
                 inflater.inflate(R.layout.element_view, this, true);
 
         symbol = (ImageView) root.findViewById(R.id.symbol);

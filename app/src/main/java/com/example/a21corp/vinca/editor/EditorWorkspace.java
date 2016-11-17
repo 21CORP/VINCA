@@ -36,6 +36,7 @@ public class EditorWorkspace {
         Log.d("EditorWorkspace - Debug", "Creating workspace");
         this.context = context;
         initiateWorkspace();
+
     }
 
     public ExpandableElementView initiateWorkspace() {
@@ -80,6 +81,9 @@ public class EditorWorkspace {
     }
 
     public View addViewToCanvas(View view, View newParent) {
+        //TODO: FIX THIS - Horrible code
+        //TODO: FIX THIS - Horrible code
+        //TODO: FIX THIS - Horrible code
         if (view == canvas) {
             //User attempted to move the main canvas. Do nothing
             return null;
@@ -87,26 +91,30 @@ public class EditorWorkspace {
         if (newParent == null) {
             newParent = cursor;
         }
-        if (view instanceof ViewGroup && ((ViewGroup) view).indexOfChild(newParent) >= 0) {
+        if (view instanceof ExpandableElementView
+                && ((ViewGroup) view).indexOfChild(newParent) >= 0) {
             //Parent is a child of the view user is moving. Do nothing
             return null;
         }
-        if (view instanceof  NodeView && newParent instanceof HolderView) {
-            ((ImageView) newParent.findViewWithTag("symbol"))
-                    .setImageResource(R.drawable.activity_1_method);
+        if (view instanceof NodeView && newParent instanceof HolderView) {
+            //TODO: Implement - visual only atm.
+            ((HolderView) newParent).symbol.setImageResource(R.drawable.activity_1_method);
+            ViewGroup oldParent = (ViewGroup) view.getParent();
+            oldParent.removeView(view);
+            newParent.invalidate();
+            oldParent.invalidate();
             return newParent;
         }
         if (view instanceof ElementView) {
             if (newParent instanceof ExpandableElementView) {
                 return setParent(view, (ExpandableElementView) newParent);
-            } else if (newParent instanceof ElementView) {
+            } else if (newParent instanceof HolderView) {
                 //Parent is a VINCA element but not an expandable.
                 //Cannot be Parent - Put new symbol to the right of it instead
-                ViewGroup trueParent = (ViewGroup) newParent.getParent();
-                int position = trueParent.indexOfChild(view) + 1;
-                return setParent(view, (ElementView) newParent, position);
+                ViewGroup trueParent = (ViewGroup) newParent.getParent().getParent();
+                int position = ((ViewGroup) newParent.getParent()).indexOfChild(newParent) + 1;
+                return setParent(view, trueParent, position);
             }
-            //TODO: FIX THIS - Horrible code
         } else if (view.getTag() != null) {
             int elementType = Integer.valueOf((String) view.getTag());
             BaseElement newElement = null;
@@ -145,9 +153,13 @@ public class EditorWorkspace {
 
 
     private View setParent(View view, ViewGroup newParent, int position) {
-        View oldParent = (View) view.getParent();
+        View oldParent = (View) view.getParent().getParent();
+        if (oldParent == newParent
+                && ((ViewGroup) view.getParent()).indexOfChild(view) < position) {
+            position = position - 1;
+        }
         ((ViewGroup) view.getParent()).removeView(view);
-        if (position > 0 && position < newParent.getChildCount()) {
+        if (position > 0 && position <= newParent.getChildCount()) {
             ((ViewGroup) newParent.findViewWithTag("canvas")).addView(view, position);
         } else {
             ((ViewGroup) newParent.findViewWithTag("canvas")).addView(view);

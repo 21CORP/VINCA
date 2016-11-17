@@ -91,6 +91,14 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
+        addElementFromPanel(view);
+    }
+
+    private void addElementFromPanel(View view) {
+        addElementFromPanel(view, null);
+    }
+
+    private void addElementFromPanel(View view, View parent) {
         Log.d("Editor - Debug", "Clicked on " + view.toString());
         if (view == backButton) {
             //TODO: Implement
@@ -108,7 +116,7 @@ public class EditorActivity extends AppCompatActivity
             ws.cursor = (ElementView) view;
             ws.cursor.setBackgroundResource(R.color.background_material_light_2);
         } else if (view.getTag() != null){
-            addElement(view, null);
+            addElement(view, parent);
         }
     }
 
@@ -172,15 +180,22 @@ public class EditorActivity extends AppCompatActivity
                 }
                 //User dropped a view into trash bin?
                 if (view == trashBin) {
+                    view.setBackgroundResource(0);
                     ws.removeViewFromCanvas(draggedView);
+                    break;
                 }
 
-                if (view instanceof ElementView && draggedView instanceof ElementView) {
+                if (view instanceof ElementView) {
                     view.setBackgroundResource(0);
                     if (view instanceof ExpandableElementView) {
                         ((ViewGroup) view.getParent()).setBackgroundResource(0);
                     }
-                    addElement(draggedView, view);
+                    if (draggedView instanceof ElementView) {
+                        addElement(draggedView, view);
+                    }
+                    else {
+                        addElementFromPanel(draggedView, view);
+                    }
                     ws.cursor.setBackgroundResource(R.color.background_material_light_2);
                     break;
                 }

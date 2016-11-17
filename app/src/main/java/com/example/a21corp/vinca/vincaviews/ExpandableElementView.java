@@ -6,7 +6,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.R;
 
 /**
@@ -15,6 +17,7 @@ import com.example.a21corp.vinca.R;
 
 public class ExpandableElementView extends ElementView {
 
+    public int type;
     public LinearLayout canvas;
 
     public ExpandableElementView(Context context, AttributeSet attrs) {
@@ -35,9 +38,17 @@ public class ExpandableElementView extends ElementView {
         LinearLayout root = (LinearLayout)
                 inflater.inflate(R.layout.expandable_element_view, this, true);
 
-        ImageView borderLeft = (ImageView) root.findViewById(R.id.border_left);
-        ImageView borderRight = (ImageView) root.findViewById(R.id.border_right);
+        ImageView borderLeft = (ImageView) root.findViewById(R.id.border_start);
+        ImageView borderRight = (ImageView) root.findViewById(R.id.border_end);
         canvas = (LinearLayout) root.findViewById(R.id.canvas);
+/**
+        TextView title = (TextView) root.findViewById(R.id.element_title);
+        TextView description = (TextView) root.findViewById(R.id.element_description);
+        title.setTranslationY(title.getBottom() + canvas.getTop());
+        title.setTranslationX(canvas.getRight()/2);
+        description.setTranslationY(canvas.getBottom() + R.dimen.expandable_element_inner_margin);
+        description.setTranslationX(canvas.getRight()/2);
+ **/
 
         switch (elementType) {
             case ENUM_PROJECT:
@@ -55,6 +66,8 @@ public class ExpandableElementView extends ElementView {
         }
         //root.setVisibility(VISIBLE);
         root.invalidate();
+
+        type = elementType;
     }
 
     public ExpandableElementView(Context context) {

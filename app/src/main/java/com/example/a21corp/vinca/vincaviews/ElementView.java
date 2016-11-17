@@ -27,7 +27,7 @@ public class ElementView extends LinearLayout {
         return;
     }
 
-    public String title, description;
+    //public String title, description;
     public ImageView symbol;
 
     public ElementView(Context context, AttributeSet attrs) {

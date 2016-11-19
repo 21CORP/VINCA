@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ExpandableElementView">
+    <declare-styleable name="ExpandableView">
         <attr name="borderLeft" format="reference"/>
         <attr name="borderRight" format="reference"/>
     </declare-styleable>
-    <declare-styleable name="ElementView">
+    <declare-styleable name="VincaElementView">
         <attr name="symbol" format="reference"/>
         <attr name="title" format="string"/>
         <attr name="description" format="string"/>

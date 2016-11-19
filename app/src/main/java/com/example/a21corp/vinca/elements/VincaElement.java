@@ -1,5 +1,4 @@
 package com.example.a21corp.vinca.elements;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +7,14 @@ import java.util.Arrays;
  * Created by ymuslu on 12-11-2016
  */
 
-public class BaseElement {
+public class VincaElement {
+
+    public int symbol;
+    public int elementType;
+    public boolean isCursor;
+    public String title;
+    public String description;
+    public Expandable parent;
 
     public static final int ELEMENT_PROJECT = 0;
     public static final int ELEMENT_PROCESS = 1;
@@ -25,7 +31,7 @@ public class BaseElement {
         ELEMENT_ITERATE
     }));
 
-    public static final ArrayList<Integer> Holder =
+    public static final ArrayList<Integer> Holders =
             new ArrayList<Integer>(Arrays.asList(new Integer[] {
         ELEMENT_ACTIVITY,
         ELEMENT_PAUSE,
@@ -37,10 +43,11 @@ public class BaseElement {
         ELEMENT_METHOD
     }));
 
-    public int icon;
-    public int elementID;
-    //TODO: 1: Rename
-    public View view;
-
-
+    public VincaElement(int elementType) {
+        isCursor = false;
+        parent = null;
+        if (elementType >= 0) {
+            this.elementType = elementType;
+        }
+    }
 }

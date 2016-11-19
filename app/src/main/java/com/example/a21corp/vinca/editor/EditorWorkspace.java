@@ -1,22 +1,12 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.example.a21corp.vinca.R;
-import com.example.a21corp.vinca.elements.BaseElement;
+import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.Holder;
 import com.example.a21corp.vinca.elements.Node;
-import com.example.a21corp.vinca.vincaviews.ElementView;
-import com.example.a21corp.vinca.vincaviews.ExpandableElementView;
-import com.example.a21corp.vinca.vincaviews.HolderView;
-import com.example.a21corp.vinca.vincaviews.NodeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,145 +17,117 @@ import java.util.List;
 
 public class EditorWorkspace {
 
-    public List<BaseElement> baseElementList = new ArrayList<BaseElement>();
-    private Context context;
-    public LinearLayout cursor;
-    public LinearLayout canvas;
+    public Expandable project;
+    public Element cursor;
+    public List<WorkspaceInterface> observerList = new ArrayList<WorkspaceInterface>();
 
-    public EditorWorkspace(Context context) {
+    public EditorWorkspace() {
         Log.d("EditorWorkspace - Debug", "Creating workspace");
-        this.context = context;
-        initiateWorkspace();
-
     }
 
-    public ExpandableElementView initiateWorkspace() {
-        Expandable project = new Expandable();
-        ExpandableElementView newView = new ExpandableElementView(this.context);
-        newView.setType(this.context, BaseElement.ELEMENT_PROJECT);
-        project.view = newView;
-        cursor = newView;
-        canvas = newView;
-
-        addElementToElemList(project);
-        addViewToCanvas(newView, cursor);
-        return newView;
+    public Expandable initiateWorkspace(Expandable project) {
+        if (project == null) {
+            project = new Expandable(VincaElement.ELEMENT_PROJECT);
+        }
+        findAndSetCursor(project);
+        this.project = project;
+        notifyObservers();
+        return project;
     }
 
-    //Top-level element has been added
-    //No index provided - append to list
-    public void addElementToElemList(BaseElement element) {
-        baseElementList.add(element);
+    public Expandable initiateWorkspace() {
+        return initiateWorkspace(null);
     }
 
-
-    //Top-level element added
-    public void addElementToElemList(int index, BaseElement element) {
+    private Element findAndSetCursor(Expandable defaultCursor) {
+        defaultCursor.isCursor = true;
+        cursor = defaultCursor;
+        if (defaultCursor.elementList != null) {
+            for (Element element : defaultCursor.elementList) {
+                if (element.isCursor) {
+                    cursor.isCursor = false;
+                    cursor = element;
+                    cursor.isCursor = true;
+                }
+            }
+        }
+        return cursor;
     }
 
+    public void setCursor(Element cursor) {
+        cursor.isCursor = false;
+        this.cursor = cursor;
+        cursor.isCursor = true;
+        notifyObservers();
+    }
 
-    public void removeViewFromCanvas(View view) {
-        if (view == canvas) {
+    public void setParent(VincaElement element, VincaElement parent) {
+        if (parent instanceof Element) {
+            if (element instanceof Element) {
+                setParent((Element) element, (Element) parent);
+            } else if (element instanceof Node) {
+                setParent((Node) element, (Element) parent);
+            }
+        }
+    }
+
+    public void setParent(Element element, Element parent) {
+        Expandable oldParent = element.parent;
+        if (oldParent != null) {
+            oldParent.elementList.remove(element);
+        }
+        if (parent instanceof Expandable) {
+            ((Expandable) parent).elementList.add(element);
+            element.parent = ((Expandable) parent);
+        } else if (parent instanceof Holder) {
+            Expandable trueParent = parent.parent;
+            int position = trueParent.elementList.indexOf(parent) + 1;
+            trueParent.elementList.add(position, element);
+            element.parent = trueParent;
+        }
+        notifyObservers();
+    }
+
+    public void setParent(Node element, Element parent) {
+        Element oldParent = element.parent;
+        if (oldParent != null) {
+            oldParent.vincaNodeList.remove(element);
+        }
+        parent.vincaNodeList.add(element);
+        element.parent = parent;
+        notifyObservers();
+    }
+
+    public void addElement(VincaElement element) {
+        if (element instanceof Element) {
+            setParent((Element) element, cursor);
+        } else if (element instanceof Node) {
+            setParent((Node) element, cursor);
+        }
+    }
+
+    public void deleteElement(VincaElement element) {
+        if (element == project) {
+            //Trying to delete entire project - create a clean canvas
             initiateWorkspace();
-        } else if (view == cursor) {
-            cursor = canvas;
-        } else {
-            View parent = (View) view.getParent();
-            ((ViewGroup) view.getParent()).removeView(view);
-            parent.invalidate();
+            return;
         }
+        if (element == cursor) {
+            element.isCursor = false;
+            cursor = project;
+            cursor.isCursor = true;
+        }
+        if (element instanceof Element) {
+            project.elementList.remove(element);
+        } else if (element instanceof Node) {
+            ((Node) element).parent.vincaNodeList.remove(element);
+        }
+        notifyObservers();
     }
 
-
-    public void moveElement(int newIndex, BaseElement element) {
-    }
-
-    public View addViewToCanvas(View view, View newParent) {
-        //TODO: FIX THIS - Horrible code
-        //TODO: FIX THIS - Horrible code
-        //TODO: FIX THIS - Horrible code
-        if (view == canvas) {
-            //User attempted to move the main canvas. Do nothing
-            return null;
+    private void notifyObservers() {
+        for (WorkspaceInterface observer : observerList) {
+            observer.updateCanvas();
         }
-        if (newParent == null) {
-            newParent = cursor;
-        }
-        if (view instanceof ExpandableElementView
-                && ((ViewGroup) view).indexOfChild(newParent) >= 0) {
-            //Parent is a child of the view user is moving. Do nothing
-            return null;
-        }
-        if (view instanceof NodeView && newParent instanceof HolderView) {
-            //TODO: Implement - visual only atm.
-            ((HolderView) newParent).symbol.setImageResource(R.drawable.activity_1_method);
-            ViewGroup oldParent = (ViewGroup) view.getParent();
-            oldParent.removeView(view);
-            newParent.invalidate();
-            oldParent.invalidate();
-            return newParent;
-        }
-        if (view instanceof ElementView) {
-            if (newParent instanceof ExpandableElementView) {
-                return setParent(view, (ExpandableElementView) newParent);
-            } else if (newParent instanceof HolderView) {
-                //Parent is a VINCA element but not an expandable.
-                //Cannot be Parent - Put new symbol to the right of it instead
-                ViewGroup trueParent = (ViewGroup) newParent.getParent().getParent();
-                int position = ((ViewGroup) newParent.getParent()).indexOfChild(newParent) + 1;
-                return setParent(view, trueParent, position);
-            }
-        } else if (view.getTag() != null) {
-            int elementType = Integer.valueOf((String) view.getTag());
-            BaseElement newElement = null;
-            ElementView newView = null;
-            if (BaseElement.Expendables.contains(elementType)) {
-                newElement = new Expandable();
-                newView = new ExpandableElementView(this.context);
-            }else if (BaseElement.Holder.contains(elementType)) {
-                newElement = new Holder();
-                newView = new HolderView(this.context);
-            } else if (BaseElement.Nodes.contains(elementType)) {
-                newElement = new Node();
-                newView = new NodeView(this.context);
-            }
-            if (newElement == null) {
-                return null;
-            }
-            newView.setType(this.context, elementType);
-            newElement.view = newView;
-            if (newParent instanceof ExpandableElementView) {
-                ((ViewGroup) newParent.findViewWithTag("canvas")).addView(newView);
-            } else if (newParent.getTag() != null && newParent.getTag() == "canvas") {
-                ((ViewGroup) newParent).addView(newView);
-            } else {
-                ((ViewGroup) newParent.getParent()).addView(newView);
-            }
-            newParent.invalidate();
-            return newView;
-        }
-        return null;
-    }
-
-    private View setParent(View view, ViewGroup newParent) {
-        return setParent(view, newParent, -1);
-    }
-
-
-    private View setParent(View view, ViewGroup newParent, int position) {
-        View oldParent = (View) view.getParent().getParent();
-        if (oldParent == newParent
-                && ((ViewGroup) view.getParent()).indexOfChild(view) < position) {
-            position = position - 1;
-        }
-        ((ViewGroup) view.getParent()).removeView(view);
-        if (position > 0 && position <= newParent.getChildCount()) {
-            ((ViewGroup) newParent.findViewWithTag("canvas")).addView(view, position);
-        } else {
-            ((ViewGroup) newParent.findViewWithTag("canvas")).addView(view);
-        }
-        oldParent.invalidate();
-        newParent.invalidate();
-        return view;
     }
 }

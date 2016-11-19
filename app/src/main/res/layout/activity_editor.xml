@@ -52,25 +52,8 @@
         android:visibility="invisible">
     </View>
 
-    <HorizontalScrollView
-        android:id="@+id/scrollView"
-        android:layout_below="@id/top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/canvas"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_gravity="center_vertical">
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
     <ScrollView
+        android:id="@+id/panel_scroller"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@id/top_bar"
@@ -79,195 +62,226 @@
         android:background="@color/background_material_light_2">
 
         <LinearLayout
-        android:id="@+id/panel"
-        android:gravity="top|center_horizontal"
-        android:layout_gravity="end"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:contentDescription="Activity"
-            android:tag="2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
-            android:id="@+id/panel_icon_activity"
-            app:srcCompat="@drawable/activity" />
-
-        <ImageView
-            android:contentDescription="Method"
-            android:tag="4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
-            app:srcCompat="@drawable/method"
-            android:id="@+id/panel_icon_method" />
-
-        <ImageView
-            android:contentDescription="Pause"
-            android:tag="5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
-            app:srcCompat="@drawable/pause"
-            android:id="@+id/panel_icon_pause" />
-
-        <ImageView
-            android:contentDescription="Decision"
-            android:tag="6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"
-            app:srcCompat="@drawable/decision"
-            android:id="@+id/panel_icon_decision" />
-
-        <TableRow
-            android:tag="3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="top|center_horizontal"
-            android:id="@+id/panel_icon_iterate"
-            tools:ignore="RtlSymmetry" >
+            android:layout_gravity="end"
+            android:orientation="vertical">
 
-            <ImageView
-                android:contentDescription="Iteration Start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingRight="5dp"
-                android:paddingEnd="5dp"
-                app:srcCompat="@drawable/iterate_left"
-                android:id="@+id/panel_icon_iterate_left"/>
-
-            <ImageView
-                android:contentDescription="Iteration End"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingStart="5dp"
-                android:paddingLeft="5dp"
-                app:srcCompat="@drawable/iterate_right"
-                android:id="@+id/panel_icon_iterate_right" />
-
-        </TableRow>
-
-        <TableRow
-            android:tag="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            <LinearLayout
+            android:id="@+id/panel"
             android:gravity="top|center_horizontal"
-            android:id="@+id/panel_icon_process"
-            tools:ignore="RtlSymmetry" >
-
-            <ImageView
-                android:contentDescription="Process Start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingRight="5dp"
-                android:paddingEnd="5dp"
-                app:srcCompat="@drawable/process_left"
-                android:id="@+id/panel_icon_process_left" />
-
-            <ImageView
-                android:contentDescription="Process End"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingStart="5dp"
-                android:paddingLeft="5dp"
-                app:srcCompat="@drawable/process_right"
-                android:id="@+id/panel_icon_process_right" />
-
-        </TableRow>
-
-        <TableRow
-            android:tag="0"
+            android:layout_gravity="end"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="top|center_horizontal"
-            android:id="@+id/panel_icon_project"
-            tools:ignore="RtlSymmetry" >
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:contentDescription="Project Start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingRight="5dp"
-                android:paddingEnd="5dp"
-                app:srcCompat="@drawable/project_start"
-                android:id="@+id/panel_icon_project_start" />
-
-            <ImageView
-                android:contentDescription="Project End"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="50dp"
-                android:maxWidth="50dp"
-                android:paddingStart="5dp"
-                android:paddingLeft="5dp"
-                app:srcCompat="@drawable/project_end"
-                android:id="@+id/panel_icon_project_end" />
-
-        </TableRow>
-
-        <View
-            android:layout_height="2dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
-            />
-        <!--
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_revert"
-                    android:id="@+id/undo" />
+                <!--
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:contentDescription="Activity"
+                    android:tag="2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_rotate"
-                    android:id="@+id/redo" />
-        -->
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"
+                    android:id="@+id/panel_icon_activity"
+                    app:srcCompat="@drawable/activity" />
 
-        <ImageButton
-            android:contentDescription="Export"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_upload"
-            android:id="@+id/export" />
+                <ImageView
+                    android:contentDescription="Method"
+                    android:tag="4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"
+                    app:srcCompat="@drawable/method"
+                    android:id="@+id/panel_icon_method" />
 
-        <ImageButton
-            android:contentDescription="Delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_menu_delete"
-            android:id="@+id/trashbin" />
+                <ImageView
+                    android:contentDescription="Pause"
+                    android:tag="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"
+                    app:srcCompat="@drawable/pause"
+                    android:id="@+id/panel_icon_pause" />
 
-    </LinearLayout>
+                <ImageView
+                    android:contentDescription="Decision"
+                    android:tag="6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"
+                    app:srcCompat="@drawable/decision"
+                    android:id="@+id/panel_icon_decision" />
+
+                <TableRow
+                    android:tag="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal"
+                    android:id="@+id/panel_icon_iterate"
+                    tools:ignore="RtlSymmetry" >
+
+                    <ImageView
+                        android:contentDescription="Iteration Start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingRight="5dp"
+                        android:paddingEnd="5dp"
+                        app:srcCompat="@drawable/iterate_left"
+                        android:id="@+id/panel_icon_iterate_left"/>
+
+                    <ImageView
+                        android:contentDescription="Iteration End"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        app:srcCompat="@drawable/iterate_right"
+                        android:id="@+id/panel_icon_iterate_right" />
+
+                </TableRow>
+
+                <TableRow
+                    android:tag="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal"
+                    android:id="@+id/panel_icon_process"
+                    tools:ignore="RtlSymmetry" >
+
+                    <ImageView
+                        android:contentDescription="Process Start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingRight="5dp"
+                        android:paddingEnd="5dp"
+                        app:srcCompat="@drawable/process_left"
+                        android:id="@+id/panel_icon_process_left" />
+
+                    <ImageView
+                        android:contentDescription="Process End"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        app:srcCompat="@drawable/process_right"
+                        android:id="@+id/panel_icon_process_right" />
+
+                </TableRow>
+
+                <TableRow
+                    android:tag="0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|center_horizontal"
+                    android:id="@+id/panel_icon_project"
+                    tools:ignore="RtlSymmetry" >
+
+                    <ImageView
+                        android:contentDescription="Project Start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingRight="5dp"
+                        android:paddingEnd="5dp"
+                        app:srcCompat="@drawable/project_start"
+                        android:id="@+id/panel_icon_project_start" />
+
+                    <ImageView
+                        android:contentDescription="Project End"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="50dp"
+                        android:maxWidth="50dp"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        app:srcCompat="@drawable/project_end"
+                        android:id="@+id/panel_icon_project_end" />
+
+                </TableRow>
+            -->
+            </LinearLayout>
+            <View
+                android:layout_height="2dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:background="@color/colorPrimary"
+                />
+
+            <!--
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@android:drawable/ic_menu_revert"
+                        android:id="@+id/undo" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@android:drawable/ic_menu_rotate"
+                        android:id="@+id/redo" />
+            -->
+
+            <ImageButton
+                android:contentDescription="Export"
+                android:layout_width="@dimen/symbol_max_size"
+                android:layout_height="@dimen/symbol_max_size"
+                app:srcCompat="@android:drawable/ic_menu_upload"
+                android:id="@+id/export" />
+
+            <ImageButton
+                android:contentDescription="Delete"
+                android:layout_width="@dimen/symbol_max_size"
+                android:layout_height="@dimen/symbol_max_size"
+                app:srcCompat="@android:drawable/ic_menu_delete"
+                android:id="@+id/trashbin" />
+
+        </LinearLayout>
     </ScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_below="@id/top_bar"
+        android:layout_toLeftOf="@id/panel_scroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/canvas"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/symbol_max_size"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical">
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
 </RelativeLayout>

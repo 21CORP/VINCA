@@ -5,6 +5,8 @@ package com.example.a21corp.vinca.elements;
  */
 
 public class Holder extends Element {
-    boolean isOpen;
-    Node vincaMethod;
+
+    public Holder(int elementType) {
+        super(elementType);
+    }
 }

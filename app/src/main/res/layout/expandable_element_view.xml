@@ -2,10 +2,29 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--
+    <TextView
+        android:id="@+id/element_title"
+        android:layout_height="60dp"
+        android:layout_width="120dp"
+        android:hint="Title goes here!"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/element_description"
+        android:layout_height="200dp"
+        android:layout_width="120dp"
+        android:hint="Description goes here!\nThis field is much bigger and can hold much more text"
+        android:gravity="start|top"
+        />
+        -->
+
+
     <ImageView
-        android:id="@+id/border_left"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/border_start"
+        android:layout_width="@dimen/symbol_max_size"
+        android:layout_height="@dimen/symbol_max_size"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_start"
@@ -27,9 +46,9 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/border_right"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/border_end"
+        android:layout_width="@dimen/symbol_max_size"
+        android:layout_height="@dimen/symbol_max_size"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_end"

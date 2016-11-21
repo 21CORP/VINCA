@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_editor"
@@ -9,7 +9,8 @@
     android:background="@color/White"
     android:rowCount="2"
     android:columnCount="2"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText"
+    android:orientation="vertical">
 
     <TableRow
         android:id="@+id/top_bar"
@@ -18,6 +19,7 @@
         android:gravity="start|center_vertical"
         android:background="@color/background_material_light_2">
 
+        <!--
         <ImageButton
             android:contentDescription="Return to main menu"
             android:layout_width="0dp"
@@ -25,6 +27,7 @@
             app:srcCompat="?android:attr/homeAsUpIndicator"
             android:id="@+id/button_return"
             android:layout_weight="1" />
+            -->
 
         <TextView
             android:text="Project Skeleton"
@@ -40,41 +43,74 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_save_status"
             android:layout_weight="2" />
+        <View
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="1dp"
+            android:background="@color/colorPrimary"
+            />
+
+        <!--
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/ic_menu_revert"
+                    android:id="@+id/undo" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/ic_menu_rotate"
+                    android:id="@+id/redo" />
+        -->
+
+        <ImageButton
+            android:contentDescription="Export"
+            android:layout_width="@dimen/symbol_max_size"
+            android:layout_height="@dimen/symbol_max_size"
+            app:srcCompat="@android:drawable/ic_menu_upload"
+            android:id="@+id/export" />
+
+        <ImageButton
+            android:contentDescription="Delete"
+            android:layout_width="@dimen/symbol_max_size"
+            android:layout_height="@dimen/symbol_max_size"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            android:id="@+id/trashbin" />
     </TableRow>
 
-    <View
-        android:id="@+id/right_margin_for_alignment"
-        android:layout_below="@id/top_bar"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:visibility="invisible">
-    </View>
+    <HorizontalScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_weight="1">
 
-    <ScrollView
+        <LinearLayout
+            android:id="@+id/canvas"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/symbol_max_size"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
         android:id="@+id/panel_scroller"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@id/top_bar"
-        android:layout_toLeftOf="@id/right_margin_for_alignment"
-        android:layout_toStartOf="@id/right_margin_for_alignment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/background_material_light_2">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="top|center_horizontal"
-            android:layout_gravity="end"
-            android:orientation="vertical">
-
-            <LinearLayout
             android:id="@+id/panel"
             android:gravity="top|center_horizontal"
-            android:layout_gravity="end"
-            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
                 <!--
 
@@ -225,63 +261,6 @@
                 </TableRow>
             -->
             </LinearLayout>
-            <View
-                android:layout_height="2dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
-                />
-
-            <!--
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@android:drawable/ic_menu_revert"
-                        android:id="@+id/undo" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@android:drawable/ic_menu_rotate"
-                        android:id="@+id/redo" />
-            -->
-
-            <ImageButton
-                android:contentDescription="Export"
-                android:layout_width="@dimen/symbol_max_size"
-                android:layout_height="@dimen/symbol_max_size"
-                app:srcCompat="@android:drawable/ic_menu_upload"
-                android:id="@+id/export" />
-
-            <ImageButton
-                android:contentDescription="Delete"
-                android:layout_width="@dimen/symbol_max_size"
-                android:layout_height="@dimen/symbol_max_size"
-                app:srcCompat="@android:drawable/ic_menu_delete"
-                android:id="@+id/trashbin" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <HorizontalScrollView
-        android:id="@+id/scrollView"
-        android:layout_below="@id/top_bar"
-        android:layout_toLeftOf="@id/panel_scroller"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:id="@+id/canvas"
-            android:background="@color/colorAccent"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/symbol_max_size"
-            android:gravity="center_vertical"
-            android:layout_gravity="center_vertical">
-
-        </LinearLayout>
     </HorizontalScrollView>
 
-</RelativeLayout>
+</LinearLayout>

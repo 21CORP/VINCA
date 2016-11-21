@@ -7,8 +7,8 @@ import java.util.List;
  * Created by ymuslu on 12-11-2016.
  */
 
-public class Expandable extends Element {
-    public List<Element> elementList = new ArrayList<Element>();
+public class Expandable extends Container {
+    public List<Container> containerList = new ArrayList<Container>();
 
     public Expandable(int elementType){
         super(elementType);

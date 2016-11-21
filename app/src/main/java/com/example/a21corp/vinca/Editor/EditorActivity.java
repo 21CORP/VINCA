@@ -14,10 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
-import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
+import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.ElementView;
-import com.example.a21corp.vinca.vincaviews.HolderView;
 import com.example.a21corp.vinca.vincaviews.NodeView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
@@ -26,14 +25,15 @@ public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
         , View.OnTouchListener {
 
-    private VINCAViewManager viewManager = null;
+    private VincaViewManager viewManager = null;
 
     private NodeView methodView;
-    private HolderView activityView, pauseView, decisionView;
+    private ElementView activityView, pauseView, decisionView;
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    private ImageButton backButton, trashBin, exportView;
+    //private ImageButton backButton, exportView;
+    private ImageButton trashBin;
     private TextView projectNameBar, saveStatusBar;
 
     public LinearLayout canvas;
@@ -46,7 +46,7 @@ public class EditorActivity extends AppCompatActivity
         setContentView(R.layout.activity_editor);
 
         initiateEditor();
-        viewManager = new VINCAViewManager(this);
+        viewManager = new VincaViewManager(this);
     }
 
     private void initiateEditor() {
@@ -59,10 +59,10 @@ public class EditorActivity extends AppCompatActivity
         projectView = new ExpandableView(this, VincaElement.ELEMENT_PROJECT);
         processView = new ExpandableView(this, VincaElement.ELEMENT_PROCESS);
         iterateView = new ExpandableView(this, VincaElement.ELEMENT_ITERATE);
-        //Holders
-        activityView = new HolderView(this, VincaElement.ELEMENT_ACTIVITY);
-        pauseView = new HolderView(this, VincaElement.ELEMENT_PAUSE);
-        decisionView = new HolderView(this, VincaElement.ELEMENT_DECISION);
+        //Elements
+        activityView = new ElementView(this, VincaElement.ELEMENT_ACTIVITY);
+        pauseView = new ElementView(this, VincaElement.ELEMENT_PAUSE);
+        decisionView = new ElementView(this, VincaElement.ELEMENT_DECISION);
         //Nodes
         methodView = new NodeView(this, VincaElement.ELEMENT_METHOD);
 
@@ -79,9 +79,9 @@ public class EditorActivity extends AppCompatActivity
 
         //undoView = findViewById(R.id.undo);
         //redoView = findViewById(R.id.redo);
-        exportView = (ImageButton) findViewById(R.id.export);
+        //exportView = (ImageButton) findViewById(R.id.export);
+        //backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
-        backButton = (ImageButton) findViewById(R.id.button_return);
         projectNameBar = (TextView) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
 
@@ -106,9 +106,10 @@ public class EditorActivity extends AppCompatActivity
         //Listen to misc. buttons
         //undoView.setOnClickListener(this);
         //redoView.setOnClickListener(this);
-        exportView.setOnClickListener(this);
-        backButton.setOnClickListener(this);
+        //exportView.setOnClickListener(this);
+        //backButton.setOnClickListener(this);
         trashBin.setOnDragListener(this);
+        trashBin.setClickable(false);
     }
 
     @Override
@@ -116,15 +117,11 @@ public class EditorActivity extends AppCompatActivity
         if (view instanceof VincaElementView) {
             if (view.getParent() == elementPanel) {
                 viewManager.addElement((VincaElementView) view);
-            } else if (view instanceof ElementView) {
-                viewManager.setCursor((ElementView) view);
+            } else if (view instanceof ContainerView) {
+                viewManager.setCursor((ContainerView) view);
             }
         } else if (view == trashBin) {
-            viewManager.deleteElement(viewManager.cursor);
-        } else if (view == exportView) {
-            //TODO: Implement
-        } else if (view == backButton) {
-            //TODO: Implement
+            viewManager.deleteElement(viewManager.getCursor());
         }
     }
 
@@ -142,14 +139,14 @@ public class EditorActivity extends AppCompatActivity
                         ((ViewGroup) view.getParent().getParent())
                                 .setBackgroundResource(0);
                     }
-                    viewManager.cursor.setBackgroundResource(R.color.background_material_light_2);
+                    viewManager.getCursor().setBackgroundResource(R.color.background_material_light_2);
                 }
             case DragEvent.ACTION_DRAG_ENTERED:
                 if (view == trashBin) {
                     view.setBackgroundColor(Color.RED);
                 }
                 else {
-                    viewManager.cursor.setBackgroundResource(0);
+                    viewManager.getCursor().setBackgroundResource(0);
                     Log.d("Editor - Debug", "Drag entered into view: " + view.toString());
                     //TODO: Fix this, should highlight border or something
                     view.setBackgroundResource(R.color.background_material_light_2);
@@ -160,8 +157,11 @@ public class EditorActivity extends AppCompatActivity
                 }
                 break;
             case DragEvent.ACTION_DROP:
-                Log.d("Editor - Debug", "Dropped on view: " + ((VincaElementView) view).type + "\n"
-                        + ((VincaElementView) view).element.toString());
+                view.setBackgroundResource(0);
+                if (view instanceof VincaElementView && view.getParent() != null) {
+                    ((ViewGroup) view.getParent().getParent())
+                            .setBackgroundResource(0);
+                }
                 VincaElementView draggedView;
                 try {
                     draggedView = (VincaElementView) event.getLocalState();
@@ -177,10 +177,13 @@ public class EditorActivity extends AppCompatActivity
                 }
                 //User dropped a view into trash bin?
                 if (view == trashBin) {
+                    Log.d("Editor - Debug", "Dropped on view trashbin! - Deleting");
                     view.setBackgroundResource(0);
                     viewManager.deleteElement(draggedView);
                     break;
                 }
+                Log.d("Editor - Debug", "Dropped on view: " + ((VincaElementView) view).type + "\n"
+                        + ((VincaElementView) view).element.toString());
 
                 if (view instanceof VincaElementView) {
                     view.setBackgroundResource(0);
@@ -190,10 +193,19 @@ public class EditorActivity extends AppCompatActivity
                     if (draggedView instanceof VincaElementView) {
                         viewManager.moveElement(draggedView, (VincaElementView) view);
                     }
-                    viewManager.cursor.setBackgroundResource(R.color.background_material_light_2);
+                    viewManager.getCursor().setBackgroundResource(R.color.background_material_light_2);
                     break;
                 }
                 break;
+            case DragEvent.ACTION_DRAG_ENDED:
+                Log.d("Editor - Debug", "Drop ended!");
+                try {
+                    draggedView = (VincaElementView) event.getLocalState();
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                    break;
+                }
+                draggedView.setVisibility(View.VISIBLE);
         }
         //This listener should always receive drag-events, so always return true!
         return true;

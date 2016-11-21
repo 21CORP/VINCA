@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -13,10 +12,6 @@ import com.example.a21corp.vinca.elements.VincaElement;
  */
 
 public class VincaElementView extends LinearLayout {
-
-    public void setType(Context context, int elementType) {
-        return;
-    }
 
     //public String title, description;
     public String title;
@@ -33,6 +28,11 @@ public class VincaElementView extends LinearLayout {
         this(context, null);
         setType(context, elementType);
     }
+
+    public void setType(Context context, int elementType) {
+        return;
+    }
+
 
     public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);

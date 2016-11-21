@@ -23,39 +23,52 @@
 
     <ImageView
         android:id="@+id/border_start"
-        android:layout_width="@dimen/symbol_max_size"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/symbol_max_size"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_start"
         android:adjustViewBounds="true"
-        android:layout_marginRight="@dimen/expandable_element_inner_margin"
-        android:layout_marginEnd="@dimen/expandable_element_inner_margin"
-        android:layout_marginLeft="@dimen/expandable_element_outer_margin"
-        android:layout_marginStart="@dimen/expandable_element_outer_margin"/>
+        android:layout_marginRight="@dimen/element_inner_margin"
+        android:layout_marginEnd="@dimen/element_inner_margin"
+        android:layout_marginLeft="@dimen/element_outer_margin"
+        android:layout_marginStart="@dimen/element_outer_margin"/>
+
+    <LinearLayout
+        android:id="@+id/nodes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/symbol_small_size"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/element_outer_margin"
+        android:paddingLeft="@dimen/element_outer_margin"
+        android:paddingEnd="@dimen/element_outer_margin"
+        android:paddingStart="@dimen/element_outer_margin">
+
+    </LinearLayout>
 
     <LinearLayout
         android:tag="canvas"
         android:id="@+id/canvas"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/expandable_element_inner_margin"
-        android:layout_marginRight="@dimen/expandable_element_inner_margin">
+        android:layout_height="@dimen/symbol_max_size"
+        android:layout_marginLeft="@dimen/element_inner_margin"
+        android:layout_marginRight="@dimen/element_inner_margin">
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/border_end"
-        android:layout_width="@dimen/symbol_max_size"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/symbol_max_size"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_end"
         android:adjustViewBounds="true"
-        android:layout_marginLeft="@dimen/expandable_element_inner_margin"
-        android:layout_marginStart="@dimen/expandable_element_inner_margin"
-        android:layout_marginRight="@dimen/expandable_element_outer_margin"
-        android:layout_marginEnd="@dimen/expandable_element_outer_margin"/>
+        android:layout_marginLeft="@dimen/element_inner_margin"
+        android:layout_marginStart="@dimen/element_inner_margin"
+        android:layout_marginRight="@dimen/element_outer_margin"
+        android:layout_marginEnd="@dimen/element_outer_margin"/>
 
 </merge>

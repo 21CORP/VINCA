@@ -10,8 +10,7 @@ import java.util.Arrays;
 public class VincaElement {
 
     public int symbol;
-    public int elementType;
-    public boolean isCursor;
+    public int type;
     public String title;
     public String description;
     public Expandable parent;
@@ -31,7 +30,7 @@ public class VincaElement {
         ELEMENT_ITERATE
     }));
 
-    public static final ArrayList<Integer> Holders =
+    public static final ArrayList<Integer> Elements =
             new ArrayList<Integer>(Arrays.asList(new Integer[] {
         ELEMENT_ACTIVITY,
         ELEMENT_PAUSE,
@@ -43,11 +42,10 @@ public class VincaElement {
         ELEMENT_METHOD
     }));
 
-    public VincaElement(int elementType) {
-        isCursor = false;
+    public VincaElement(int type) {
         parent = null;
-        if (elementType >= 0) {
-            this.elementType = elementType;
+        if (type >= 0) {
+            this.type = type;
         }
     }
 }

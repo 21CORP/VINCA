@@ -28,7 +28,7 @@ public class NodeView extends VincaElementView {
         LayoutInflater inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         NodeView root = (NodeView)
-                inflater.inflate(R.layout.element_view, this, true);
+                inflater.inflate(R.layout.node_view, this, true);
 
         symbol = (ImageView) root.findViewById(R.id.symbol);
         type = elementType;

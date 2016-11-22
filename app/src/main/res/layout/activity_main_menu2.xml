@@ -28,29 +28,18 @@
         android:layout_weight="0.75">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher"
+            android:layout_width="358dp"
+            android:layout_height="91dp"
+            app:srcCompat="@drawable/vincahead"
             android:id="@+id/titleImage"
             android:layout_gravity="center"/>
 
         <ImageView
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher"
+            app:srcCompat="@drawable/vincalogotemp"
             android:id="@+id/logoImage"
-            android:layout_width="wrap_content"
+            android:layout_width="108dp"
             android:layout_gravity="center"/>
-
-        <TextView
-            android:text="Visuelt alfabet for innovations- og læringsprocesser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/subTitle"
-            android:textAlignment="center"
-            android:textStyle="normal|bold"
-            android:textSize="14sp"
-            android:typeface="normal"
-            android:textColor="@color/primary_text_light" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -77,6 +66,21 @@
                 android:layout_alignLeft="@+id/newProjectButton"
                 android:layout_alignStart="@+id/newProjectButton"
                 android:layout_marginTop="48dp" />
+
+            <TextView
+                android:text="Visuelt alfabet for innovations- og læringsprocesser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/subTitle"
+                android:textAlignment="center"
+                android:textStyle="normal|bold"
+                android:textSize="14sp"
+                android:typeface="normal"
+                android:textColor="@color/primary_text_light"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="38dp" />
 
 
         </RelativeLayout>

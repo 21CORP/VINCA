@@ -2,49 +2,52 @@ package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.R;
-import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
-import com.example.a21corp.vinca.elements.Holder;
+import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
-import com.example.a21corp.vinca.vincaviews.ElementView;
+import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
-import com.example.a21corp.vinca.vincaviews.HolderView;
+import com.example.a21corp.vinca.vincaviews.ElementView;
 import com.example.a21corp.vinca.vincaviews.NodeView;
 
 /**
  * Created by ymuslu on 17-11-2016.
  */
 
-public class VINCAViewManager implements WorkspaceInterface {
+public class VincaViewManager implements WorkspaceInterface {
 
-    public static final EditorWorkspace workspace = new EditorWorkspace();
+    private EditorWorkspace workspace;
     public Context context;
-    public EditorActivity observer;
-    public VincaElementView cursor;
-    public VincaElementView projectView = null;
+    private EditorActivity editor;
+    private VincaElementView cursor;
+    private VincaElementView projectView = null;
+    private ImageView nodeOnElementView;
 
-    public VINCAViewManager(Context context) {
-        initViewManager();
+    public VincaViewManager(Context context) {
         this.context = context;
-        workspace.observerList.add(this);
+        initViewManager();
     }
 
-    public VINCAViewManager(EditorActivity observer) {
-        this.observer = observer;
-        this.context = observer;
+    public VincaViewManager(EditorActivity editor) {
+        this.editor = editor;
+        this.context = editor;
         initViewManager();
-        workspace.observerList.add(this);
     }
 
     public void initViewManager() {
+        workspace = EditorWorkspace.getInstance();
         if (workspace.project == null) {
             workspace.initiateWorkspace();
         }
+        workspace.observerList.add(this);
         updateCanvas();
     }
 
@@ -52,85 +55,109 @@ public class VINCAViewManager implements WorkspaceInterface {
 
         VincaElementView view = null;
 
-        int type = element.elementType;
+        int type = element.type;
         if (VincaElement.Expendables.contains(type)) {
             view = makeExpandableView((Expandable) element);
-        } else if (VincaElement.Holders.contains(type)) {
-            view = makeHolderView((Holder) element);
+        } else if (VincaElement.Elements.contains(type)) {
+            view = makeElementView((Element) element);
         } else if (VincaElement.Nodes.contains(type)) {
             view = makeNodeView((Node) element);
         }
-        if (view != null && element != null && element instanceof Element) {
+        if (view != null && element != null && element instanceof Container) {
             view.element = element;
-            if (element.isCursor) {
+
+            if (((Container) element).isCursor) {
                 if (cursor != null) {
                     cursor.setBackgroundResource(0);
                 }
                 cursor = view;
-                cursor.setBackgroundResource(R.color.background_material_light_2);
             }
             if (projectView == null) {
                 projectView = view;
             }
+            if (element instanceof Container) {
+                createViewForNodesOnContainer((ContainerView) view, (Container) element);
+            }
             return view;
         }
-        Log.d("VINCAViewManager", "FATAL ERROR!");
+        Log.d("VincaViewManager", "FATAL ERROR!");
         return null;
     }
 
     private ExpandableView makeExpandableView(Expandable element) {
-        int elementType = element.elementType;
+        int elementType = element.type;
 
         ExpandableView view = new ExpandableView(context, elementType);
         LinearLayout elementCanvas = view.canvas;
 
-        for (VincaElement child : element.elementList) {
+        for (VincaElement child : element.containerList) {
             elementCanvas.addView(makeViewFromClass(child));
         }
 
-        if (observer != null) {
-            view.setOnDragListener(observer);
-            view.setOnClickListener(observer);
-            view.setOnLongClickListener(observer);
-            view.setOnTouchListener(observer);
+        if (editor != null) {
+            setListeners(view);
         }
 
         return view;
     }
 
-    private HolderView makeHolderView(Holder element) {
-        //TODO: Implement - Holders can contain Node
-        int elementType = element.elementType;
+    private ElementView makeElementView(Element element) {
+        //TODO: Implement - Elements can contain Node
+        int elementType = element.type;
 
-        HolderView view = new HolderView(context, elementType);
+        ElementView view = new ElementView(context, elementType);
         view.title = element.title;
         view.description = element.description;
 
-        if (observer != null) {
-            view.setOnDragListener(observer);
-            view.setOnClickListener(observer);
-            view.setOnLongClickListener(observer);
-            view.setOnTouchListener(observer);
+        if (editor != null) {
+            setListeners(view);
         }
 
         return view;
     }
 
     private NodeView makeNodeView(Node element) {
-        int elementType = element.elementType;
+        int elementType = element.type;
 
         NodeView view = new NodeView(context, elementType);
         view.title = element.title;
         view.description = element.description;
 
-        if (observer != null) {
-            view.setOnDragListener(observer);
-            view.setOnClickListener(observer);
-            view.setOnLongClickListener(observer);
-            view.setOnTouchListener(observer);
+        if (editor != null) {
+            setListeners(view);
         }
 
         return view;
+    }
+
+    private void createViewForNodesOnContainer(ContainerView view, Container element) {
+        if (element != null &&
+            !(element).vincaNodeList.isEmpty()) {
+            switch (view.type) {
+                case VincaElement.ELEMENT_ACTIVITY:
+                    break;
+                case VincaElement.ELEMENT_DECISION | VincaElement.ELEMENT_PAUSE:
+                    ImageView symbol = view.symbol;
+                    ViewGroup symbolParent = (ViewGroup) symbol.getParent();
+                    symbolParent.removeView(symbol);
+                    symbolParent.addView(symbol);
+                    break;
+            }
+            for (int i = 0; i < element.vincaNodeList.size(); i++) {
+                Node node = element.vincaNodeList.get(i);
+                NodeView nodeView = makeNodeView(node);
+                nodeView.element = node;
+
+                nodeView.symbol.getLayoutParams().width
+                        = (int) context.getResources().getDimension(R.dimen.symbol_small_size);
+                nodeView.symbol.getLayoutParams().height
+                        = (int) context.getResources().getDimension(R.dimen.symbol_small_size);
+
+                view.nodes.addView(nodeView);
+                setListeners(nodeView);
+                nodeView.setOnDragListener(null);
+            }
+        }
     }
 
     public void addElement(VincaElementView elementView) {
@@ -138,8 +165,8 @@ public class VINCAViewManager implements WorkspaceInterface {
         if (element == null) {
             if (elementView instanceof ExpandableView) {
                 element = new Expandable(elementView.type);
-            } else if (elementView instanceof HolderView) {
-                element = new Holder(elementView.type);
+            } else if (elementView instanceof ElementView) {
+                element = new Element(elementView.type);
             } else if (elementView instanceof NodeView) {
                 element = new Node(elementView.type);
             }
@@ -147,60 +174,80 @@ public class VINCAViewManager implements WorkspaceInterface {
             workspace.addElement(element);
             return;
         } else if (element instanceof Expandable) {
-            workspace.addElement(new Expandable(element.elementType));
-        } else if (element instanceof Holder) {
-            workspace.addElement(new Holder(element.elementType));
+            workspace.addElement(new Expandable(element.type));
+        } else if (element instanceof Element) {
+            workspace.addElement(new Element(element.type));
         } else if (element instanceof Node) {
-            workspace.addElement(new Node(element.elementType));
+            workspace.addElement(new Node(element.type));
         }
     }
 
     public void deleteElement(VincaElementView elementView) {
-        workspace.deleteElement(elementView.element);
+        VincaElement element = elementView.element;
+        workspace.deleteElement(element);
     }
 
     public void moveElement(VincaElementView elementView, VincaElementView parentView) {
         VincaElement element;
-        if (elementView.getParent() == observer.elementPanel) {
+        if (elementView.getParent() == editor.elementPanel) {
             element = new VincaElement(elementView.type);
             int type = elementView.type;
             if (VincaElement.Expendables.contains(type)) {
                 element = new Expandable(type);
-            } else if (VincaElement.Holders.contains(type)) {
-                element = new Holder(type);
+            } else if (VincaElement.Elements.contains(type)) {
+                element = new Element(type);
             } else if (VincaElement.Nodes.contains(type)) {
                 element = new Node(type);
             }
         } else {
             element = elementView.element;
         }
-        VincaElement parentElement = parentView.element;
+        VincaElement parent = parentView.element;
 
-        workspace.setParent(element, parentElement);
+        workspace.setParent(element, parent);
     }
 
-    public void setCursor(ElementView newCursor) {
+    public void setCursor(ContainerView newCursor) {
+        VincaElementView oldCursor = cursor;
         cursor = newCursor;
-        if (newCursor.element != null && newCursor.element instanceof Element) {
-            workspace.setCursor((Element) newCursor.element);
+        if (newCursor.element != null && newCursor.element instanceof Container) {
+            oldCursor.setBackgroundResource(0);
+            workspace.setCursor((Container) newCursor.element);
+            cursor.setBackgroundResource(R.color.background_material_light_2);
+        } else {
+            cursor = oldCursor;
         }
     }
 
-    public VincaElementView getCursor() {
-        if (cursor == null) {
-            cursor = projectView;
+    public ContainerView getCursor() {
+        if (cursor instanceof ContainerView) {
+            return (ContainerView) cursor;
+        } else if (cursor == null && projectView instanceof ContainerView) {
+            setCursor( (ContainerView) projectView);
+            return (ContainerView) projectView;
+        } else {
+            return null;
         }
-        return cursor;
+    }
+
+    private void setListeners(VincaElementView view) {
+        view.setOnDragListener(editor);
+        view.setOnClickListener(editor);
+        view.setOnLongClickListener(editor);
+        view.setOnTouchListener(editor);
     }
 
     @Override
     public void updateCanvas() {
+        cursor = null;
         projectView = makeViewFromClass(workspace.project);
-        if (observer != null) {
-            //((ViewGroup) this.canvas.getParent()).removeView(this.canvas);
-            observer.canvas.removeAllViews();
-            observer.canvas.addView(this.projectView);
-            observer.canvas.invalidate();
+        if (editor != null) {
+            //((ViewGroup) this.nodes.getParent()).removeView(this.nodes);
+            editor.canvas.removeAllViews();
+            editor.canvas.addView(this.projectView);
+            editor.canvas.invalidate();
+            getCursor();
+            cursor.setBackgroundResource(R.color.background_material_light_2);
         }
     }
 }

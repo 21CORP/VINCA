@@ -1,11 +1,12 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.content.Context;
 import android.util.Log;
 
-import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
-import com.example.a21corp.vinca.elements.Holder;
+import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 
 import java.util.ArrayList;
@@ -17,12 +18,17 @@ import java.util.List;
 
 public class EditorWorkspace {
 
+    private static final EditorWorkspace instance = new EditorWorkspace();
     public Expandable project;
-    public Element cursor;
+    public Container cursor;
     public List<WorkspaceInterface> observerList = new ArrayList<WorkspaceInterface>();
 
-    public EditorWorkspace() {
+    private EditorWorkspace() {
         Log.d("EditorWorkspace - Debug", "Creating workspace");
+    }
+
+    public static EditorWorkspace getInstance() {
+        return instance;
     }
 
     public Expandable initiateWorkspace(Expandable project) {
@@ -39,14 +45,14 @@ public class EditorWorkspace {
         return initiateWorkspace(null);
     }
 
-    private Element findAndSetCursor(Expandable defaultCursor) {
-        defaultCursor.isCursor = true;
-        cursor = defaultCursor;
-        if (defaultCursor.elementList != null) {
-            for (Element element : defaultCursor.elementList) {
-                if (element.isCursor) {
+    private Container findAndSetCursor(Expandable scope) {
+        scope.isCursor = true;
+        cursor = scope;
+        if (scope.containerList != null) {
+            for (Container container : scope.containerList) {
+                if (container.isCursor) {
                     cursor.isCursor = false;
-                    cursor = element;
+                    cursor = container;
                     cursor.isCursor = true;
                 }
             }
@@ -54,7 +60,7 @@ public class EditorWorkspace {
         return cursor;
     }
 
-    public void setCursor(Element cursor) {
+    public void setCursor(Container cursor) {
         cursor.isCursor = false;
         this.cursor = cursor;
         cursor.isCursor = true;
@@ -62,34 +68,34 @@ public class EditorWorkspace {
     }
 
     public void setParent(VincaElement element, VincaElement parent) {
-        if (parent instanceof Element) {
-            if (element instanceof Element) {
-                setParent((Element) element, (Element) parent);
+        if (parent instanceof Container) {
+            if (element instanceof Container) {
+                setParent((Container) element, (Container) parent);
             } else if (element instanceof Node) {
-                setParent((Node) element, (Element) parent);
+                setParent((Node) element, (Container) parent);
             }
         }
     }
 
-    public void setParent(Element element, Element parent) {
-        Expandable oldParent = element.parent;
+    public void setParent(Container container, Container parent) {
+        Expandable oldParent = container.parent;
         if (oldParent != null) {
-            oldParent.elementList.remove(element);
+            oldParent.containerList.remove(container);
         }
         if (parent instanceof Expandable) {
-            ((Expandable) parent).elementList.add(element);
-            element.parent = ((Expandable) parent);
-        } else if (parent instanceof Holder) {
+            ((Expandable) parent).containerList.add(container);
+            container.parent = ((Expandable) parent);
+        } else if (parent instanceof Element) {
             Expandable trueParent = parent.parent;
-            int position = trueParent.elementList.indexOf(parent) + 1;
-            trueParent.elementList.add(position, element);
-            element.parent = trueParent;
+            int position = trueParent.containerList.indexOf(parent) + 1;
+            trueParent.containerList.add(position, container);
+            container.parent = trueParent;
         }
         notifyObservers();
     }
 
-    public void setParent(Node element, Element parent) {
-        Element oldParent = element.parent;
+    public void setParent(Node element, Container parent) {
+        Container oldParent = element.parent;
         if (oldParent != null) {
             oldParent.vincaNodeList.remove(element);
         }
@@ -99,8 +105,8 @@ public class EditorWorkspace {
     }
 
     public void addElement(VincaElement element) {
-        if (element instanceof Element) {
-            setParent((Element) element, cursor);
+        if (element instanceof Container) {
+            setParent((Container) element, cursor);
         } else if (element instanceof Node) {
             setParent((Node) element, cursor);
         }
@@ -108,17 +114,15 @@ public class EditorWorkspace {
 
     public void deleteElement(VincaElement element) {
         if (element == project) {
-            //Trying to delete entire project - create a clean canvas
+            //Trying to delete entire project - create a clean nodes
             initiateWorkspace();
             return;
         }
         if (element == cursor) {
-            element.isCursor = false;
-            cursor = project;
-            cursor.isCursor = true;
+            setCursor(project);
         }
-        if (element instanceof Element) {
-            project.elementList.remove(element);
+        if (element instanceof Container) {
+            element.parent.containerList.remove(element);
         } else if (element instanceof Node) {
             ((Node) element).parent.vincaNodeList.remove(element);
         }

@@ -21,26 +21,25 @@ public class NodeView extends VincaElementView {
 
     public NodeView(Context context, int elementType) {
         this(context, null);
-        setType(context, elementType);
+        setType(context, elementType, null);
     }
 
-    public void setType(Context context, int elementType) {
-        LayoutInflater inflater = (LayoutInflater)
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        NodeView root = (NodeView)
-                inflater.inflate(R.layout.node_view, this, true);
+    public void setType(Context context, int elementType, VincaElementView root) {
+        if (root == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            root = (NodeView)
+                    inflater.inflate(R.layout.node_view, this, true);
+        }
+        super.setType(context, elementType, root);
 
         symbol = (ImageView) root.findViewById(R.id.symbol);
-        type = elementType;
 
-        //Could be an 'if'-statement right now, but will be easier to add Nodes later on like this
-        //TODO: Check if switch with 1 case is slower than simple if-statement
         switch (elementType) {
             case VincaElement.ELEMENT_METHOD:
                 symbol.setImageResource(R.drawable.method);
                 break;
         }
-        //root.setVisibility(VISIBLE);
         root.invalidate();
     }
 

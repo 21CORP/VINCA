@@ -26,10 +26,11 @@ public class VincaElementView extends LinearLayout {
 
     public VincaElementView(Context context, int elementType) {
         this(context, null);
-        setType(context, elementType);
+        setType(context, elementType, null);
     }
 
-    public void setType(Context context, int elementType) {
+    public void setType(Context context, int elementType, VincaElementView root) {
+        type = elementType;
         return;
     }
 

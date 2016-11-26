@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
 
     <!--
     <TextView
@@ -25,7 +27,7 @@
         android:contentDescription="border_start"
         android:id="@+id/border_start"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/symbol_max_size"
+        android:layout_height="wrap_content"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_start"
@@ -51,9 +53,12 @@
         android:id="@+id/canvas"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/symbol_max_size"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/element_inner_margin"
-        android:layout_marginRight="@dimen/element_inner_margin">
+        android:layout_marginRight="@dimen/element_inner_margin"
+        android:layout_gravity="center"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
     </LinearLayout>
 
@@ -61,12 +66,12 @@
         android:contentDescription="border_end"
         android:id="@+id/border_end"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/symbol_max_size"
+        android:layout_height="wrap_content"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
         app:srcCompat="@drawable/project_end"
         android:adjustViewBounds="true"
         android:layout_marginLeft="@dimen/element_inner_margin"
-        android:layout_marginStart="@dimen/element_inner_margin"/>
+        android:layout_marginStart="@dimen/element_inner_margin" />
 
 </merge>

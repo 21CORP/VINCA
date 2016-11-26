@@ -2,38 +2,38 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center">
-
-        <ImageView
-            android:id="@+id/symbol"
+            <FrameLayout
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/symbol_max_size"
-            android:maxHeight="@dimen/symbol_max_size"
-            android:maxWidth="@dimen/symbol_max_size"
-            app:srcCompat="@drawable/activity"
-            android:adjustViewBounds="true"
-            android:layout_marginRight="@dimen/element_outer_margin"
-            android:layout_marginEnd="@dimen/element_outer_margin"
-            android:layout_marginLeft="@dimen/element_outer_margin"
-            android:layout_marginStart="@dimen/element_outer_margin"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center">
 
-        <LinearLayout
-            android:id="@+id/nodes"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/symbol_small_size"
-            android:layout_gravity="bottom|center_horizontal"
-            android:orientation="horizontal"
-            android:paddingRight="@dimen/element_outer_margin"
-            android:paddingLeft="@dimen/element_outer_margin"
-            android:paddingEnd="@dimen/element_outer_margin"
-            android:paddingStart="@dimen/element_outer_margin">
+            <ImageView
+                android:id="@+id/symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/symbol_max_size"
+                android:maxHeight="@dimen/symbol_max_size"
+                android:maxWidth="@dimen/symbol_max_size"
+                app:srcCompat="@drawable/activity"
+                android:adjustViewBounds="true"
+                android:layout_marginRight="@dimen/element_outer_margin"
+                android:layout_marginEnd="@dimen/element_outer_margin"
+                android:layout_marginLeft="@dimen/element_outer_margin"
+                android:layout_marginStart="@dimen/element_outer_margin"
+                android:layout_gravity="center"/>
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/nodes"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/symbol_small_size"
+                android:layout_gravity="bottom|center_horizontal"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/element_outer_margin"
+                android:paddingLeft="@dimen/element_outer_margin"
+                android:paddingEnd="@dimen/element_outer_margin"
+                android:paddingStart="@dimen/element_outer_margin">
 
-    </FrameLayout>
+            </LinearLayout>
+
+        </FrameLayout>
 
 </merge>

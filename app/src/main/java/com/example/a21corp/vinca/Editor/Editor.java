@@ -23,8 +23,8 @@ public class Editor {
         if (project == null) {
             project = new Expandable(VincaElement.ELEMENT_PROJECT);
         }
-        findAndSetCursor(project);
-        workspace.project = project;
+        Workspace.project = project;
+        setCursor(findCursor(project));
         notifyObservers();
         return project;
     }
@@ -33,25 +33,37 @@ public class Editor {
         return initiateWorkspace(null);
     }
 
-    private Container findAndSetCursor(Expandable scope) {
-        scope.isCursor = true;
-        workspace.cursor = scope;
-        /**
-        if (scope.containerList != null) {
-            for (Container container : scope.containerList) {
+    private Container findCursor(Container scope) {
+        Container cursor;
+        if (scope.isCursor) {
+            setCursor(scope);
+            return scope;
+        }
+        if (scope instanceof Expandable && ((Expandable) scope).containerList != null) {
+            for (Container container : ((Expandable) scope).containerList) {
                 if (container.isCursor) {
-                    workspace.cursor.isCursor = false;
-                    workspace.cursor = container;
-                    workspace.cursor.isCursor = true;
+                    setCursor(container);
+                    return container;
+                } else {
+                    cursor = findCursor(container);
+                    if (cursor != null) {
+                        setCursor(cursor);
+                        return cursor;
+                    }
                 }
             }
         }
-         **/
-        return workspace.cursor;
+        return null;
     }
 
+
     public void setCursor(Container cursor) {
-        workspace.cursor.isCursor = false;
+        if (cursor == null) {
+            cursor = Workspace.project;
+        }
+        if (workspace.cursor != null) {
+            workspace.cursor.isCursor = false;
+        }
         workspace.cursor = cursor;
         cursor.isCursor = true;
         notifyObservers();
@@ -103,13 +115,22 @@ public class Editor {
     }
 
     public void deleteElement(VincaElement element) {
-        if (element == workspace.project) {
+        if (element == Workspace.project) {
             //Trying to delete entire project - create a clean nodes
             initiateWorkspace();
             return;
         }
         if (element == workspace.cursor) {
-            setCursor(workspace.project);
+            //Trying to delete the cursor - reset cursor to the main project symbol
+            setCursor(Workspace.project);
+        } else if (element instanceof Container) {
+            Container currentCursor = workspace.cursor;
+            if (findCursor((Container) element) != null) {
+                //Cursor within deleted element - reset cursor to the main project symbol
+                setCursor(Workspace.project);
+            } else {
+                setCursor(currentCursor);
+            }
         }
         if (element instanceof Container) {
             element.parent.containerList.remove(element);

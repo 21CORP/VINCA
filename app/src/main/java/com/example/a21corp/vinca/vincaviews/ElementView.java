@@ -21,18 +21,19 @@ public class ElementView extends ContainerView {
 
     public ElementView(Context context, int elementType) {
         this(context, null);
-        setType(context, elementType);
+        setType(context, elementType, null);
     }
 
-    public void setType(Context context, int elementType) {
-        LayoutInflater inflater = (LayoutInflater)
-                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ElementView root = (ElementView)
-                inflater.inflate(R.layout.element_view, this, true);
+    public void setType(Context context, int elementType, ElementView root) {
+        if (root == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            root = (ElementView)
+                    inflater.inflate(R.layout.element_view, this, true);
+        }
+        super.setType(context, elementType, root);
 
         symbol = (ImageView) root.findViewById(R.id.symbol);
-        nodes = (LinearLayout) root.findViewById(R.id.nodes);
-        type = elementType;
 
         switch (elementType) {
             case VincaElement.ELEMENT_ACTIVITY:
@@ -45,8 +46,6 @@ public class ElementView extends ContainerView {
                 symbol.setImageResource(R.drawable.decision);
                 break;
         }
-
-        //root.setVisibility(VISIBLE);
         root.invalidate();
     }
 

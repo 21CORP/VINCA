@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -133,35 +132,19 @@ public class EditorActivity extends AppCompatActivity
                     view.setBackgroundColor(0);
                 } else {
                     Log.d("Editor - Debug", "Drag exited view: " + view.getId() + view.toString());
-                    //Remove the background - Doesn't matter if no background present
-                    view.setBackgroundResource(0);
-                    if (view instanceof VincaElementView && view.getParent() != null) {
-                        ((ViewGroup) view.getParent().getParent())
-                                .setBackgroundResource(0);
-                    }
-                    viewManager.getCursor().setBackgroundResource(R.color.background_material_light_2);
+                    viewManager.highlightView(viewManager.getCursor());
                 }
+                break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 if (view == trashBin) {
                     view.setBackgroundColor(Color.RED);
                 }
                 else {
-                    viewManager.getCursor().setBackgroundResource(0);
                     Log.d("Editor - Debug", "Drag entered into view: " + view.toString());
-                    //TODO: Fix this, should highlight border or something
-                    view.setBackgroundResource(R.color.background_material_light_2);
-                    if (view instanceof VincaElementView && view.getParent() != null) {
-                        ((ViewGroup) view.getParent().getParent())
-                                .setBackgroundResource(0);
-                    }
+                    viewManager.highlightView(view);
                 }
                 break;
             case DragEvent.ACTION_DROP:
-                view.setBackgroundResource(0);
-                if (view instanceof VincaElementView && view.getParent() != null) {
-                    ((ViewGroup) view.getParent().getParent())
-                            .setBackgroundResource(0);
-                }
                 VincaElementView draggedView;
                 try {
                     draggedView = (VincaElementView) event.getLocalState();
@@ -178,7 +161,7 @@ public class EditorActivity extends AppCompatActivity
                 //User dropped a view into trash bin?
                 if (view == trashBin) {
                     Log.d("Editor - Debug", "Dropped on view trashbin! - Deleting");
-                    view.setBackgroundResource(0);
+                    view.setBackgroundColor(0);
                     viewManager.deleteElement(draggedView);
                     break;
                 }
@@ -186,14 +169,10 @@ public class EditorActivity extends AppCompatActivity
                         + ((VincaElementView) view).element.toString());
 
                 if (view instanceof VincaElementView) {
-                    view.setBackgroundResource(0);
-                    if (view instanceof ExpandableView) {
-                        ((ViewGroup) view.getParent()).setBackgroundResource(0);
-                    }
                     if (draggedView instanceof VincaElementView) {
                         viewManager.moveElement(draggedView, (VincaElementView) view);
                     }
-                    viewManager.getCursor().setBackgroundResource(R.color.background_material_light_2);
+                    viewManager.highlightView(viewManager.getCursor());
                     break;
                 }
                 break;
@@ -206,6 +185,7 @@ public class EditorActivity extends AppCompatActivity
                     break;
                 }
                 draggedView.setVisibility(View.VISIBLE);
+                break;
         }
         //This listener should always receive drag-events, so always return true!
         return true;

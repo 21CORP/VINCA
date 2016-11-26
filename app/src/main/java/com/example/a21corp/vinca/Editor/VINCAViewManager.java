@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ public class VincaViewManager implements WorkspaceObserver {
     private EditorActivity listener;
     private VincaElementView cursor;
     private VincaElementView projectView = null;
+    private ContainerView highlightedElement;
 
     public VincaViewManager(Context context) {
         this.context = context;
@@ -47,6 +49,8 @@ public class VincaViewManager implements WorkspaceObserver {
             editor.initiateWorkspace();
         }
         editor.observerList.add(this);
+        highlightedElement = getCursor();
+        highlightView(highlightedElement);
         updateCanvas();
     }
 
@@ -66,10 +70,8 @@ public class VincaViewManager implements WorkspaceObserver {
             view.element = element;
 
             if (((Container) element).isCursor) {
-                if (cursor != null) {
-                    cursor.setBackgroundResource(0);
-                }
                 cursor = view;
+                highlightView(view);
             }
             if (projectView == null) {
                 projectView = view;
@@ -160,8 +162,8 @@ public class VincaViewManager implements WorkspaceObserver {
     }
 
     public void addElement(VincaElementView elementView) {
-        VincaElement element = elementView.element;
-        if (element == null) {
+        VincaElement element = null;
+        if (elementView.element == null) {
             if (elementView instanceof ExpandableView) {
                 element = new Expandable(elementView.type);
             } else if (elementView instanceof ElementView) {
@@ -169,15 +171,17 @@ public class VincaViewManager implements WorkspaceObserver {
             } else if (elementView instanceof NodeView) {
                 element = new Node(elementView.type);
             }
-            elementView.element = element;
             editor.addElement(element);
             return;
-        } else if (element instanceof Expandable) {
-            editor.addElement(new Expandable(element.type));
-        } else if (element instanceof Element) {
-            editor.addElement(new Element(element.type));
-        } else if (element instanceof Node) {
-            editor.addElement(new Node(element.type));
+        } else {
+            element = elementView.element;
+            if (element instanceof Expandable) {
+                editor.addElement(new Expandable(element.type));
+            } else if (element instanceof Element) {
+                editor.addElement(new Element(element.type));
+            } else if (element instanceof Node) {
+                editor.addElement(new Node(element.type));
+            }
         }
     }
 
@@ -210,9 +214,8 @@ public class VincaViewManager implements WorkspaceObserver {
         VincaElementView oldCursor = cursor;
         cursor = newCursor;
         if (newCursor.element != null && newCursor.element instanceof Container) {
-            oldCursor.setBackgroundResource(0);
             editor.setCursor((Container) newCursor.element);
-            cursor.setBackgroundResource(R.color.background_material_light_2);
+            highlightView(cursor);
         } else {
             cursor = oldCursor;
         }
@@ -246,7 +249,19 @@ public class VincaViewManager implements WorkspaceObserver {
             listener.canvas.addView(this.projectView);
             listener.canvas.invalidate();
             getCursor();
-            cursor.setBackgroundResource(R.color.background_material_light_2);
+            highlightView(cursor);
+        }
+    }
+
+    public void highlightView(View view) {
+        if (view instanceof ContainerView) {
+            if (highlightedElement != null) {
+                highlightedElement.setBackgroundResource(0);
+            }
+            highlightedElement = ((ContainerView) view);
+            if (highlightedElement != null) {
+                highlightedElement.setBackgroundResource(R.drawable.highlight);
+            }
         }
     }
 }

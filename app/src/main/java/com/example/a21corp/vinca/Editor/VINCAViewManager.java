@@ -22,32 +22,31 @@ import com.example.a21corp.vinca.vincaviews.NodeView;
  * Created by ymuslu on 17-11-2016.
  */
 
-public class VincaViewManager implements WorkspaceInterface {
+public class VincaViewManager implements WorkspaceObserver {
 
-    private EditorWorkspace workspace;
+    private Editor editor;
     public Context context;
-    private EditorActivity editor;
+    private EditorActivity listener;
     private VincaElementView cursor;
     private VincaElementView projectView = null;
-    private ImageView nodeOnElementView;
 
     public VincaViewManager(Context context) {
         this.context = context;
         initViewManager();
     }
 
-    public VincaViewManager(EditorActivity editor) {
-        this.editor = editor;
-        this.context = editor;
+    public VincaViewManager(EditorActivity listener) {
+        this.listener = listener;
+        this.context = listener;
         initViewManager();
     }
 
     public void initViewManager() {
-        workspace = EditorWorkspace.getInstance();
-        if (workspace.project == null) {
-            workspace.initiateWorkspace();
+        editor = new Editor();
+        if (Workspace.project == null) {
+            editor.initiateWorkspace();
         }
-        workspace.observerList.add(this);
+        editor.observerList.add(this);
         updateCanvas();
     }
 
@@ -94,7 +93,7 @@ public class VincaViewManager implements WorkspaceInterface {
             elementCanvas.addView(makeViewFromClass(child));
         }
 
-        if (editor != null) {
+        if (listener != null) {
             setListeners(view);
         }
 
@@ -109,7 +108,7 @@ public class VincaViewManager implements WorkspaceInterface {
         view.title = element.title;
         view.description = element.description;
 
-        if (editor != null) {
+        if (listener != null) {
             setListeners(view);
         }
 
@@ -123,7 +122,7 @@ public class VincaViewManager implements WorkspaceInterface {
         view.title = element.title;
         view.description = element.description;
 
-        if (editor != null) {
+        if (listener != null) {
             setListeners(view);
         }
 
@@ -171,26 +170,26 @@ public class VincaViewManager implements WorkspaceInterface {
                 element = new Node(elementView.type);
             }
             elementView.element = element;
-            workspace.addElement(element);
+            editor.addElement(element);
             return;
         } else if (element instanceof Expandable) {
-            workspace.addElement(new Expandable(element.type));
+            editor.addElement(new Expandable(element.type));
         } else if (element instanceof Element) {
-            workspace.addElement(new Element(element.type));
+            editor.addElement(new Element(element.type));
         } else if (element instanceof Node) {
-            workspace.addElement(new Node(element.type));
+            editor.addElement(new Node(element.type));
         }
     }
 
     public void deleteElement(VincaElementView elementView) {
         VincaElement element = elementView.element;
-        workspace.deleteElement(element);
+        editor.deleteElement(element);
     }
 
     public void moveElement(VincaElementView elementView, VincaElementView parentView) {
         VincaElement element;
-        if (elementView.getParent() == editor.elementPanel) {
-            element = new VincaElement(elementView.type);
+        if (elementView.getParent() == listener.elementPanel) {
+            element = null;
             int type = elementView.type;
             if (VincaElement.Expendables.contains(type)) {
                 element = new Expandable(type);
@@ -204,7 +203,7 @@ public class VincaViewManager implements WorkspaceInterface {
         }
         VincaElement parent = parentView.element;
 
-        workspace.setParent(element, parent);
+        editor.moveElement(element, parent);
     }
 
     public void setCursor(ContainerView newCursor) {
@@ -212,7 +211,7 @@ public class VincaViewManager implements WorkspaceInterface {
         cursor = newCursor;
         if (newCursor.element != null && newCursor.element instanceof Container) {
             oldCursor.setBackgroundResource(0);
-            workspace.setCursor((Container) newCursor.element);
+            editor.setCursor((Container) newCursor.element);
             cursor.setBackgroundResource(R.color.background_material_light_2);
         } else {
             cursor = oldCursor;
@@ -231,21 +230,21 @@ public class VincaViewManager implements WorkspaceInterface {
     }
 
     private void setListeners(VincaElementView view) {
-        view.setOnDragListener(editor);
-        view.setOnClickListener(editor);
-        view.setOnLongClickListener(editor);
-        view.setOnTouchListener(editor);
+        view.setOnDragListener(listener);
+        view.setOnClickListener(listener);
+        view.setOnLongClickListener(listener);
+        view.setOnTouchListener(listener);
     }
 
     @Override
     public void updateCanvas() {
         cursor = null;
-        projectView = makeViewFromClass(workspace.project);
-        if (editor != null) {
+        projectView = makeViewFromClass(Workspace.project);
+        if (listener != null) {
             //((ViewGroup) this.nodes.getParent()).removeView(this.nodes);
-            editor.canvas.removeAllViews();
-            editor.canvas.addView(this.projectView);
-            editor.canvas.invalidate();
+            listener.canvas.removeAllViews();
+            listener.canvas.addView(this.projectView);
+            listener.canvas.invalidate();
             getCursor();
             cursor.setBackgroundResource(R.color.background_material_light_2);
         }

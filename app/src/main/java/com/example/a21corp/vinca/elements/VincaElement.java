@@ -7,7 +7,7 @@ import java.util.Arrays;
  * Created by ymuslu on 12-11-2016
  */
 
-public class VincaElement {
+public abstract class VincaElement {
 
     public int symbol;
     public int type;

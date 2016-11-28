@@ -1,12 +1,15 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.content.ClipData;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -126,7 +129,11 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public boolean onDrag(View view, DragEvent event) {
+        //Log.d("Editor - DragEvent", "drag event recieved: " + DragEvent.class.getDeclaredFields()[event.getAction()]);
         switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                Log.d("Editor - Debug", "Started dragging " + view.getId());
+                break;
             case DragEvent.ACTION_DRAG_EXITED:
                 if (view == trashBin) {
                     view.setBackgroundColor(0);
@@ -203,6 +210,7 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            Log.d("Editor - Debug", "touch move event recieved");
             startDragAux(view);
             return true;
         }
@@ -214,7 +222,17 @@ public class EditorActivity extends AppCompatActivity
         if (view.getParent() != elementPanel) {
             view.setVisibility(View.GONE);
         }
+
         View.DragShadowBuilder dragShadowBuilder = new View.DragShadowBuilder(view);
-        view.startDrag(null, dragShadowBuilder, view, 0);
+        boolean success = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            success = view.startDragAndDrop(null, dragShadowBuilder, view, 0);
+        } else {
+            success =  view.startDrag(null, dragShadowBuilder, view, 0);
+        }
+        if(!success)
+        {
+            Log.e("Editor", "failed to start dragging");
+        }
     }
 }

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.example.a21corp.vinca"
-        minSdkVersion 15
+        minSdkVersion 20
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"

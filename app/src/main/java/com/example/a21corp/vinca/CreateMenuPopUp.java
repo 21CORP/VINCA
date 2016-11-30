@@ -22,7 +22,7 @@ public class CreateMenuPopUp extends DialogFragment implements View.OnClickListe
 Button b1;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View promptView = inflater.inflate(R.layout.dialogbox, null);
@@ -43,11 +43,9 @@ Button b1;
 
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // cancel
                     }
+
                 });
-
-
 
 
         return builder.create();

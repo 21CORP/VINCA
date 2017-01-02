@@ -23,11 +23,15 @@ public class VincaElementView extends LinearLayout {
 
     public VincaElementView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        title = new TextView(context);
+        description = new TextView(context);
     }
 
     public VincaElementView(Context context, int elementType) {
         this(context, null);
         setType(context, elementType, null);
+        title = new TextView(context);
+        description = new TextView(context);
     }
 
     public void setType(Context context, int elementType, VincaElementView root) {

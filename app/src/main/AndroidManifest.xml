@@ -17,6 +17,10 @@
         </activity>
         <activity android:name=".LoadActivity" />
         <activity android:name=".Editor.EditorActivity"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="670ab4b35707a77bf7d0e310fe51aa94cf1661ec" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

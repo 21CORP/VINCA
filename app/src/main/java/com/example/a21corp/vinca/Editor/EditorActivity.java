@@ -111,7 +111,8 @@ public class EditorActivity extends AppCompatActivity
         //exportView.setOnClickListener(this);
         //backButton.setOnClickListener(this);
         trashBin.setOnDragListener(this);
-        trashBin.setClickable(false);
+        trashBin.setOnClickListener(this);
+        //trashBin.setClickable(false);
     }
 
     @Override
@@ -123,7 +124,8 @@ public class EditorActivity extends AppCompatActivity
                 viewManager.setCursor((ContainerView) view);
             }
         } else if (view == trashBin) {
-            viewManager.deleteElement(viewManager.getCursor());
+            //viewManager.deleteElement(viewManager.getCursor());
+            throw new IllegalStateException("Testing CrashLytics by clicking TrashBin");
         }
     }
 

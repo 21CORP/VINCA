@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.a21corp.vinca.elements.VincaElement;
 
@@ -14,19 +15,23 @@ import com.example.a21corp.vinca.elements.VincaElement;
 public class VincaElementView extends LinearLayout {
 
     //public String title, description;
-    public String title;
-    public String description;
+    public TextView title;
+    public TextView description;
     public ImageView symbol;
     public VincaElement element;
     public int type;
 
     public VincaElementView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        title = new TextView(context);
+        description = new TextView(context);
     }
 
     public VincaElementView(Context context, int elementType) {
         this(context, null);
         setType(context, elementType, null);
+        title = new TextView(context);
+        description = new TextView(context);
     }
 
     public void setType(Context context, int elementType, VincaElementView root) {

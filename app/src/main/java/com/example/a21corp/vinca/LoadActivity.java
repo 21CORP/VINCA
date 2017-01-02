@@ -15,8 +15,11 @@ import android.widget.Toast;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 
 
 public class LoadActivity extends AppCompatActivity implements View.OnClickListener {
@@ -26,7 +29,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
-        LoadAdapter listadapter = new LoadAdapter();
+        LoadAdapter listadapter = new LoadAdapter(getFilesDir());
         ListView view = (ListView)findViewById(R.id.workspaceList);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,14 +56,29 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
 
     public class LoadAdapter extends BaseAdapter implements View.OnClickListener
     {
+        private class ViewCache{
+            public TextView titel;
+            public TextView date;
+        }
 
+       private File[] directory;
 
-        protected String[] names = {"Proj 1", "test2", "Proj", "Vinca", "Vinca2", "Festival 666", "Meeting", "Birthday party", "Recipe 2", "App development", "Software"};
-
-
+        public LoadAdapter(File f)
+        {
+            directory = f.listFiles();
+            if(directory==null){
+                directory = new File[0]; //Instead of null we pass on an empty array
+            }
+            Arrays.sort(directory, new Comparator<File>() {
+                @Override
+                public int compare(File f1, File f2) {
+                    return (int)Math.signum(f1.lastModified() - f2.lastModified());
+                }
+            });
+        }
         @Override
         public int getCount() {
-            return names.length;
+            return directory.length;
         }
 
         @Override
@@ -74,23 +92,29 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewCache cache;
             if(convertView==null)
             {
                 convertView = getLayoutInflater().inflate(R.layout.loadmenulistelements, null);
+                cache = new ViewCache();
+                cache.titel = (TextView)convertView.findViewById(R.id.elementName);
+                cache.date = (TextView)convertView.findViewById(R.id.elementDate);
+                convertView.setTag(R.id.VIEW_CACHE_DATA, cache);
             }
-            TextView titel = (TextView)convertView.findViewById(R.id.elementName);
-            titel.setText(names[position]);
-            TextView date = (TextView)convertView.findViewById(R.id.elementDate);
-            Calendar c = Calendar.getInstance();
-
-            date.setText(dateFormatter.format(c.getTime()));
+            else
+            {
+                cache = (ViewCache)convertView.getTag(R.id.VIEW_CACHE_DATA);
+            }
+            File currentFile = directory[position];
+            cache.titel.setText(currentFile.getName());
+            cache.date.setText(dateFormatter.format(new Date(currentFile.lastModified())));
 
             return convertView;
         }
 
         @Override
         public void onClick(View view) {
-            View row = (View)view.getTag(R.id.LOAD_MENU_ROW_ELEMENT);
+            /*View row = (View)view.getTag(R.id.LOAD_MENU_ROW_ELEMENT);
             TextView name = (TextView)row.findViewById(R.id.elementName);
             Toast toast;
             if((Integer)view.getTag(R.id.LOAD_MENU_DELETE)!=null)
@@ -104,7 +128,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(workspace);
 
             }
-            toast.show();
+            toast.show();*/
         }
     }
 }

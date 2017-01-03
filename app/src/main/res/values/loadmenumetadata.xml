@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="VIEW_CACHE_DATA"/>
-    <item type="id" name="LOAD_MENU_OPEN"/>
-    <item type="id" name="LOAD_MENU_ROW_ELEMENT"/>
+    <item type="id" name="FILE_ENTRY_ID"/>
 </resources>

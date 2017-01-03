@@ -1,8 +1,13 @@
 package com.example.a21corp.vinca;
 
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -38,14 +43,24 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         //floatAButton.setOnClickListener(this);
         //view2.setAdapter(listadapter);
         view.setAdapter(listadapter);
+        Log.d("LoadActivity", "Created");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.v("LoadActivity", "Creating options menu");
+        Log.d("LoadActivity", "Creating options menu");
         getMenuInflater().inflate(R.menu.loadactivitymenu, menu);
-
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
+        Log.d("LoadActivity", "SearchInfo: " + info + " for: " + getComponentName());
+        searchView.setSearchableInfo(info);
+        //searchView.setIconifiedByDefault(false);
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.d("LoadActivity", "in onNewIntent");
     }
 
     @Override
@@ -108,7 +123,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             File currentFile = directory[position];
             cache.titel.setText(currentFile.getName());
             cache.date.setText(dateFormatter.format(new Date(currentFile.lastModified())));
-
+            convertView.setTag(R.id.FILE_ENTRY_ID, currentFile);
             return convertView;
         }
 

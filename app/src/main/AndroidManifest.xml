@@ -10,16 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/VINCA_theme">
         <activity android:name=".MainMenu">
-        <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadActivity" />
+        <activity android:name=".LoadActivity"
+                  android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable"/>
+        </activity>
         <activity android:name=".Editor.EditorActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="670ab4b35707a77bf7d0e310fe51aa94cf1661ec" />
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

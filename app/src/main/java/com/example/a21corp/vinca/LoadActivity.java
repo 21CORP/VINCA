@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItem;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -21,27 +23,29 @@ import android.widget.Toast;
 import com.example.a21corp.vinca.Editor.EditorActivity;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class LoadActivity extends AppCompatActivity implements View.OnClickListener {
 
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
+    private LoadAdapter listadapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
-        LoadAdapter listadapter = new LoadAdapter(getFilesDir());
+        listadapter = new LoadAdapter(getFilesDir());
+        handleSearchIntent(getIntent());
         ListView view = (ListView)findViewById(R.id.workspaceList);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // ListView view2 = (ListView)findViewById(R.id.listAll);
-        //FloatingActionButton floatAButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        //floatAButton.setOnClickListener(this);
-        //view2.setAdapter(listadapter);
         view.setAdapter(listadapter);
         Log.d("LoadActivity", "Created");
     }
@@ -51,16 +55,48 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("LoadActivity", "Creating options menu");
         getMenuInflater().inflate(R.menu.loadactivitymenu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //Bugged? Never called..
+        /*searchManager.setOnDismissListener(new SearchManager.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.d("LoadActivity", "Hello?");
+                listadapter.FilterDirectory("");
+            }
+        });*/
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
         SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
-        Log.d("LoadActivity", "SearchInfo: " + info + " for: " + getComponentName());
         searchView.setSearchableInfo(info);
-        //searchView.setIconifiedByDefault(false);
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        listadapter.FilterDirectory("");
+                        return true;
+                    }
+                });
+                //searchView.setIconifiedByDefault(false);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void handleSearchIntent(Intent intent){
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+            applySearch(intent.getStringExtra(SearchManager.QUERY));
+        }
+    }
+
+    public void applySearch(String q)
+    {
+        listadapter.FilterDirectory(q);
     }
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.d("LoadActivity", "in onNewIntent");
+        setIntent(intent);
+        handleSearchIntent(intent);
     }
 
     @Override
@@ -75,12 +111,25 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             public TextView titel;
             public TextView date;
         }
+        private File sourceDir;
+        private File[] directory;
+        public void FilterDirectory(final String query){
+            Log.d("LoadActivity", "Applying filter " + query);
+            final Pattern regex = Pattern.compile("(\\w)*" + query + "(\\w)*");
+            directory = sourceDir.listFiles(new FilenameFilter() {
 
-       private File[] directory;
 
-        public LoadAdapter(File f)
+                @Override
+                public boolean accept(File dir, String name) {
+                    Matcher match = regex.matcher(name);
+                    return match.find();
+                }
+            }
+            );
+            UpdateDirectory();
+        }
+        public void UpdateDirectory()
         {
-            directory = f.listFiles();
             if(directory==null){
                 directory = new File[0]; //Instead of null we pass on an empty array
             }
@@ -90,6 +139,12 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                     return (int)Math.signum(f1.lastModified() - f2.lastModified());
                 }
             });
+        }
+        public LoadAdapter(File f)
+        {
+            sourceDir = f;
+            directory = sourceDir.listFiles();
+            UpdateDirectory();
         }
         @Override
         public int getCount() {

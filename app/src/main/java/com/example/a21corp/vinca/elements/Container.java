@@ -1,5 +1,6 @@
 package com.example.a21corp.vinca.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import java.util.List;
  * Created by ymuslu on 18-11-2016.
  */
 
-public class Container extends VincaElement {
+public class Container extends VincaElement implements Serializable {
+    private static final long serialVersionUID = 12345;
+
     public boolean isCursor;
     boolean isOpen;
     public List<Node> vincaNodeList = new ArrayList<Node>();

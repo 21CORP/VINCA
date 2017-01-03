@@ -6,6 +6,7 @@ import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +14,12 @@ import java.util.List;
  * Created by ymuslu on 12-11-2016.
  */
 
-public class Editor {
+public class Editor implements Serializable {
+
+    private static final long serialVersionUID = 12345;
 
     public Workspace workspace = new Workspace();
-    public List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
+    public transient List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
 
 
     public Expandable initiateWorkspace(Expandable project) {

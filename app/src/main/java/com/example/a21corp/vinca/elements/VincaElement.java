@@ -1,5 +1,6 @@
 package com.example.a21corp.vinca.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,7 +8,8 @@ import java.util.Arrays;
  * Created by ymuslu on 12-11-2016
  */
 
-public abstract class VincaElement {
+public abstract class VincaElement implements Serializable {
+    private static final long serialVersionUID = 12345;
 
     public int symbol;
     public int type;

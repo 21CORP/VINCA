@@ -149,8 +149,8 @@ public class VincaViewManager implements WorkspaceObserver {
         int elementType = element.type;
 
         ElementView view = new ElementView(context, elementType);
-        view.title.setText(element.title);
-        view.description.setText(element.description);
+        //view.title.setText(element.title);
+        //view.description.setText(element.description);
 
         if (listener != null) {
             setListeners(view);
@@ -163,8 +163,8 @@ public class VincaViewManager implements WorkspaceObserver {
         int elementType = element.type;
 
         NodeView view = new NodeView(context, elementType);
-        view.title.setText(element.title);
-        view.description.setText(element.description);
+        //view.title.setText(element.title);
+        //view.description.setText(element.description);
 
         if (listener != null) {
             setListeners(view);

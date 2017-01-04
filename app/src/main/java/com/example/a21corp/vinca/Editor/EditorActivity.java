@@ -31,6 +31,8 @@ import com.example.a21corp.vinca.vincaviews.NodeView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
+import java.io.File;
+
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
         , View.OnTouchListener {
@@ -50,6 +52,11 @@ public class EditorActivity extends AppCompatActivity
     public LinearLayout elementPanel;
 
     private HistoryAccountant historyAccountant;
+
+    //flyttes til andet sted?
+    private String dirPath;
+    private File projDir;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +131,18 @@ public class EditorActivity extends AppCompatActivity
         trashBin.setOnDragListener(this);
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
+
+       dirPath = getFilesDir().getAbsolutePath() + File.separator + "workspaces";
+        projDir = new File(dirPath);
+        if (!projDir.exists())
+            projDir.mkdirs();
+
     }
 
     @Override
     public void onClick(View view) {
+
+
         if (view instanceof VincaElementView) {
             if (view.getParent() == elementPanel) {
                 CreateCommand cCmd = new CreateCommand((VincaElementView) view, viewManager);
@@ -140,18 +155,20 @@ public class EditorActivity extends AppCompatActivity
         }
         if(view==exportView){
 
-           // ProjectManager.getInstance().saveProject(getFilesDir()+ "/workspace.ser");
-
-            ProjectManager.getInstance().saveProject(getFilesDir()+"/"
+            ProjectManager.getInstance().saveProject(projDir+"/"
                     + Workspace.getInstance().getTitle() +".ser");
 
             Log.d("export","serialized");
-        }
 
-        if(view== backButton){
+            for (String s : projDir.list()) {
+                System.out.println(s);
+            }
+
+        }
+            if(view== backButton){
             Log.d("back","clicked");
-           // ProjectManager.getInstance().loadProject(getFilesDir()+ "/workspace.ser");
-            ProjectManager.getInstance().loadProject(getFilesDir()+"/"
+
+            ProjectManager.getInstance().loadProject(projDir+"/"
                     + Workspace.getInstance().getTitle() +".ser");
 
             Intent workspace = new Intent(this, EditorActivity.class);

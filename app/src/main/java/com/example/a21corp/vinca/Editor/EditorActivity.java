@@ -32,7 +32,6 @@ public class EditorActivity extends AppCompatActivity
         , View.OnTouchListener {
 
     private VincaViewManager viewManager = null;
-    private ProjectManager pm;
     private NodeView methodView;
     private ElementView activityView, pauseView, decisionView;
     private ExpandableView processView, projectView, iterateView;
@@ -53,7 +52,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         viewManager = new VincaViewManager(this);
-        pm = new ProjectManager();
+
     }
 
     private void initiateEditor() {
@@ -91,7 +90,7 @@ public class EditorActivity extends AppCompatActivity
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (TextView) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
-
+        projectNameBar.setText(Workspace.getInstance().getTitle());
         //Listen to VINCA symbols
         projectView.setOnTouchListener(this);
         projectView.setOnClickListener(this);
@@ -134,14 +133,22 @@ public class EditorActivity extends AppCompatActivity
         }
         if(view==exportView){
 
+           // ProjectManager.getInstance().saveProject(getFilesDir()+ "/workspace.ser");
 
-            pm.saveProject(this.getFilesDir()+ "/workspace.ser");
+            ProjectManager.getInstance().saveProject(getFilesDir()+"/"
+                    + Workspace.getInstance().getTitle() +".ser");
+
             Log.d("export","serialized");
         }
+
         if(view== backButton){
             Log.d("back","clicked");
-            pm.loadProject(this.getFilesDir()+ "/workspace.ser");
+           // ProjectManager.getInstance().loadProject(getFilesDir()+ "/workspace.ser");
+            ProjectManager.getInstance().loadProject(getFilesDir()+"/"
+                    + Workspace.getInstance().getTitle() +".ser");
+
             Intent workspace = new Intent(this, EditorActivity.class);
+            finish();
             startActivity(workspace);
         }
     }

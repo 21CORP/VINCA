@@ -1,20 +1,32 @@
 package com.example.a21corp.vinca.Editor;
 
+import com.example.a21corp.vinca.elements.Expandable;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Oliver on 04-01-2017.
  */
 
 public class ProjectManager {
-
+    private static ProjectManager instance;
     public ProjectManager(){
 
     }
 
-    public int createProject(String title, String description){
+    public static ProjectManager getInstance() {
+        if (instance == null) {
+            instance = new ProjectManager();
+        }
+        return instance;
+    }
 
+    public int createProject(String title) {
+        Workspace instance = Workspace.getInstance();
+        instance.setTitle(title);
+        instance.project = new ArrayList<Expandable>();
         return 0;
     }
 

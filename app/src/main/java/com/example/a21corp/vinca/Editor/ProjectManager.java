@@ -38,7 +38,7 @@ public class ProjectManager {
             ex.printStackTrace();
         }
 
-        return  true;
+        return  false;
     }
 
     public boolean importProject(File project){

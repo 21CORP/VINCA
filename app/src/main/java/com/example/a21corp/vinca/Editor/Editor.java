@@ -1,5 +1,7 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.util.Log;
+
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
@@ -88,6 +90,7 @@ public class Editor implements Serializable {
     }
 
     private void moveElement(Container container, Container parent) {
+        parent.isOpen = true;
         Expandable oldParent = container.parent;
         if (oldParent != null) {
             oldParent.containerList.remove(container);
@@ -105,6 +108,7 @@ public class Editor implements Serializable {
     }
 
     private void moveElement(Node element, Container parent) {
+        parent.isOpen = true;
         Container oldParent = element.parent;
         if (oldParent != null) {
             oldParent.vincaNodeList.remove(element);
@@ -154,5 +158,10 @@ public class Editor implements Serializable {
         for (WorkspaceObserver observer : observerList) {
             observer.updateCanvas();
         }
+    }
+
+    public void toggleOpenExpandable(Container element) {
+        element.isOpen = !element.isOpen;
+        notifyObservers();
     }
 }

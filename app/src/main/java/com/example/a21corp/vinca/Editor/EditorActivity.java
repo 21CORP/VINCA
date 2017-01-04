@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.elements.Container;
+import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.ElementView;
@@ -202,6 +204,13 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public boolean onLongClick(View view) {
+        //PLACEHOLDER
+        //TODO: REPLACE
+        if (view instanceof ContainerView) {
+            viewManager.toggleOpenExpandableView((ContainerView) view);
+            return true;
+        }
+        //PLACEHOLDER END
         if (view instanceof VincaElementView && view.getParent() != elementPanel) {
             //Show menu for title, description etc.
             Log.d("Editor - Debug", "LongClick detected!");

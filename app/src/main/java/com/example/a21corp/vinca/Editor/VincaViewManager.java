@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.view.ViewGroup.LayoutParams;
 
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
@@ -76,13 +78,51 @@ public class VincaViewManager implements WorkspaceObserver {
             if (projectView == null) {
                 projectView = view;
             }
-            if (element instanceof Container) {
+            if (((Container) element).isOpen) {
                 createViewForNodesOnContainer((ContainerView) view, (Container) element);
+            } else {
+                //Vinca Element is closed! Indicate if the element contains anything!
+                if (((Container) element).vincaNodeList.size() > 0) {
+                    indicateNodesWithin((ContainerView) view, (Container) element);
+                }
+                if (element instanceof Expandable) {
+                    if (((Expandable) element).containerList.size() > 0) {
+                        indicateContainersWithin((ExpandableView) view);
+                    }
+                }
             }
             return view;
         }
         Log.d("VincaViewManager", "FATAL ERROR!");
         return null;
+    }
+
+    private void indicateContainersWithin(ExpandableView view) {
+        int height = (int) context.getResources().getDimension(R.dimen.symbol_mid_size);
+        int width = (int) context.getResources().getDimension(R.dimen.symbol_mid_size);
+        ImageView indicator = new ImageView(context);
+        indicator.setImageResource(R.drawable.pause_rotated);
+        indicator.setMaxWidth((int) context.getResources().getDimension(R.dimen.symbol_mid_size));
+        view.canvas.addView(indicator, width, height);
+    }
+
+    public void indicateNodesWithin(ContainerView view, Container element) {
+        int size = element.vincaNodeList.size();
+        int height = (int) context.getResources().getDimension(R.dimen.symbol_small_size);
+        int width = (int) context.getResources().getDimension(R.dimen.symbol_small_size);
+
+        ImageView indicator = new ImageView(context);
+
+        indicator.setImageResource(R.drawable.method);
+
+        view.nodes.addView(indicator, width, height);
+
+        if (size > 1) {
+            TextView textView = new TextView(context);
+            String text = "x"+Integer.toString(size);
+            textView.setText(text);
+            view.nodes.addView(textView, width, height);
+        }
     }
 
     private ExpandableView makeExpandableView(Expandable element) {
@@ -91,8 +131,10 @@ public class VincaViewManager implements WorkspaceObserver {
         ExpandableView view = new ExpandableView(context, elementType);
         LinearLayout elementCanvas = view.canvas;
 
-        for (VincaElement child : element.containerList) {
-            elementCanvas.addView(makeViewFromClass(child));
+        if (element.isOpen) {
+            for (VincaElement child : element.containerList) {
+                elementCanvas.addView(makeViewFromClass(child));
+            }
         }
 
         if (listener != null) {
@@ -263,5 +305,9 @@ public class VincaViewManager implements WorkspaceObserver {
                 highlightedElement.setBackgroundResource(R.drawable.highlight);
             }
         }
+    }
+
+    public void toggleOpenExpandableView(ContainerView view) {
+        editor.toggleOpenExpandable((Container) view.element);
     }
 }

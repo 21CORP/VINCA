@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class ProjectManager {
 
-public static ProjectManager pm;
-
     public ProjectManager(){
 
     }
@@ -20,10 +18,10 @@ public static ProjectManager pm;
         return 0;
     }
 
-    public boolean loadProject(String fileName, int id){
+    public boolean loadProject(String fileName){
 
         try {
-            Serialization.load("lol");
+          Workspace.setWorkspace((Workspace) Serialization.load(fileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,10 +29,10 @@ public static ProjectManager pm;
         return  true;
     }
 
-    public boolean saveProject(String fileName, String state ){
+    public boolean saveProject(String fileName){
 
         try {
-            Serialization.save(Workspace.getInstance());
+            Serialization.save(Workspace.getInstance(),fileName);
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -46,8 +44,6 @@ public static ProjectManager pm;
     public boolean importProject(File project){
         return  true;
     }
-
-
     public boolean exportProject(File project, String state){
         return true;
     }

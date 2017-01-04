@@ -10,16 +10,16 @@ import java.io.Serializable;
 
 public class Serialization {
 
-  public static void save(Serializable obj) throws IOException {
+  public static void save(Serializable obj, String fileName) throws IOException {
     ObjectOutputStream oos = new ObjectOutputStream(
-            new FileOutputStream(new File("/sdcard/save_object.bin")));
+            new FileOutputStream(fileName));
     oos.writeObject(obj);
     oos.close();
   }
 
   public static Serializable load(String fileName) throws Exception {
     ObjectInputStream oos = new ObjectInputStream(
-            new FileInputStream((new File("/sdcard/save_object.bin"))));
+            new FileInputStream((fileName)));
     Object obj = oos.readObject();
     oos.close();
     return (Serializable) obj;

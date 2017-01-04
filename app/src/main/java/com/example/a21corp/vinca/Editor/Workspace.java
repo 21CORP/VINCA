@@ -26,5 +26,8 @@ public class Workspace implements Serializable {
         }
         return instance;
     }
+    public static void setWorkspace(Workspace workspace){
+        instance = workspace;
 
+    }
 }

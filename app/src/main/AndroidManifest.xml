@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:debuggable="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/vinca_logo_tmp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/VINCA_theme">
@@ -30,6 +30,6 @@
             android:value="670ab4b35707a77bf7d0e310fe51aa94cf1661ec" />
 
     </application>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

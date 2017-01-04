@@ -19,7 +19,7 @@
         android:gravity="start|center_vertical"
         android:background="@color/background_material_light_2">
 
-        <!--
+
         <ImageButton
             android:contentDescription="Return to main menu"
             android:layout_width="0dp"
@@ -27,7 +27,7 @@
             app:srcCompat="?android:attr/homeAsUpIndicator"
             android:id="@+id/button_return"
             android:layout_weight="1" />
-            -->
+
 
         <TextView
             android:text="Project Skeleton"

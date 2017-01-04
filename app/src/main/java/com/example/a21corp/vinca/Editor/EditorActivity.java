@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca.Editor;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -30,13 +31,13 @@ public class EditorActivity extends AppCompatActivity
         , View.OnTouchListener {
 
     private VincaViewManager viewManager = null;
-
+    private ProjectManager pm;
     private NodeView methodView;
     private ElementView activityView, pauseView, decisionView;
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    //private ImageButton backButton, exportView;
+    private ImageButton backButton, exportView;
     private ImageButton trashBin;
     private TextView projectNameBar, saveStatusBar;
 
@@ -51,6 +52,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         viewManager = new VincaViewManager(this);
+        pm = new ProjectManager();
     }
 
     private void initiateEditor() {
@@ -83,8 +85,8 @@ public class EditorActivity extends AppCompatActivity
 
         //undoView = findViewById(R.id.undo);
         //redoView = findViewById(R.id.redo);
-        //exportView = (ImageButton) findViewById(R.id.export);
-        //backButton = (ImageButton) findViewById(R.id.button_return);
+        exportView = (ImageButton) findViewById(R.id.export);
+        backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (TextView) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -110,8 +112,8 @@ public class EditorActivity extends AppCompatActivity
         //Listen to misc. buttons
         //undoView.setOnClickListener(this);
         //redoView.setOnClickListener(this);
-        //exportView.setOnClickListener(this);
-        //backButton.setOnClickListener(this);
+        exportView.setOnClickListener(this);
+        backButton.setOnClickListener(this);
         trashBin.setOnDragListener(this);
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
@@ -128,6 +130,18 @@ public class EditorActivity extends AppCompatActivity
         } else if (view == trashBin) {
             //viewManager.deleteElement(viewManager.getCursor());
             throw new IllegalStateException("Testing CrashLytics by clicking TrashBin");
+        }
+        if(view==exportView){
+
+
+            pm.saveProject(this.getFilesDir()+ "/workspace.ser");
+            Log.d("export","serialized");
+        }
+        if(view== backButton){
+            Log.d("back","clicked");
+            pm.loadProject(this.getFilesDir()+ "/workspace.ser");
+            Intent workspace = new Intent(this, EditorActivity.class);
+            startActivity(workspace);
         }
     }
 

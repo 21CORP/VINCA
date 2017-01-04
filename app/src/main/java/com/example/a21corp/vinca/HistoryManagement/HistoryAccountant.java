@@ -30,6 +30,6 @@ public class HistoryAccountant { //https://en.wikipedia.org/wiki/Command_pattern
     public void storeAndExecute(Command cmd){
         historyList.add(cmd);
         cmd.execute();
-        Log.d("History", cmd.getClass().getName() + " added to history");
+        Log.d("History", cmd.getClass().getSimpleName() + " added to history");
     }
 }

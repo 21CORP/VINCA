@@ -19,18 +19,17 @@
             android:ems="10"
             android:id="@+id/TitleTextView"
             android:hint="Title"
-            android:textColor="?android:attr/textColorHint" />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:text=" "
             android:ems="10"
             android:id="@+id/DescriptionTextView"
-            android:layout_weight="1.01"
             android:hint="Description"
-            android:textColor="?android:attr/textColorHint" />
+            android:textColor="?android:attr/textColorSecondary" />
 
     </LinearLayout>
 </RelativeLayout>

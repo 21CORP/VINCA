@@ -38,7 +38,7 @@ public class element_description extends DialogFragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View promptView = inflater.inflate(R.layout.element_description, null);
+        View promptView = inflater.inflate(R.layout.fragment_element_description, null);
         titleTV = (TextView) promptView.findViewById(R.id.TitleTextView);
         descTV = (TextView) promptView.findViewById(R.id.DescriptionTextView);
 

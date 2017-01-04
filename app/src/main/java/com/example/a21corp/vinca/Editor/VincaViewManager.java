@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
 
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;

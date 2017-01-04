@@ -9,15 +9,17 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
 public class MoveCommand implements Command {
     VincaElementView view;
+    VincaElementView parentView;
     VincaViewManager manager;
 
-    public MoveCommand(VincaElementView view, VincaViewManager manager){
+    public MoveCommand(VincaElementView view, VincaViewManager manager, VincaElementView parentView){
         this.view = view;
+        this.parentView = parentView;
         this.manager = manager;
     }
 
     @Override
     public void execute(){
-        manager.addElement(view);
+        manager.moveElement(view, parentView);
     }
 }

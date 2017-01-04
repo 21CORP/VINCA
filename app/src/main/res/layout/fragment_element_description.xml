@@ -23,7 +23,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:text=" "
             android:ems="10"
@@ -32,11 +32,5 @@
             android:hint="Description"
             android:textColor="?android:attr/textColorHint" />
 
-        <Button
-            android:text="Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/Save"
-            android:textColor="@color/primary_text_light" />
     </LinearLayout>
 </RelativeLayout>

@@ -45,7 +45,7 @@ public class VincaViewManager implements WorkspaceObserver {
 
     public void initViewManager() {
         editor = new Editor();
-        if (Workspace.project == null) {
+        if (Workspace.getInstance().project.size() == 0) {
             editor.initiateWorkspace();
         }
         editor.observerList.add(this);
@@ -242,7 +242,7 @@ public class VincaViewManager implements WorkspaceObserver {
     @Override
     public void updateCanvas() {
         cursor = null;
-        projectView = makeViewFromClass(Workspace.project);
+        projectView = makeViewFromClass(Workspace.getInstance().project.get(0));
         if (listener != null) {
             //((ViewGroup) this.nodes.getParent()).removeView(this.nodes);
             listener.canvas.removeAllViews();

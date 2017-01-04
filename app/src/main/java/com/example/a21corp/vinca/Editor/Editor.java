@@ -18,7 +18,7 @@ public class Editor implements Serializable {
 
     private static final long serialVersionUID = 12345;
 
-    public Workspace workspace = new Workspace();
+    public Workspace workspace = Workspace.getInstance();
     public transient List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
 
 
@@ -26,7 +26,8 @@ public class Editor implements Serializable {
         if (project == null) {
             project = new Expandable(VincaElement.ELEMENT_PROJECT);
         }
-        Workspace.project = project;
+        workspace.project = new ArrayList<Expandable>();
+        workspace.project.add(project);
         setCursor(findCursor(project));
         notifyObservers();
         return project;
@@ -62,7 +63,11 @@ public class Editor implements Serializable {
 
     public void setCursor(Container cursor) {
         if (cursor == null) {
-            cursor = Workspace.project;
+            if (workspace.project.size() == 0) {
+                workspace.project = new ArrayList<Expandable>();
+                workspace.project.add(new Expandable(VincaElement.ELEMENT_PROJECT));
+            }
+            cursor = workspace.project.get(0);
         }
         if (workspace.cursor != null) {
             workspace.cursor.isCursor = false;
@@ -118,19 +123,21 @@ public class Editor implements Serializable {
     }
 
     public void deleteElement(VincaElement element) {
-        if (element == Workspace.project) {
-            //Trying to delete entire project - create a clean nodes
-            initiateWorkspace();
-            return;
+        if (workspace.project.remove(element)) {
+            //Removed element was a top-level project
+            if (workspace.project.size() == 0) {
+                initiateWorkspace();
+                return;
+            }
         }
         if (element == workspace.cursor) {
             //Trying to delete the cursor - reset cursor to the main project symbol
-            setCursor(Workspace.project);
+            setCursor(workspace.project.get(0));
         } else if (element instanceof Container) {
             Container currentCursor = workspace.cursor;
             if (findCursor((Container) element) != null) {
                 //Cursor within deleted element - reset cursor to the main project symbol
-                setCursor(Workspace.project);
+                setCursor(workspace.project.get(0));
             } else {
                 setCursor(currentCursor);
             }

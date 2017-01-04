@@ -63,29 +63,28 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                 listadapter.FilterDirectory("");
             }
         });*/
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchViewAction = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        //SearchView searchView = (SearchView) menu.findItem(R.id.action_search);
+        searchViewAction.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listadapter.FilterDirectory(newText);
+                return true;
+            }
+        });
         SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
-        searchView.setSearchableInfo(info);
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        listadapter.FilterDirectory("");
-                        return true;
-                    }
-                });
-                //searchView.setIconifiedByDefault(false);
         return super.onCreateOptionsMenu(menu);
     }
 
     public void handleSearchIntent(Intent intent){
         if(Intent.ACTION_SEARCH.equals(intent.getAction())){
             applySearch(intent.getStringExtra(SearchManager.QUERY));
+            Log.d("LoadActivity", "Handling search intent");
         }
     }
 
@@ -139,6 +138,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
                     return (int)Math.signum(f1.lastModified() - f2.lastModified());
                 }
             });
+            notifyDataSetChanged();
         }
         public LoadAdapter(File f)
         {

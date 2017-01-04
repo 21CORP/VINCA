@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.VincaElement;
@@ -222,6 +223,11 @@ public class EditorActivity extends AppCompatActivity
         //TODO: REPLACE
         if (view instanceof ContainerView) {
             viewManager.toggleOpenExpandableView((ContainerView) view);
+
+            element_description ed = new element_description();
+            ed.setElement(((ContainerView) view).element);
+            ed.show(getFragmentManager(), "DescriptionWindow");
+
             return true;
         }
         //PLACEHOLDER END

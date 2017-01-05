@@ -12,6 +12,8 @@ public class EditDescriptionCommand implements Command{
     VincaElement element;
     String title;
     String description;
+    String oldTitle;
+    String oldDescription;
 
     public EditDescriptionCommand(VincaElement element, String title, String description){
         this.element = element;
@@ -23,5 +25,11 @@ public class EditDescriptionCommand implements Command{
     public void execute(){
         element.title = title;
         element.description = description;
+    }
+
+    @Override
+    public void inverse() {
+        element.title = oldTitle;
+        element.description = oldDescription;
     }
 }

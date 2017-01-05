@@ -35,6 +35,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
 
     public void undo(){
         if(!historyStack.isEmpty()) {
+            historyStack.peek().inverse();
             redoStack.push(historyStack.peek());
             historyStack.pop();
         }
@@ -44,6 +45,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
 
     public void redo(){
         if(!redoStack.isEmpty()) {
+            redoStack.peek().execute();
             historyStack.push(redoStack.peek());
             redoStack.pop();
         }

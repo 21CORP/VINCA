@@ -237,7 +237,7 @@ public class VincaViewManager implements WorkspaceObserver {
 
     public void deleteElement(VincaElementView elementView) {//TODO Convert to command pattern
         VincaElement element = elementView.element;
-        DeleteCommand dCmd = new DeleteCommand(element, editor);
+        DeleteCommand dCmd = new DeleteCommand(element, element.parent, editor);
         historian.storeAndExecute(dCmd);
     }
 
@@ -258,7 +258,7 @@ public class VincaViewManager implements WorkspaceObserver {
         }
         VincaElement parent = parentView.element;
 
-        MoveCommand mCmd = new MoveCommand(element, parent, editor);
+        MoveCommand mCmd = new MoveCommand(element, parent, element.parent, editor);
         historian.storeAndExecute(mCmd);
     }
 

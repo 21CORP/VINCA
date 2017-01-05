@@ -21,4 +21,9 @@ public class CreateCommand implements Command{
         editor.addElement(element);
     }
 
+    @Override
+    public void inverse(){
+        editor.deleteElement(element);
+    }
+
 }

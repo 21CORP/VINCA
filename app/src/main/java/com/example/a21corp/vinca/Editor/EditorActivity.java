@@ -1,6 +1,5 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,12 +16,10 @@ import android.widget.TextView;
 
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
-import com.example.a21corp.vinca.HistoryManagement.HistoryAccountant;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.element_description;
-import com.example.a21corp.vinca.elements.Container;
-import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.ElementView;
@@ -51,7 +47,7 @@ public class EditorActivity extends AppCompatActivity
     private HorizontalScrollView scrollView;
     public LinearLayout elementPanel;
 
-    private HistoryAccountant historyAccountant;
+    private Historian historian;
 
     //flyttes til andet sted?
     private String dirPath;
@@ -65,7 +61,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         viewManager = new VincaViewManager(this);
-        historyAccountant = HistoryAccountant.getInstance();
+        historian = Historian.getInstance();
 
     }
 
@@ -220,7 +216,7 @@ public class EditorActivity extends AppCompatActivity
                     Log.d("Editor - Debug", "Dropped on view trashbin! - Deleting");
                     view.setBackgroundColor(0);
                     DeleteCommand dCmd = new DeleteCommand(draggedView, viewManager);
-                    historyAccountant.storeAndExecute(dCmd);
+                    historian.storeAndExecute(dCmd);
 
                     break;
                 }
@@ -230,7 +226,7 @@ public class EditorActivity extends AppCompatActivity
                 if (view instanceof VincaElementView) {
                     if (draggedView instanceof VincaElementView) {
                         MoveCommand mCmd = new MoveCommand(draggedView, viewManager, (VincaElementView) view);
-                        historyAccountant.storeAndExecute(mCmd);
+                        historian.storeAndExecute(mCmd);
                     }
                     viewManager.highlightView(viewManager.getCursor());
                     break;

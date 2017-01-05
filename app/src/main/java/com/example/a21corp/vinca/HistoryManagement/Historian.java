@@ -9,22 +9,22 @@ import java.util.List;
  * Created by Thomas on 04-01-2017.
  */
 
-public class HistoryAccountant { //https://en.wikipedia.org/wiki/Command_pattern#Java
+public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     private static final long serialVersionUID = 12345;
-    private static HistoryAccountant instance;
+    private static Historian instance;
 
     private List<Command> historyList = new ArrayList<Command>();
 
-    private HistoryAccountant() {}
+    private Historian() {}
 
-    public static HistoryAccountant getInstance() {
+    public static Historian getInstance() {
         if (instance == null) {
-            instance = new HistoryAccountant();
+            instance = new Historian();
         }
         return instance;
     }
-    public static void setHistoryAccountant(HistoryAccountant historyAccountant){
-        instance = historyAccountant;
+    public static void setHistoryAccountant(Historian historian){
+        instance = historian;
     }
 
     public void storeAndExecute(Command cmd){

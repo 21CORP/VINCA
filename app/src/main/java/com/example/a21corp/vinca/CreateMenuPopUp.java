@@ -28,7 +28,7 @@ Button b1;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View promptView = inflater.inflate(R.layout.dialogbox, null);
+        View promptView = inflater.inflate(R.layout.create_dialogbox, null);
         builder.setView(promptView);
 
         b1 = (Button) promptView.findViewById(R.id.button4);

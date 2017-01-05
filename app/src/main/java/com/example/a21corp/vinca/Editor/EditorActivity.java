@@ -20,6 +20,7 @@ import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
@@ -40,7 +41,7 @@ public class EditorActivity extends AppCompatActivity
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    private ImageButton backButton, exportView;
+    private ImageButton backButton, exportView, saveButton;
     private ImageButton trashBin;
     private TextView projectNameBar, saveStatusBar;
 
@@ -100,6 +101,7 @@ public class EditorActivity extends AppCompatActivity
 
         //undoView = findViewById(R.id.undo);
         //redoView = findViewById(R.id.redo);
+        saveButton = (ImageButton) findViewById(R.id.saveas) ;
         exportView = (ImageButton) findViewById(R.id.export);
         backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
@@ -127,6 +129,7 @@ public class EditorActivity extends AppCompatActivity
         //Listen to misc. buttons
         //undoView.setOnClickListener(this);
         //redoView.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
         exportView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         trashBin.setOnDragListener(this);
@@ -161,10 +164,12 @@ public class EditorActivity extends AppCompatActivity
             //viewManager.deleteElement(viewManager.getCursor());
             throw new IllegalStateException("Testing CrashLytics by clicking TrashBin");
         }
-        if(view==exportView){
+        if(view==saveButton){
+            SaveAsDialog savepop = new SaveAsDialog();
+            savepop.show(getFragmentManager(),"save as");
 
-            ProjectManager.getInstance().saveProject(projDir+"/"
-                    + Workspace.getInstance().getTitle() +".ser");
+
+
 
             Log.d("export","serialized");
 

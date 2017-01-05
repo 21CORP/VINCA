@@ -23,12 +23,14 @@ public class ProjectManager {
         return instance;
     }
 
-    public int createProject(String title) {
+    public void createProject(String title) {
         Workspace instance = Workspace.getInstance();
         instance.setTitle(title);
         instance.project = new ArrayList<Expandable>();
-        return 0;
+
     }
+
+
 
     public boolean loadProject(String fileName){
 

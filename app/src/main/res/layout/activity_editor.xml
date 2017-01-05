@@ -76,6 +76,15 @@
                     app:srcCompat="@android:drawable/ic_menu_rotate"
                     android:id="@+id/redo" />
         -->
+        <ImageButton
+            android:contentDescription="Save as"
+            android:layout_width="@dimen/symbol_max_size"
+            android:layout_height="@dimen/symbol_max_size"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            android:id="@+id/saveas"
+
+
+            />
 
         <ImageButton
             android:contentDescription="Export"

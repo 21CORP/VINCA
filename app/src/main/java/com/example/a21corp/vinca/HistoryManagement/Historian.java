@@ -34,12 +34,20 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     }
 
     public void undo(){
-        redoStack.push(historyStack.peek());
-        historyStack.pop();
+        if(!historyStack.isEmpty()) {
+            redoStack.push(historyStack.peek());
+            historyStack.pop();
+        }
+        System.out.println("historyStack: " + historyStack.toString());
+        System.out.println("redoStack: " + redoStack.toString());
     }
 
     public void redo(){
-        historyStack.push(redoStack.peek());
-        redoStack.pop();
+        if(!redoStack.isEmpty()) {
+            historyStack.push(redoStack.peek());
+            redoStack.pop();
+        }
+        System.out.println("historyStack: " + historyStack.toString());
+        System.out.println("redoStack: " + redoStack.toString());
     }
 }

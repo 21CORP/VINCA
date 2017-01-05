@@ -29,6 +29,18 @@
             android:layout_weight="1" />
 
 
+        <Button
+            android:text="Button_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button" />
+
+        <Button
+            android:text="Button_redo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button2" />
+
         <TextView
             android:text="Project Skeleton"
             android:layout_width="0dp"

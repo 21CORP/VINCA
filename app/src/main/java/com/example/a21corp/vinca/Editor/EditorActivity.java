@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -53,6 +54,10 @@ public class EditorActivity extends AppCompatActivity
     private String dirPath;
     private File projDir;
 
+    //test
+    Button undoButton;
+    Button redoButton;
+    //test end
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +133,13 @@ public class EditorActivity extends AppCompatActivity
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
+        //test, please ignore
+        undoButton = (Button) findViewById(R.id.button);
+        redoButton = (Button) findViewById(R.id.button2);
+        undoButton.setOnClickListener(this);
+        redoButton.setOnClickListener(this);
+        //test end
+
        dirPath = getFilesDir().getAbsolutePath() + File.separator + "workspaces";
         projDir = new File(dirPath);
         if (!projDir.exists())
@@ -170,6 +182,13 @@ public class EditorActivity extends AppCompatActivity
             Intent workspace = new Intent(this, EditorActivity.class);
             finish();
             startActivity(workspace);
+        }
+        //test
+        if(view == undoButton){
+            historian.undo();
+        }
+        if(view == redoButton){
+            historian.redo();
         }
     }
 

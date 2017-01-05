@@ -1,25 +1,25 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
-import com.example.a21corp.vinca.Editor.VincaViewManager;
-import com.example.a21corp.vinca.vincaviews.VincaElementView;
+import com.example.a21corp.vinca.Editor.Editor;
+import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
  * Created by Thomas on 04-01-2017.
  */
 
 public class MoveCommand implements Command {
-    VincaElementView view;
-    VincaElementView parentView;
-    VincaViewManager manager;
+    VincaElement element;
+    VincaElement parentElement;
+    Editor editor;
 
-    public MoveCommand(VincaElementView view, VincaViewManager manager, VincaElementView parentView){
-        this.view = view;
-        this.parentView = parentView;
-        this.manager = manager;
+    public MoveCommand(VincaElement element, VincaElement parentElement, Editor editor){
+        this.element = element;
+        this.parentElement = parentElement;
+        this.editor = editor;
     }
 
     @Override
     public void execute(){
-        manager.moveElement(view, parentView);
+        editor.moveElement(element, parentElement);
     }
 }

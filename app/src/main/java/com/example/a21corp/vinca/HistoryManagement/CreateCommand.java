@@ -1,24 +1,24 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
-import com.example.a21corp.vinca.Editor.VincaViewManager;
-import com.example.a21corp.vinca.vincaviews.VincaElementView;
+import com.example.a21corp.vinca.Editor.Editor;
+import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
  * Created by Thomas on 04-01-2017.
  */
 
 public class CreateCommand implements Command{
-    VincaElementView view;
-    VincaViewManager manager;
+    VincaElement element;
+    Editor editor;
 
-    public CreateCommand(VincaElementView view, VincaViewManager manager){
-        this.view = view;
-        this.manager = manager;
+    public CreateCommand(VincaElement element, Editor editor){
+        this.element = element;
+        this.editor = editor;
     }
 
     @Override
     public void execute(){
-        manager.addElement(view);
+        editor.addElement(element);
     }
 
 }

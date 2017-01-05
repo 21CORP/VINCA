@@ -15,10 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
-import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
-import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
@@ -156,7 +153,7 @@ public class EditorActivity extends AppCompatActivity
 
         if (view instanceof VincaElementView) {
             if (view.getParent() == elementPanel) {
-                CreateCommand cCmd = new CreateCommand((VincaElementView) view, viewManager);
+                viewManager.addElement((VincaElementView) view);
             } else if (view instanceof ContainerView) {
                 viewManager.setCursor((ContainerView) view);
             }
@@ -239,8 +236,7 @@ public class EditorActivity extends AppCompatActivity
                 if (view == trashBin) {
                     Log.d("Editor - Debug", "Dropped on view trashbin! - Deleting");
                     view.setBackgroundColor(0);
-                    DeleteCommand dCmd = new DeleteCommand(draggedView, viewManager);
-                    historian.storeAndExecute(dCmd);
+                    viewManager.deleteElement(draggedView);
 
                     break;
                 }
@@ -249,8 +245,7 @@ public class EditorActivity extends AppCompatActivity
 
                 if (view instanceof VincaElementView) {
                     if (draggedView instanceof VincaElementView) {
-                        MoveCommand mCmd = new MoveCommand(draggedView, viewManager, (VincaElementView) view);
-                        historian.storeAndExecute(mCmd);
+                        viewManager.moveElement(draggedView, (VincaElementView) view);
                     }
                     viewManager.highlightView(viewManager.getCursor());
                     break;

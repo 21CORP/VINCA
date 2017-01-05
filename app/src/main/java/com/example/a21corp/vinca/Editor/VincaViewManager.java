@@ -9,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
 
+import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
+import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
@@ -34,6 +38,7 @@ public class VincaViewManager implements WorkspaceObserver {
     private VincaElementView cursor;
     private VincaElementView projectView = null;
     private ContainerView highlightedElement;
+    private Historian historian;
 
     public VincaViewManager(Context context) {
         this.context = context;
@@ -47,6 +52,7 @@ public class VincaViewManager implements WorkspaceObserver {
     }
 
     public void initViewManager() {
+        historian = Historian.getInstance();
         editor = new Editor();
         if (Workspace.getInstance().project.size() == 0) {
             editor.initiateWorkspace();
@@ -204,8 +210,9 @@ public class VincaViewManager implements WorkspaceObserver {
         }
     }
 
-    public void addElement(VincaElementView elementView) {
+    public void addElement(VincaElementView elementView) { //TODO Convert to command pattern
         VincaElement element = null;
+        CreateCommand cCmd = null;
         if (elementView.element == null) {
             if (elementView instanceof ExpandableView) {
                 element = new Expandable(elementView.type);
@@ -214,26 +221,27 @@ public class VincaViewManager implements WorkspaceObserver {
             } else if (elementView instanceof NodeView) {
                 element = new Node(elementView.type);
             }
-            editor.addElement(element);
-            return;
+            cCmd = new CreateCommand(element, editor);
         } else {
             element = elementView.element;
             if (element instanceof Expandable) {
-                editor.addElement(new Expandable(element.type));
+                cCmd = new CreateCommand(new Expandable(element.type), editor);
             } else if (element instanceof Element) {
-                editor.addElement(new Element(element.type));
+                cCmd = new CreateCommand(new Element(element.type), editor);
             } else if (element instanceof Node) {
-                editor.addElement(new Node(element.type));
+                cCmd = new CreateCommand(new Node(element.type), editor);
             }
         }
+        historian.storeAndExecute(cCmd);
     }
 
-    public void deleteElement(VincaElementView elementView) {
+    public void deleteElement(VincaElementView elementView) {//TODO Convert to command pattern
         VincaElement element = elementView.element;
-        editor.deleteElement(element);
+        DeleteCommand dCmd = new DeleteCommand(element, editor);
+        historian.storeAndExecute(dCmd);
     }
 
-    public void moveElement(VincaElementView elementView, VincaElementView parentView) {
+    public void moveElement(VincaElementView elementView, VincaElementView parentView) {//TODO Convert to command pattern
         VincaElement element;
         if (elementView.getParent() == listener.elementPanel) {
             element = null;
@@ -250,7 +258,8 @@ public class VincaViewManager implements WorkspaceObserver {
         }
         VincaElement parent = parentView.element;
 
-        editor.moveElement(element, parent);
+        MoveCommand mCmd = new MoveCommand(element, parent, editor);
+        historian.storeAndExecute(mCmd);
     }
 
     public void setCursor(ContainerView newCursor) {

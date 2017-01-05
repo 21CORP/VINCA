@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
 import com.example.a21corp.vinca.Editor.VincaViewManager;
+import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
 /**
@@ -8,19 +9,19 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
  */
 
 public class EditDescriptionCommand implements Command{
-    VincaElementView view;
-    VincaViewManager manager;
+    VincaElement element;
     String title;
     String description;
 
-    public EditDescriptionCommand(VincaElementView view, VincaViewManager manager, String title, String description){
-        this.view = view;
-        this.manager = manager;
+    public EditDescriptionCommand(VincaElement element, String title, String description){
+        this.element = element;
+        this.title = title;
+        this.description = description;
     }
 
     @Override
     public void execute(){
-        view.element.title = title;
-        view.element.description = description;
+        element.title = title;
+        element.description = description;
     }
 }

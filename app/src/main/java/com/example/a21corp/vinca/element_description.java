@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
+import com.example.a21corp.vinca.HistoryManagement.EditDescriptionCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
@@ -42,15 +44,15 @@ public class element_description extends DialogFragment{
         titleTV = (TextView) promptView.findViewById(R.id.TitleTextView);
         descTV = (TextView) promptView.findViewById(R.id.DescriptionTextView);
 
-        titleTV.setText(workElement.title);
+        titleTV.setText(workElement.title); //Overflødigt?
         descTV.setText(workElement.description);
 
         builder.setView(promptView);
         builder
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        workElement.title = titleTV.getText().toString();
-                        workElement.description = descTV.getText().toString();
+                        EditDescriptionCommand edCmd = new EditDescriptionCommand(workElement, titleTV.getText().toString(), descTV.getText().toString());
+                        Historian.getInstance().storeAndExecute(edCmd);
                     }
                 })
 

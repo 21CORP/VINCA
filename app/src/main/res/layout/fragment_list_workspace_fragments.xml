@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.a21corp.vinca.LoadMenu.ListWorkspaceFragments">
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@android:id/list" />
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@android:id/empty"
+        android:layout_height="match_parent">
+    </ListView>
+</FrameLayout>

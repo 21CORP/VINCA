@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
@@ -21,11 +22,11 @@ import java.util.regex.Pattern;
 
 public class FolderAdapter extends BaseAdapter implements View.OnClickListener
 {
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
-    private LayoutInflater inflater;
+    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     private class ViewCache{
         public TextView titel;
         public TextView date;
+        public Button button;
     }
     private OnFileSelectedListener listener;
     private File sourceDir;
@@ -36,7 +37,7 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
     }
     public void FilterDirectory(final String query){
         Log.d("LoadActivity", "Applying filter " + query);
-        final Pattern regex = Pattern.compile("(\\w)*" + query + "(\\w)*");
+        final Pattern regex = Pattern.compile(query,Pattern.CASE_INSENSITIVE);
         directory = sourceDir.listFiles(new FilenameFilter() {
 
 
@@ -62,9 +63,8 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
         });
         notifyDataSetChanged();
     }
-    public FolderAdapter(File f, Context context)
+    public FolderAdapter(File f)
     {
-        inflater = LayoutInflater.from(context);
         sourceDir = f;
         directory = sourceDir.listFiles();
         UpdateDirectory();
@@ -88,10 +88,11 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
         ViewCache cache;
         if(convertView==null)
         {
-            convertView = inflater.inflate(R.layout.loadmenulistelements, null);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.loadmenulistelements, null);
             cache = new ViewCache();
             cache.titel = (TextView)convertView.findViewById(R.id.elementName);
             cache.date = (TextView)convertView.findViewById(R.id.elementDate);
+            convertView.setOnClickListener(this);
             convertView.setTag(R.id.VIEW_CACHE_DATA, cache);
         }
         else
@@ -107,6 +108,7 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Log.d("FolderAdapter", "onClickRegistered");
         File selected;
         if((selected = (File)view.getTag(R.id.FILE_ENTRY_ID))!=null){
             if(listener == null){

@@ -26,27 +26,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
+        <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/workspaceList"
-            android:layout_weight="0.77" />
+            android:layout_weight="0.77"
+            android:name="com.example.a21corp.vinca.LoadMenu.ListWorkspaceFragments"
+            android:id="@+id/LoadActivityWorkspaceList"/>
         <!-- px is fine here. We ALWAYS want a border(dp may dissapear on small screens) -->
         <View
             android:layout_width="2px"
             android:background="@color/colorPrimary"
             android:layout_height="match_parent"/>
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.example.a21corp.vinca.LoadActivity_WorkspaceFragment"
-            android:id="@+id/fragment"
-            tools:layout="@layout/fragment_load_activity_workspace"
-            android:layout_below="@id/toolbar"
-            android:layout_toRightOf="@id/workspaceList"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="0.33" />
+       <FrameLayout
+           android:id="@+id/LoadActivityWorkspaceFragment"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_weight="0.33">
+                <TextView
+                    android:id="@android:id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="No selection"
+                    android:gravity="center"/>
+
+       </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

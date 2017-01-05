@@ -1,6 +1,8 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
+import android.os.SystemClock;
 import android.util.Log;
+import android.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,9 @@ import java.util.Stack;
 public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     private static final long serialVersionUID = 12345;
     private static Historian instance;
-
+    private long timeSinceChange;
     private Stack<Command> historyStack = new Stack<Command>();
     private Stack<Command> redoStack= new Stack<Command>();
-
     private Historian() {}
 
     public static Historian getInstance() {
@@ -29,7 +30,8 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     public void storeAndExecute(Command cmd){
         historyStack.push(cmd);
         cmd.execute();
-        Log.d("History", cmd.getClass().getSimpleName() + " added to history");
+        timeSinceChange = System.currentTimeMillis(); //??
+        Log.d("History", cmd.getClass().getSimpleName() + " added to history at " + timeSinceChange);
         redoStack.clear();
     }
 

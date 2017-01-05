@@ -6,48 +6,50 @@
 
 
     <TextView
-        android:text="ProjectNameBeHere"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textSize="36sp" />
-
-    <TextView
-        android:text="Edited:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:id="@+id/textView3" />
-
-    <TextView
         android:text="Created:"
+
+        android:layout_below="@+id/LoadActivityWorkspaceTitle"
+        android:layout_centerHorizontal="true"
+        android:translationX="-50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
         android:id="@+id/textView4" />
 
     <TextView
         android:text="Created"
+        android:layout_below="@+id/LoadActivityWorkspaceTitle"
+        android:layout_toRightOf="@id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView4"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView5" />
+
+        android:id="@+id/LoadActivityWorkspaceCreated" />
+
+    <TextView
+        android:text="ProjectNameBeHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:id="@+id/LoadActivityWorkspaceTitle"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:text="Edited"
+        android:layout_below="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView5"
-        android:layout_alignLeft="@+id/textView5"
-        android:layout_alignStart="@+id/textView5"
-        android:id="@+id/textView6" />
+        android:layout_alignStart="@id/LoadActivityWorkspaceCreated"
+        android:id="@+id/LoadActivityWorkspaceEdited" />
+
+    <TextView
+        android:text="Edited:"
+        android:layout_below="@+id/textView4"
+        android:layout_centerHorizontal="true"
+        android:translationX="-50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3" />
 </RelativeLayout>

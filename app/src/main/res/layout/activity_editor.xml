@@ -10,7 +10,9 @@
     android:rowCount="2"
     android:columnCount="2"
     tools:ignore="HardcodedText"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    >
 
     <TableRow
         android:id="@+id/top_bar"
@@ -41,8 +43,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/button2" />
 
-        <TextView
+        <EditText
             android:text="Project Skeleton"
+            android:textColor="@android:color/black"
+            android:inputType="text"
+            android:maxLines="1"
+            android:background="@android:color/transparent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/text_project_name"

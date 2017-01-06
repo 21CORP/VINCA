@@ -30,7 +30,8 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     public void storeAndExecute(Command cmd){
         historyStack.push(cmd);
         cmd.execute();
-        timeSinceChange = System.currentTimeMillis(); //??
+        timeSinceChange =SystemClock.uptimeMillis()/1000;
+
         Log.d("History", cmd.getClass().getSimpleName() + " added to history at " + timeSinceChange);
         redoStack.clear();
     }
@@ -43,15 +44,15 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
         }
         System.out.println("historyStack: " + historyStack.toString());
         System.out.println("redoStack: " + redoStack.toString());
-    }
+        }
 
-    public void redo(){
+public void redo(){
         if(!redoStack.isEmpty()) {
-            redoStack.peek().execute();
-            historyStack.push(redoStack.peek());
-            redoStack.pop();
+        redoStack.peek().execute();
+        historyStack.push(redoStack.peek());
+        redoStack.pop();
         }
         System.out.println("historyStack: " + historyStack.toString());
         System.out.println("redoStack: " + redoStack.toString());
-    }
-}
+        }
+        }

@@ -64,6 +64,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         viewManager = new VincaViewManager(this);
+        trashBin.setOnDragListener(new TrashBin(viewManager));
         historian = Historian.getInstance();
 
     }
@@ -129,7 +130,7 @@ public class EditorActivity extends AppCompatActivity
         saveButton.setOnClickListener(this);
         exportView.setOnClickListener(this);
         backButton.setOnClickListener(this);
-        trashBin.setOnDragListener(this);
+
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
@@ -164,9 +165,6 @@ public class EditorActivity extends AppCompatActivity
             SaveAsDialog savepop = new SaveAsDialog();
             savepop.show(getFragmentManager(),"save as");
 
-
-
-
             Log.d("export","serialized");
 
             for (String s : projDir.list()) {
@@ -198,24 +196,15 @@ public class EditorActivity extends AppCompatActivity
         //Log.d("WorkspaceController - DragEvent", "drag event recieved: " + DragEvent.class.getDeclaredFields()[event.getAction()]);
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
-                Log.d("WorkspaceController - Debug", "Started dragging " + view.getId());
+                Log.d("WorkspaceController", "Started dragging " + view.getId());
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
-                if (view == trashBin) {
-                    view.setBackgroundColor(0);
-                } else {
-                    Log.d("WorkspaceController - Debug", "Drag exited view: " + view.getId() + view.toString());
+                    Log.d("WorkspaceController", "Drag exited view: " + view.getId() + view.toString());
                     viewManager.highlightView(viewManager.getCursor());
-                }
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
-                if (view == trashBin) {
-                    view.setBackgroundColor(Color.RED);
-                }
-                else {
-                    Log.d("WorkspaceController - Debug", "Drag entered into view: " + view.toString());
+                    Log.d("WorkspaceController", "Drag entered into view: " + view.toString());
                     viewManager.highlightView(view);
-                }
                 break;
             case DragEvent.ACTION_DROP:
                 VincaElementView draggedView;
@@ -231,15 +220,7 @@ public class EditorActivity extends AppCompatActivity
                 if (view == draggedView) {
                     break;
                 }
-                //User dropped a view into trash bin?
-                if (view == trashBin) {
-                    Log.d("WorkspaceController - Debug", "Dropped on view trashbin! - Deleting");
-                    view.setBackgroundColor(0);
-                    viewManager.deleteElement(draggedView);
-
-                    break;
-                }
-                Log.d("WorkspaceController - Debug", "Dropped on view: " + ((VincaElementView) view).type + "\n"
+                Log.d("WorkspaceController", "Dropped on view: " + ((VincaElementView) view).type + "\n"
                         + ((VincaElementView) view).element.toString());
 
                 if (view instanceof VincaElementView) {
@@ -251,7 +232,7 @@ public class EditorActivity extends AppCompatActivity
                 }
                 break;
             case DragEvent.ACTION_DRAG_ENDED:
-                Log.d("WorkspaceController - Debug", "Drop ended!");
+                Log.d("WorkspaceController", "Drop ended!");
                 try {
                     draggedView = (VincaElementView) event.getLocalState();
                 } catch (ClassCastException e) {
@@ -281,7 +262,7 @@ public class EditorActivity extends AppCompatActivity
         //PLACEHOLDER END
         if (view instanceof VincaElementView && view.getParent() != elementPanel) {
             //Show menu for title, description etc.
-            Log.d("WorkspaceController - Debug", "LongClick detected!");
+            Log.d("WorkspaceController", "LongClick detected!");
         }
         return true;
     }
@@ -289,7 +270,7 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            Log.d("WorkspaceController - Debug", "touch move event recieved");
+            Log.d("WorkspaceController", "touch move event recieved");
             startDragAux(view);
             return true;
         }

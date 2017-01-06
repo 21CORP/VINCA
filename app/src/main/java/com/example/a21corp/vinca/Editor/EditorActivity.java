@@ -158,8 +158,7 @@ public class EditorActivity extends AppCompatActivity
                 viewManager.setCursor((ContainerView) view);
             }
         } else if (view == trashBin) {
-            //viewManager.deleteElement(viewManager.getCursor());
-            throw new IllegalStateException("Testing CrashLytics by clicking TrashBin");
+            viewManager.deleteElement(viewManager.getCursor());
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();

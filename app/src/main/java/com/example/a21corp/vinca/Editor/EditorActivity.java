@@ -10,6 +10,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -40,8 +41,8 @@ public class EditorActivity extends AppCompatActivity
     //private View undoView, redoView
     private ImageButton backButton, exportView, saveButton;
     private ImageButton trashBin;
-    private TextView projectNameBar, saveStatusBar;
-
+    private EditText projectNameBar;
+    private TextView saveStatusBar;
     public LinearLayout canvas;
     private HorizontalScrollView scrollView;
     public LinearLayout elementPanel;
@@ -102,7 +103,7 @@ public class EditorActivity extends AppCompatActivity
         exportView = (ImageButton) findViewById(R.id.export);
         backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
-        projectNameBar = (TextView) findViewById(R.id.text_project_name);
+        projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
         projectNameBar.setText(Workspace.getInstance().getTitle());
         //Listen to VINCA symbols

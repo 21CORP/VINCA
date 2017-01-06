@@ -44,15 +44,15 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
         }
         System.out.println("historyStack: " + historyStack.toString());
         System.out.println("redoStack: " + redoStack.toString());
-    }
+        }
 
-    public void redo(){
+public void redo(){
         if(!redoStack.isEmpty()) {
-            redoStack.peek().execute();
-            historyStack.push(redoStack.peek());
-            redoStack.pop();
+        redoStack.peek().execute();
+        historyStack.push(redoStack.peek());
+        redoStack.pop();
         }
         System.out.println("historyStack: " + historyStack.toString());
         System.out.println("redoStack: " + redoStack.toString());
-    }
-}
+        }
+        }

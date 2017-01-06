@@ -1,6 +1,6 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
-import com.example.a21corp.vinca.Editor.Editor;
+import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -9,21 +9,21 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class CreateCommand implements Command{
     VincaElement element;
-    Editor editor;
+    WorkspaceController workspaceController;
 
-    public CreateCommand(VincaElement element, Editor editor){
+    public CreateCommand(VincaElement element, WorkspaceController workspaceController){
         this.element = element;
-        this.editor = editor;
+        this.workspaceController = workspaceController;
     }
 
     @Override
     public void execute(){
-        editor.addElement(element);
+        workspaceController.addElement(element);
     }
 
     @Override
     public void inverse(){
-        editor.deleteElement(element);
+        workspaceController.deleteElement(element);
     }
 
 }

@@ -7,14 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
-import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
@@ -32,7 +30,7 @@ import com.example.a21corp.vinca.vincaviews.NodeView;
 
 public class VincaViewManager implements WorkspaceObserver {
 
-    private Editor editor;
+    private WorkspaceController workspaceController;
     public Context context;
     private EditorActivity listener;
     private VincaElementView cursor;
@@ -53,11 +51,11 @@ public class VincaViewManager implements WorkspaceObserver {
 
     public void initViewManager() {
         historian = Historian.getInstance();
-        editor = new Editor();
+        workspaceController = new WorkspaceController();
         if (Workspace.getInstance().project.size() == 0) {
-            editor.initiateWorkspace();
+            workspaceController.initiateWorkspace();
         }
-        editor.observerList.add(this);
+        workspaceController.observerList.add(this);
         highlightedElement = getCursor();
         highlightView(highlightedElement);
         updateCanvas();
@@ -221,15 +219,15 @@ public class VincaViewManager implements WorkspaceObserver {
             } else if (elementView instanceof NodeView) {
                 element = new Node(elementView.type);
             }
-            cCmd = new CreateCommand(element, editor);
+            cCmd = new CreateCommand(element, workspaceController);
         } else {
             element = elementView.element;
             if (element instanceof Expandable) {
-                cCmd = new CreateCommand(new Expandable(element.type), editor);
+                cCmd = new CreateCommand(new Expandable(element.type), workspaceController);
             } else if (element instanceof Element) {
-                cCmd = new CreateCommand(new Element(element.type), editor);
+                cCmd = new CreateCommand(new Element(element.type), workspaceController);
             } else if (element instanceof Node) {
-                cCmd = new CreateCommand(new Node(element.type), editor);
+                cCmd = new CreateCommand(new Node(element.type), workspaceController);
             }
         }
         historian.storeAndExecute(cCmd);
@@ -237,7 +235,7 @@ public class VincaViewManager implements WorkspaceObserver {
 
     public void deleteElement(VincaElementView elementView) {//TODO Convert to command pattern
         VincaElement element = elementView.element;
-        DeleteCommand dCmd = new DeleteCommand(element, element.parent, editor);
+        DeleteCommand dCmd = new DeleteCommand(element, element.parent, workspaceController);
         historian.storeAndExecute(dCmd);
     }
 
@@ -258,7 +256,7 @@ public class VincaViewManager implements WorkspaceObserver {
         }
         VincaElement parent = parentView.element;
 
-        MoveCommand mCmd = new MoveCommand(element, parent, element.parent, editor);
+        MoveCommand mCmd = new MoveCommand(element, parent, element.parent, workspaceController);
         historian.storeAndExecute(mCmd);
     }
 
@@ -266,7 +264,7 @@ public class VincaViewManager implements WorkspaceObserver {
         VincaElementView oldCursor = cursor;
         cursor = newCursor;
         if (newCursor.element != null && newCursor.element instanceof Container) {
-            editor.setCursor((Container) newCursor.element);
+            workspaceController.setCursor((Container) newCursor.element);
             highlightView(cursor);
         } else {
             cursor = oldCursor;
@@ -318,6 +316,6 @@ public class VincaViewManager implements WorkspaceObserver {
     }
 
     public void toggleOpenExpandableView(ContainerView view) {
-        editor.toggleOpenExpandable((Container) view.element);
+        workspaceController.toggleOpenExpandable((Container) view.element);
     }
 }

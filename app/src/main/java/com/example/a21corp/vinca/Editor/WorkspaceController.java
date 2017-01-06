@@ -16,7 +16,7 @@ import java.util.List;
  * Created by ymuslu on 12-11-2016.
  */
 
-public class Editor implements Serializable {
+public class WorkspaceController implements Serializable {
 
     private static final long serialVersionUID = 12345;
 

@@ -16,6 +16,7 @@ public class AutoSaver{
 
     private CountDownTimer timer;
     private Historian historian;
+    private boolean stop = false;
 
     public AutoSaver(final long interval, final String saveFile){
         historian = Historian.getInstance();
@@ -38,11 +39,18 @@ public class AutoSaver{
 
     }
 
-    public void start(){
-        timer.start();
+    public void startLoop(){
+        Loop();
     }
 
-    public void stop(){
-        timer.cancel();
+    private void Loop(){
+        if(!stop) {
+            timer.start();
+            Loop();
+        }
+    }
+
+    public void stopLoop(){
+        stop = true;
     }
 }

@@ -135,17 +135,16 @@ public class EditorActivity extends AppCompatActivity
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
-        //test, please ignore
         undoButton = (Button) findViewById(R.id.button);
         redoButton = (Button) findViewById(R.id.button2);
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
-        //test end
 
        dirPath = getFilesDir().getAbsolutePath() + File.separator + "workspaces";
         projDir = new File(dirPath);
         if (!projDir.exists())
             projDir.mkdirs();
+
 
     }
 

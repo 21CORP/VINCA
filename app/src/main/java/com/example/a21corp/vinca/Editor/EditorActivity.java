@@ -3,6 +3,7 @@ package com.example.a21corp.vinca.Editor;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,10 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
 import java.io.File;
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
@@ -60,6 +65,7 @@ public class EditorActivity extends AppCompatActivity
     Button redoButton;
     //test end
     private AutoSaver autoSaver;
+    private Date timeLastSaved;
 
 
     @Override
@@ -239,52 +245,30 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public boolean onDrag(View view, DragEvent event) {
-        //Log.d("WorkspaceController - DragEvent", "drag event recieved: " + DragEvent.class.getDeclaredFields()[event.getAction()]);
+        View draggedView = (View) event.getLocalState();
+        if (! (view instanceof VincaElementView)) {
+            //Not dragging a VincaElementView, not interested in future drag-events
+            return false;
+        }
         switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                Log.d("WorkspaceController", "Started dragging " + view.getId());
-                break;
             case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d("WorkspaceController", "Drag exited view: " + view.getId() + view.toString());
                     viewManager.highlightView(viewManager.getCursor());
                 break;
+
             case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d("WorkspaceController", "Drag entered into view: " + view.toString());
                     viewManager.highlightView(view);
                 break;
+
             case DragEvent.ACTION_DROP:
-                VincaElementView draggedView;
-                try {
-                    draggedView = (VincaElementView) event.getLocalState();
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
-                    break;
-                }
                 draggedView.setVisibility(View.VISIBLE);
-
-                //User dropped a view on top of itself?
-                if (view == draggedView) {
-                    break;
-                }
-                Log.d("WorkspaceController", "Dropped on view: " + ((VincaElementView) view).type + "\n"
-                        + ((VincaElementView) view).element.toString());
-
                 if (view instanceof VincaElementView) {
-                    if (draggedView instanceof VincaElementView) {
-                        viewManager.moveElement(draggedView, (VincaElementView) view);
-                    }
+                    viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
                     viewManager.highlightView(viewManager.getCursor());
                     break;
                 }
                 break;
+
             case DragEvent.ACTION_DRAG_ENDED:
-                Log.d("WorkspaceController", "Drop ended!");
-                try {
-                    draggedView = (VincaElementView) event.getLocalState();
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
-                    break;
-                }
                 draggedView.setVisibility(View.VISIBLE);
                 break;
         }
@@ -345,9 +329,12 @@ public class EditorActivity extends AppCompatActivity
     public void setSaveStatusBar(Boolean status){
         if(status){
             saveStatusBar.setText("Saving...");
+            timeLastSaved = Calendar.getInstance().getTime();
         }
         else{
-            saveStatusBar.setText("Saved");
+            if (timeLastSaved != null) {
+                saveStatusBar.setText("Saved on " + timeLastSaved);
+            }
         }
     }
 

@@ -49,7 +49,7 @@ public class EditorActivity extends AppCompatActivity
 
     private Historian historian;
 
-    //flyttes til andet sted?
+    //flyttes til andet sted? JA
     private String dirPath;
     private File projDir;
 

@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.Editor;
 
 import android.util.Log;
 
+import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Expandable;
@@ -9,6 +10,7 @@ import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 
 import java.io.Serializable;
+import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class WorkspaceController implements Serializable {
 
     public Workspace workspace = Workspace.getInstance();
     public transient List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
+    private AutoSaver autoSaver;
 
 
     public Expandable initiateWorkspace(Expandable project) {
@@ -31,6 +34,13 @@ public class WorkspaceController implements Serializable {
         workspace.project = new ArrayList<Expandable>();
         workspace.project.add(project);
         setCursor(findCursor(project));
+        //TODO FIX, flyt til bedre sted?
+        if(autoSaver != null){
+            autoSaver.timer.cancel();
+        }
+        autoSaver = new AutoSaver(5, "Filename");
+        autoSaver.timer.start();
+        //TODO
         notifyObservers();
         return project;
     }

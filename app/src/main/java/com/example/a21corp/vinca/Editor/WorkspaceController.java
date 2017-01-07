@@ -24,7 +24,6 @@ public class WorkspaceController implements Serializable {
 
     public Workspace workspace = Workspace.getInstance();
     public transient List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
-    private AutoSaver autoSaver;
 
 
     public Expandable initiateWorkspace(Expandable project) {
@@ -34,13 +33,6 @@ public class WorkspaceController implements Serializable {
         workspace.project = new ArrayList<Expandable>();
         workspace.project.add(project);
         setCursor(findCursor(project));
-        //TODO FIX, flyt til bedre sted?
-        if(autoSaver != null){
-            autoSaver.timer.cancel();
-        }
-        autoSaver = new AutoSaver(5, "Filename");
-        autoSaver.timer.start();
-        //TODO
         notifyObservers();
         return project;
     }

@@ -15,7 +15,7 @@ import java.util.Stack;
 public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     private static final long serialVersionUID = 12345;
     private static Historian instance;
-    public long timeSinceChange;
+    public long timeSinceChange = SystemClock.currentThreadTimeMillis();
     private Stack<Command> historyStack = new Stack<Command>();
     private Stack<Command> redoStack= new Stack<Command>();
     private Historian() {}
@@ -30,7 +30,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     public void storeAndExecute(Command cmd){
         historyStack.push(cmd);
         cmd.execute();
-        timeSinceChange =SystemClock.uptimeMillis();
+        timeSinceChange = SystemClock.currentThreadTimeMillis();
         redoStack.clear();
         Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
     }

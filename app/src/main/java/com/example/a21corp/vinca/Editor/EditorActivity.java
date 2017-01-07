@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
@@ -57,6 +58,7 @@ public class EditorActivity extends AppCompatActivity
     Button undoButton;
     Button redoButton;
     //test end
+    private AutoSaver autoSaver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +147,13 @@ public class EditorActivity extends AppCompatActivity
         if (!projDir.exists())
             projDir.mkdirs();
 
-
+        //TODO flyt til bedre sted?
+        if(autoSaver != null){
+            autoSaver.timer.cancel();
+        }
+        autoSaver = new AutoSaver(this);
+        autoSaver.timer.start();
+        //TODO
     }
 
     @Override
@@ -293,6 +301,15 @@ public class EditorActivity extends AppCompatActivity
         if(!success)
         {
             Log.e("WorkspaceController", "failed to start dragging");
+        }
+    }
+
+    public void setSaveStatusBar(Boolean status){
+        if(status){
+            saveStatusBar.setText("Saving...");
+        }
+        else{
+            saveStatusBar.setText("Saved");
         }
     }
 }

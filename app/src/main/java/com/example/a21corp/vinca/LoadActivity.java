@@ -19,6 +19,7 @@ import com.example.a21corp.vinca.AndroidUtilities.FolderAdapter;
 import com.example.a21corp.vinca.AndroidUtilities.OnFileSelectedListener;
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
+import com.example.a21corp.vinca.LoadMenu.ListWorkspaceFragments;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,15 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Log.d("LoadActivity", "Created");
+    }
+
+    @Override
+    protected void onResume() {
+        ListWorkspaceFragments projectList =
+                (ListWorkspaceFragments) getSupportFragmentManager()
+                .findFragmentById(R.id.LoadActivityWorkspaceList);
+        projectList.updateFileList();
+        super.onResume();
     }
 
     @Override

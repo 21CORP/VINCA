@@ -18,6 +18,8 @@ import com.example.a21corp.vinca.AndroidUtilities.FolderAdapter;
 import com.example.a21corp.vinca.AndroidUtilities.OnFileSelectedListener;
 import com.example.a21corp.vinca.R;
 
+import java.io.File;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -41,7 +43,15 @@ public class ListWorkspaceFragments extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        updateFileList();
         return inflater.inflate(R.layout.fragment_list_workspace_fragments, container, false);
+    }
+
+    public void updateFileList() {
+        FolderAdapter adapter = new FolderAdapter(
+                new File(getActivity().getFilesDir() + "/workspaces/"));
+        adapter.setOnFileSelectedListener((OnFileSelectedListener)getActivity());
+        setListAdapter(adapter);
     }
 
     @Override
@@ -66,8 +76,5 @@ public class ListWorkspaceFragments extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FolderAdapter adapter = new FolderAdapter(new File(view.getContext().getFilesDir() + "/workspaces/"));
-        adapter.setOnFileSelectedListener((OnFileSelectedListener)getActivity());
-        setListAdapter(adapter);
     }
 }

@@ -353,8 +353,8 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        String title = projectNameBar.getText().toString().trim();
-        if (title.isEmpty()) {
+        String title = projectNameBar.getText().toString();
+        if (title.isEmpty() || title.equals(viewManager.getWorkspaceTitle())) {
             return false;
         } else {
             viewManager.renameWorkspace(title, dirPath);

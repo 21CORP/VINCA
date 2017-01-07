@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +33,7 @@ import java.io.File;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
-        , View.OnTouchListener {
+        , View.OnTouchListener, TextView.OnEditorActionListener {
 
     private VincaViewManager viewManager = null;
     private NodeView methodView;
@@ -64,7 +65,7 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         ProjectManager.getInstance().saveProject(viewManager.workspaceController.workspace, dirPath);
-        outState.putString("title", viewManager.workspaceController.workspace.getTitle());
+        outState.putString("title", viewManager.getWorkspaceTitle());
         Log.d("Editor - onSaveInstance", outState.toString());
         super.onSaveInstanceState(outState);
     }
@@ -163,6 +164,7 @@ public class EditorActivity extends AppCompatActivity
         saveButton.setOnClickListener(this);
         exportView.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        projectNameBar.setOnEditorActionListener(this);
 
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
@@ -215,7 +217,7 @@ public class EditorActivity extends AppCompatActivity
             Workspace workspace;
             try {
                 workspace = ProjectManager.getInstance().loadProject(dirPath + "/"
-                        + viewManager.workspaceController.workspace.getTitle() + ".ser");
+                        + viewManager.getWorkspaceTitle() + ".ser");
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
@@ -342,6 +344,17 @@ public class EditorActivity extends AppCompatActivity
         }
         else{
             saveStatusBar.setText("Saved");
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        String title = projectNameBar.getText().toString().trim();
+        if (title.isEmpty()) {
+            return false;
+        } else {
+            viewManager.renameWorkspace(title, dirPath);
+            return true;
         }
     }
 }

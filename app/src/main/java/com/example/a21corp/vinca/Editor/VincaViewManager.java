@@ -322,4 +322,12 @@ public class VincaViewManager implements WorkspaceObserver {
     public void setWorkspace(Workspace workspace) {
         workspaceController.setWorkspace(workspace);
     }
+
+    public String getWorkspaceTitle() {
+        return workspaceController.workspace.getTitle();
+    }
+
+    public void renameWorkspace(String title, String path) {
+        workspaceController.renameWorkspace(title, path);
+    }
 }

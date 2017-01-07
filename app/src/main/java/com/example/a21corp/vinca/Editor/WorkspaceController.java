@@ -177,4 +177,11 @@ public class WorkspaceController implements Serializable {
         this.workspace = workspace;
         notifyObservers();
     }
+
+    public void renameWorkspace(String title, String path) {
+        String oldTitle = workspace.getTitle();
+        workspace.setTitle(title);
+        ProjectManager.getInstance().saveProject(workspace, path);
+        ProjectManager.getInstance().removeProject(oldTitle, path);
+    }
 }

@@ -40,9 +40,9 @@ public class ProjectManager {
         return workspace;
     }
 
-    public boolean saveProject(Workspace workspace, String dir){
+    public boolean saveProject(Workspace workspace, String dirPath){
         String title = workspace.getTitle();
-        String filePath = dir + "/" + title + fileExtension;
+        String filePath = dirPath + "/" + title + fileExtension;
         try {
             Serialization.save(workspace,filePath);
         } catch (IOException ex) {
@@ -65,5 +65,12 @@ public class ProjectManager {
     }
 
 
-
+    public void removeProject(String title, String dirPath) {
+        String absoluteFilePath = dirPath + "/" + title;
+        if (!absoluteFilePath.endsWith(fileExtension)) {
+            absoluteFilePath = absoluteFilePath + fileExtension;
+        }
+        File file = new File(absoluteFilePath);
+        file.delete();
+    }
 }

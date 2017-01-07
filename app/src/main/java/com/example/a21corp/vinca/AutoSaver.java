@@ -33,24 +33,10 @@ public class AutoSaver{
                 if((SystemClock.uptimeMillis()/1000 - historian.timeSinceChange) >= interval) {
                     ProjectManager.getInstance().saveProject(saveFile);
                     System.out.println("Save time!");
+                    timer.start();
                 }
             }
         };
 
-    }
-
-    public void startLoop(){
-        Loop();
-    }
-
-    private void Loop(){
-        if(!stop) {
-            timer.start();
-            Loop();
-        }
-    }
-
-    public void stopLoop(){
-        stop = true;
     }
 }

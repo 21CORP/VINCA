@@ -30,31 +30,29 @@ import com.example.a21corp.vinca.vincaviews.NodeView;
 
 public class VincaViewManager implements WorkspaceObserver {
 
-    private WorkspaceController workspaceController;
+    public WorkspaceController workspaceController = new WorkspaceController();
     public Context context;
     private EditorActivity listener;
     private VincaElementView cursor;
     private VincaElementView projectView = null;
     private ContainerView highlightedElement;
     private Historian historian;
+    private Workspace workspace;
 
-    public VincaViewManager(Context context) {
+    public VincaViewManager(Context context, Workspace workspace) {
         this.context = context;
-        initViewManager();
+        initViewManager(workspace);
     }
 
-    public VincaViewManager(EditorActivity listener) {
+    public VincaViewManager(EditorActivity listener, Workspace workspace) {
         this.listener = listener;
         this.context = listener;
-        initViewManager();
+        initViewManager(workspace);
     }
 
-    public void initViewManager() {
+    public void initViewManager(Workspace workspace) {
         historian = Historian.getInstance();
-        workspaceController = new WorkspaceController();
-        if (Workspace.getInstance().project.size() == 0) {
-            workspaceController.initiateWorkspace();
-        }
+        setWorkspace(workspace);
         workspaceController.observerList.add(this);
         highlightedElement = getCursor();
         highlightView(highlightedElement);
@@ -292,7 +290,8 @@ public class VincaViewManager implements WorkspaceObserver {
     @Override
     public void updateCanvas() {
         cursor = null;
-        projectView = makeViewFromClass(Workspace.getInstance().project.get(0));
+        //TODO: Implement multiple projects in a single workspace
+        projectView = makeViewFromClass(workspaceController.workspace.projects.get(0));
         if (listener != null) {
             //((ViewGroup) this.nodes.getParent()).removeView(this.nodes);
             listener.canvas.removeAllViews();
@@ -317,5 +316,10 @@ public class VincaViewManager implements WorkspaceObserver {
 
     public void toggleOpenExpandableView(ContainerView view) {
         workspaceController.toggleOpenExpandable((Container) view.element);
+    }
+
+
+    public void setWorkspace(Workspace workspace) {
+        workspaceController.setWorkspace(workspace);
     }
 }

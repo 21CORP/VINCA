@@ -22,9 +22,19 @@ import java.io.File;
 public class SaveAsDialog extends DialogFragment {
 
 private EditText newProjName;
+    private Workspace currentWorkspace;
+    private String dirPath;
+    private File projDir;
 
      @Override
      public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        dirPath = getActivity().getFilesDir().getAbsolutePath() + File.separator + "workspaces";
+        projDir = new File(dirPath);
+        if (!projDir.exists()) {
+            projDir.mkdirs();
+        }
+
          AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
          LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -35,19 +45,24 @@ private EditText newProjName;
          builder
                  .setPositiveButton("Save as", new DialogInterface.OnClickListener() {
                      public void onClick(DialogInterface dialog, int id) {
+                         try {
+                             if (currentWorkspace == null) {
+                                 throw new NullPointerException("Project is null");
+                             }
+                         } catch (NullPointerException e){
+                             e.printStackTrace();
+                             return;
+                         }
                          String pName = newProjName.getText().toString();
+                         Workspace workspace = new Workspace(pName, currentWorkspace.projects);
+                         workspace.cursor = currentWorkspace.cursor;
 
-                         //To change
-                         Workspace.getInstance().setTitle(pName);
-
-                         ProjectManager.getInstance().saveProject(getActivity().getFilesDir().getAbsolutePath()
-                                 + File.separator + "workspaces"+"/"
-                                 + Workspace.getInstance().getTitle() +".ser");
-
-                         Intent workspace = new Intent(getActivity(), EditorActivity.class);
-                         getActivity().finish();
-                         startActivity(workspace);
-
+                         if (ProjectManager.getInstance().saveProject(workspace, dirPath)) {
+                             Intent editor = new Intent(getActivity(), EditorActivity.class);
+                             editor.putExtra("title", pName);
+                             getActivity().finish();
+                             startActivity(editor);
+                         }
 
                      }
                  })
@@ -63,4 +78,7 @@ private EditText newProjName;
      }
 
 
-     }
+    public void setCurrentWorkspace(Workspace currentWorkspace) {
+        this.currentWorkspace = currentWorkspace;
+    }
+}

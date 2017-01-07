@@ -13,6 +13,9 @@ import android.widget.EditText;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
+import com.example.a21corp.vinca.Editor.Workspace;
+
+import java.io.File;
 
 
 /**
@@ -23,8 +26,18 @@ public class CreateMenuPopUp extends DialogFragment implements View.OnClickListe
 
 Button b1;
     EditText projectName;
+    private String dirPath;
+    private File projDir;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        dirPath = getActivity().getFilesDir().getAbsolutePath() + File.separator + "workspaces";
+        projDir = new File(dirPath);
+        if (!projDir.exists()) {
+            projDir.mkdirs();
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -40,10 +53,13 @@ Button b1;
               builder
                 .setPositiveButton("Create project", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                       String pname =  projectName.getText().toString();
-                        ProjectManager.getInstance().createProject(pname);
-                        Intent workspace = new Intent(getActivity(), EditorActivity.class);
-                        startActivity(workspace);
+                        String pname =  projectName.getText().toString();
+                        Workspace workspace = ProjectManager.getInstance().createProject(pname);
+                        if (ProjectManager.getInstance().saveProject(workspace, dirPath)) {
+                            Intent editor = new Intent(getActivity(), EditorActivity.class);
+                            editor.putExtra("title", pname);
+                            startActivity(editor);
+                        }
                     }
                 })
 

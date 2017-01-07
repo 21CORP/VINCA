@@ -2,8 +2,10 @@ package com.example.a21corp.vinca.Editor;
 
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Expandable;
+import com.example.a21corp.vinca.elements.VincaElement;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,23 +17,22 @@ public class Workspace implements Serializable {
     private static final long serialVersionUID = 12345;
 
     private String title;
-    public List<Expandable> project = new ArrayList<Expandable>();
-    private static Workspace instance;
+    public ArrayList<Expandable> projects = new ArrayList<Expandable>();
     public Container cursor;
 
-    private Workspace() {
-    }
+    public Workspace(String title, ArrayList<Expandable> projects) {
+        this.title = title;
+        this.projects = projects;
 
-    public static Workspace getInstance() {
-        if (instance == null) {
-            instance = new Workspace();
+        if (this.projects.isEmpty()) {
+            Expandable initialProject = new Expandable(VincaElement.ELEMENT_PROJECT);
+            this.projects.add(initialProject);
         }
-        return instance;
-    }
-    public static void setWorkspace(Workspace workspace){
-        instance = workspace;
 
+        this.cursor = this.projects.get(0);
     }
+
+
     public String getTitle() {
         return title;
     }

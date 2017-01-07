@@ -22,16 +22,22 @@ public class WorkspaceController implements Serializable {
 
     private static final long serialVersionUID = 12345;
 
-    public Workspace workspace = Workspace.getInstance();
+    public Workspace workspace;
     public transient List<WorkspaceObserver> observerList = new ArrayList<WorkspaceObserver>();
+
+    public WorkspaceController() {}
+
+    public WorkspaceController(Workspace workspace) {
+        this.workspace = workspace;
+    }
 
 
     public Expandable initiateWorkspace(Expandable project) {
         if (project == null) {
             project = new Expandable(VincaElement.ELEMENT_PROJECT);
         }
-        workspace.project = new ArrayList<Expandable>();
-        workspace.project.add(project);
+        workspace.projects = new ArrayList<Expandable>();
+        workspace.projects.add(project);
         setCursor(findCursor(project));
         notifyObservers();
         return project;
@@ -67,11 +73,11 @@ public class WorkspaceController implements Serializable {
 
     public void setCursor(Container cursor) {
         if (cursor == null) {
-            if (workspace.project.size() == 0) {
-                workspace.project = new ArrayList<Expandable>();
-                workspace.project.add(new Expandable(VincaElement.ELEMENT_PROJECT));
+            if (workspace.projects.size() == 0) {
+                workspace.projects = new ArrayList<Expandable>();
+                workspace.projects.add(new Expandable(VincaElement.ELEMENT_PROJECT));
             }
-            cursor = workspace.project.get(0);
+            cursor = workspace.projects.get(0);
         }
         if (workspace.cursor != null) {
             workspace.cursor.isCursor = false;
@@ -129,21 +135,21 @@ public class WorkspaceController implements Serializable {
     }
 
     public void deleteElement(VincaElement element) {
-        if (workspace.project.remove(element)) {
-            //Removed element was a top-level project
-            if (workspace.project.size() == 0) {
+        if (workspace.projects.remove(element)) {
+            //Removed element was a top-level projects
+            if (workspace.projects.size() == 0) {
                 initiateWorkspace();
                 return;
             }
         }
         if (element == workspace.cursor) {
-            //Trying to delete the cursor - reset cursor to the main project symbol
-            setCursor(workspace.project.get(0));
+            //Trying to delete the cursor - reset cursor to the main projects symbol
+            setCursor(workspace.projects.get(0));
         } else if (element instanceof Container) {
             Container currentCursor = workspace.cursor;
             if (findCursor((Container) element) != null) {
-                //Cursor within deleted element - reset cursor to the main project symbol
-                setCursor(workspace.project.get(0));
+                //Cursor within deleted element - reset cursor to the main projects symbol
+                setCursor(workspace.projects.get(0));
             } else {
                 setCursor(currentCursor);
             }
@@ -164,6 +170,11 @@ public class WorkspaceController implements Serializable {
 
     public void toggleOpenExpandable(Container element) {
         element.isOpen = !element.isOpen;
+        notifyObservers();
+    }
+
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
         notifyObservers();
     }
 }

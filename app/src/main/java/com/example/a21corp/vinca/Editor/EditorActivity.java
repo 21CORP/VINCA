@@ -60,13 +60,44 @@ public class EditorActivity extends AppCompatActivity
     //test end
     private AutoSaver autoSaver;
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        ProjectManager.getInstance().saveProject(viewManager.workspaceController.workspace, dirPath);
+        outState.putString("title", viewManager.workspaceController.workspace.getTitle());
+        Log.d("Editor - onSaveInstance", outState.toString());
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        dirPath = getFilesDir().getAbsolutePath() + File.separator + "workspaces";
+        projDir = new File(dirPath);
+        if (!projDir.exists()) {
+            projDir.mkdirs();
+        }
+
+        String title;
+        if (savedInstanceState == null) {
+            title = getIntent().getExtras().getString("title");
+        } else {
+            Log.d("Editor - onCreate", savedInstanceState.toString());
+            title = savedInstanceState.getString("title");
+        }
+        Workspace workspace;
+        try {
+            workspace = ProjectManager.getInstance().loadProject(dirPath + "/" + title + ".ser");
+        } catch (Exception e) {
+            e.printStackTrace();
+            workspace = ProjectManager.getInstance().createProject(title);
+        }
         initiateEditor();
-        viewManager = new VincaViewManager(this);
+        projectNameBar.setText(title);
+
+        viewManager = new VincaViewManager(this, workspace);
         trashBin.setOnDragListener(new TrashBin(viewManager));
         historian = Historian.getInstance();
 
@@ -108,7 +139,6 @@ public class EditorActivity extends AppCompatActivity
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
-        projectNameBar.setText(Workspace.getInstance().getTitle());
         //Listen to VINCA symbols
         projectView.setOnTouchListener(this);
         projectView.setOnClickListener(this);
@@ -142,11 +172,6 @@ public class EditorActivity extends AppCompatActivity
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
 
-       dirPath = getFilesDir().getAbsolutePath() + File.separator + "workspaces";
-        projDir = new File(dirPath);
-        if (!projDir.exists())
-            projDir.mkdirs();
-
         //TODO flyt til bedre sted?
         if(autoSaver != null){
             autoSaver.timer.cancel();
@@ -171,6 +196,7 @@ public class EditorActivity extends AppCompatActivity
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();
+            savepop.setCurrentWorkspace(viewManager.workspaceController.workspace);
             savepop.show(getFragmentManager(),"save as");
 
             Log.d("export","serialized");
@@ -180,15 +206,21 @@ public class EditorActivity extends AppCompatActivity
             }
 
         }
+        if (view == exportView) {
+            ProjectManager.getInstance().saveProject(viewManager.workspaceController.workspace, dirPath);
+        }
             if(view== backButton){
             Log.d("back","clicked");
 
-            ProjectManager.getInstance().loadProject(projDir+"/"
-                    + Workspace.getInstance().getTitle() +".ser");
-
-            Intent workspace = new Intent(this, EditorActivity.class);
-            finish();
-            startActivity(workspace);
+            Workspace workspace;
+            try {
+                workspace = ProjectManager.getInstance().loadProject(dirPath + "/"
+                        + viewManager.workspaceController.workspace.getTitle() + ".ser");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+            viewManager.setWorkspace(workspace);
         }
         //test
         if(view == undoButton){

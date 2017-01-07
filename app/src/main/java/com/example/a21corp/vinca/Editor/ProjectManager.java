@@ -12,7 +12,9 @@ import java.util.ArrayList;
 
 public class ProjectManager {
     private static ProjectManager instance;
-    public ProjectManager(){
+    private static final String fileExtension = ".ser";
+
+    private ProjectManager(){
 
     }
 
@@ -23,36 +25,31 @@ public class ProjectManager {
         return instance;
     }
 
-    public void createProject(String title) {
-        Workspace instance = Workspace.getInstance();
-        instance.setTitle(title);
-        instance.project = new ArrayList<Expandable>();
-
+    public Workspace createProject(String title) {
+        Workspace workspace = new Workspace(title, new ArrayList<Expandable>());
+        return workspace;
     }
 
 
 
-    public boolean loadProject(String fileName){
-
-        try {
-          Workspace.setWorkspace((Workspace) Serialization.load(fileName));
-        } catch (Exception e) {
-            e.printStackTrace();
+    public Workspace loadProject(String absoluteFilePath) throws Exception{
+        if (!absoluteFilePath.endsWith(fileExtension)) {
+            absoluteFilePath = absoluteFilePath + fileExtension;
         }
-
-        return  true;
+        Workspace workspace = (Workspace) Serialization.load(absoluteFilePath);
+        return workspace;
     }
 
-    public boolean saveProject(String fileName){
-
+    public boolean saveProject(Workspace workspace, String dir){
+        String title = workspace.getTitle();
+        String filePath = dir + "/" + title + fileExtension;
         try {
-            Serialization.save(Workspace.getInstance(),fileName);
-
+            Serialization.save(workspace,filePath);
         } catch (IOException ex) {
             ex.printStackTrace();
+            return false;
         }
-
-        return  false;
+        return  true;
     }
 
     public boolean importProject(File project){

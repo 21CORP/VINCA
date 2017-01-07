@@ -27,13 +27,15 @@ public class AutoSaver{
         timer = new CountDownTimer(interval, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.d("Autosave","time left: " + (millisUntilFinished - historian.timeSinceChange));
+                Log.d("Autosave","time left: " + (historian.timeSinceChange - millisUntilFinished));
                 editorActivity.setSaveStatusBar(false);
             }
 
             @Override
             public void onFinish() {
-                Long deltaTime = (SystemClock.currentThreadTimeMillis() - historian.timeSinceChange);
+                Long deltaTime = (SystemClock.uptimeMillis() - historian.timeSinceChange);
+                System.out.println("nowTime: " + SystemClock.uptimeMillis());
+                System.out.println("historianTime: " + historian.timeSinceChange);
                 if(deltaTime >= interval) {
                     Log.d("Autosave", deltaTime + ", no fun...");
                 }

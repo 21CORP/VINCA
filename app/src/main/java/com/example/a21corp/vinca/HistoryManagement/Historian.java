@@ -30,7 +30,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     public void storeAndExecute(Command cmd){
         historyStack.push(cmd);
         cmd.execute();
-        timeSinceChange =SystemClock.uptimeMillis()/1000;
+        timeSinceChange =SystemClock.uptimeMillis();
         redoStack.clear();
         Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
     }

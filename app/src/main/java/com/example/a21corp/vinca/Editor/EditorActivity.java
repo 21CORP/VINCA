@@ -81,6 +81,14 @@ public class EditorActivity extends AppCompatActivity
             projDir.mkdirs();
         }
 
+        initiateEditor();
+        initiateWorkspace(savedInstanceState);
+        trashBin.setOnDragListener(new TrashBin(viewManager));
+        historian = Historian.getInstance();
+
+    }
+
+    private void initiateWorkspace(Bundle savedInstanceState) {
         String title;
         if (savedInstanceState == null) {
             title = getIntent().getExtras().getString("title");
@@ -90,18 +98,14 @@ public class EditorActivity extends AppCompatActivity
         }
         Workspace workspace;
         try {
-            workspace = ProjectManager.getInstance().loadProject(dirPath + "/" + title + ".ser");
+            workspace = ProjectManager.getInstance()
+                    .loadProject(dirPath + "/" + title + ".ser");
         } catch (Exception e) {
             e.printStackTrace();
             workspace = ProjectManager.getInstance().createProject(title);
         }
-        initiateEditor();
         projectNameBar.setText(title);
-
         viewManager = new VincaViewManager(this, workspace);
-        trashBin.setOnDragListener(new TrashBin(viewManager));
-        historian = Historian.getInstance();
-
     }
 
     private void initiateEditor() {

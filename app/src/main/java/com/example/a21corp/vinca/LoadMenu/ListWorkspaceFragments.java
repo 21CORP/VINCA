@@ -66,7 +66,7 @@ public class ListWorkspaceFragments extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FolderAdapter adapter = new FolderAdapter(view.getContext().getFilesDir());
+        FolderAdapter adapter = new FolderAdapter(new File(view.getContext().getFilesDir() + "/workspaces/"));
         adapter.setOnFileSelectedListener((OnFileSelectedListener)getActivity());
         setListAdapter(adapter);
     }

@@ -37,19 +37,34 @@
             android:layout_width="2px"
             android:background="@color/colorPrimary"
             android:layout_height="match_parent"/>
-       <FrameLayout
-           android:id="@+id/LoadActivityWorkspaceFragment"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:layout_weight="0.33">
+
+           <FrameLayout
+               android:id="@+id/LoadActivityWorkspaceFragment"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_weight="0.33">
+
+               <LinearLayout
+                   android:orientation="vertical"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:gravity="center">
                 <TextView
                     android:id="@android:id/empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="No selection"
                     android:gravity="center"/>
 
-       </FrameLayout>
+                   <Button
+                       android:text="Load"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:id="@+id/button_loadSelectedProject"
+                       android:textColor="#000000"/>
+               </LinearLayout>
+           </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>

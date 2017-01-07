@@ -12,10 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.example.a21corp.vinca.AndroidUtilities.FolderAdapter;
 import com.example.a21corp.vinca.AndroidUtilities.OnFileSelectedListener;
+import com.example.a21corp.vinca.Editor.EditorActivity;
+import com.example.a21corp.vinca.Editor.ProjectManager;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -26,12 +29,17 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     private FolderAdapter listadapter;
     private FrameLayout workspacePreviewHolder;
+    private Button loadButton;
+    private String title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
         handleSearchIntent(getIntent());
         workspacePreviewHolder = (FrameLayout)findViewById(R.id.LoadActivityWorkspaceFragment);
+        loadButton = (Button) findViewById(R.id.button_loadSelectedProject);
+        loadButton.setOnClickListener(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Log.d("LoadActivity", "Created");
@@ -64,12 +72,21 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        CreateMenuPopUp p = new CreateMenuPopUp();
-        p.show(getFragmentManager(),"pop");
+        if (v == loadButton) {
+            Intent editor = new Intent(this, EditorActivity.class);
+            editor.putExtra("title", title);
+            startActivity(editor);
+        }
+        else {
+            CreateMenuPopUp p = new CreateMenuPopUp();
+            p.show(getFragmentManager(), "pop");
+        }
     }
     private Bundle createBundle(File f){
         Bundle newBundle = new Bundle();
-        newBundle.putString("title", f.getName());
+        String name = f.getName();
+        name = name.substring(0, name.length() - 4);
+        newBundle.putString("title", name);
         newBundle.putString("created", "Unknown");
         newBundle.putString("edited",dateFormatter.format(new Date(f.lastModified())));
         return newBundle;
@@ -77,6 +94,8 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onSelected(File f) {
+        title = f.getName();
+        title = title.substring(0, title.length() - 4);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment newWorkspacePreview = new LoadActivity_WorkspaceFragment();
         newWorkspacePreview.setArguments(createBundle(f));

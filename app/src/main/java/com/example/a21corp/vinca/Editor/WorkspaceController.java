@@ -181,8 +181,8 @@ public class WorkspaceController implements Serializable {
     public void renameWorkspace(String title, String path) {
         String oldTitle = workspace.getTitle();
         workspace.setTitle(title);
-        if (ProjectManager.getInstance().saveProject(workspace, path)) {
-            ProjectManager.getInstance().removeProject(oldTitle, path);
+        if (ProjectManager.saveProject(workspace, path)) {
+            ProjectManager.removeProject(oldTitle, path);
         }
     }
 }

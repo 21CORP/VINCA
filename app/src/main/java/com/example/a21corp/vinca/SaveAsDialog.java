@@ -57,7 +57,7 @@ private EditText newProjName;
                          Workspace workspace = new Workspace(pName, currentWorkspace.projects);
                          workspace.cursor = currentWorkspace.cursor;
 
-                         if (ProjectManager.getInstance().saveProject(workspace, dirPath)) {
+                         if (ProjectManager.saveProject(workspace, dirPath)) {
                              Intent editor = new Intent(getActivity(), EditorActivity.class);
                              editor.putExtra("title", pName);
                              getActivity().finish();

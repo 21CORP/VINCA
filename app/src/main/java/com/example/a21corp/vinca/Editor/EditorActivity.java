@@ -70,7 +70,7 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        ProjectManager.getInstance().saveProject(viewManager.workspaceController.workspace, dirPath);
+        ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         outState.putString("title", viewManager.getWorkspaceTitle());
         Log.d("Editor - onSaveInstance", outState.toString());
         super.onSaveInstanceState(outState);
@@ -104,11 +104,10 @@ public class EditorActivity extends AppCompatActivity
         }
         Workspace workspace;
         try {
-            workspace = ProjectManager.getInstance()
-                    .loadProject(dirPath + "/" + title + ".ser");
+            workspace = ProjectManager.loadProject(dirPath + "/" + title + ".ser");
         } catch (Exception e) {
             e.printStackTrace();
-            workspace = ProjectManager.getInstance().createProject(title);
+            workspace = ProjectManager.createProject(title);
         }
         projectNameBar.setText(title);
         viewManager = new VincaViewManager(this, workspace);
@@ -219,14 +218,14 @@ public class EditorActivity extends AppCompatActivity
 
         }
         if (view == exportView) {
-            ProjectManager.getInstance().saveProject(viewManager.workspaceController.workspace, dirPath);
+            ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         }
             if(view== backButton){
             Log.d("back","clicked");
 
             Workspace workspace;
             try {
-                workspace = ProjectManager.getInstance().loadProject(dirPath + "/"
+                workspace = ProjectManager.loadProject(dirPath + "/"
                         + viewManager.getWorkspaceTitle() + ".ser");
             } catch (Exception e) {
                 e.printStackTrace();

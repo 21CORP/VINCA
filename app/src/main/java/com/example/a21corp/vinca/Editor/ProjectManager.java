@@ -10,29 +10,18 @@ import java.util.ArrayList;
  * Created by Oliver on 04-01-2017.
  */
 
-public class ProjectManager {
-    private static ProjectManager instance;
+public abstract class ProjectManager {
     private static final String fileExtension = ".ser";
 
-    private ProjectManager(){
 
-    }
-
-    public static ProjectManager getInstance() {
-        if (instance == null) {
-            instance = new ProjectManager();
-        }
-        return instance;
-    }
-
-    public Workspace createProject(String title) {
+    public static Workspace createProject(String title) {
         Workspace workspace = new Workspace(title, new ArrayList<Expandable>());
         return workspace;
     }
 
 
 
-    public Workspace loadProject(String absoluteFilePath) throws Exception{
+    public static Workspace loadProject(String absoluteFilePath) throws Exception{
         if (!absoluteFilePath.endsWith(fileExtension)) {
             absoluteFilePath = absoluteFilePath + fileExtension;
         }
@@ -40,7 +29,7 @@ public class ProjectManager {
         return workspace;
     }
 
-    public boolean saveProject(Workspace workspace, String dirPath){
+    public static boolean saveProject(Workspace workspace, String dirPath){
         String title = workspace.getTitle();
         String filePath = dirPath + "/" + title + fileExtension;
         try {
@@ -59,13 +48,7 @@ public class ProjectManager {
         return true;
     }
 
-
-    public void onProjectChange(){
-
-    }
-
-
-    public void removeProject(String title, String dirPath) {
+    public static void removeProject(String title, String dirPath) {
         String absoluteFilePath = dirPath + "/" + title;
         if (!absoluteFilePath.endsWith(fileExtension)) {
             absoluteFilePath = absoluteFilePath + fileExtension;

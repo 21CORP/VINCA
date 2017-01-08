@@ -54,8 +54,8 @@ Button b1;
                 .setPositiveButton("Create project", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String pname =  projectName.getText().toString();
-                        Workspace workspace = ProjectManager.getInstance().createProject(pname);
-                        if (ProjectManager.getInstance().saveProject(workspace, dirPath)) {
+                        Workspace workspace = ProjectManager.createProject(pname);
+                        if (ProjectManager.saveProject(workspace, dirPath)) {
                             Intent editor = new Intent(getActivity(), EditorActivity.class);
                             editor.putExtra("title", pname);
                             startActivity(editor);

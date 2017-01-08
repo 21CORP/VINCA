@@ -1,5 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.DragEvent;
@@ -11,12 +12,17 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
  * Created by root on 1/6/17.
  */
 
-public class TrashBin implements View.OnClickListener, View.OnDragListener {
+public class TrashBin extends View implements View.OnClickListener, View.OnDragListener {
     private VincaViewManager manager;
-    TrashBin(VincaViewManager manager)
+
+    public TrashBin(Context context) {
+        super(context);
+    }
+    /*TrashBin(VincaViewManager manager)
     {
         this.manager = manager;
-    }
+    }*/
+
     @Override
     public boolean onDrag(View view, DragEvent event) {
         VincaElementView draggedView = null;
@@ -54,6 +60,6 @@ public class TrashBin implements View.OnClickListener, View.OnDragListener {
 
     @Override
     public void onClick(View view) {
-
+        manager.deleteElement(manager.getCursor());
     }
 }

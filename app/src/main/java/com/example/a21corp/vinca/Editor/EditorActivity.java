@@ -1,9 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,18 +20,20 @@ import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
-import com.example.a21corp.vinca.elements.VincaElement;
+import com.example.a21corp.vinca.vincaviews.ActivityElementView;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
+import com.example.a21corp.vinca.vincaviews.DecisionElementView;
 import com.example.a21corp.vinca.vincaviews.ElementView;
+import com.example.a21corp.vinca.vincaviews.IterateContainerView;
 import com.example.a21corp.vinca.vincaviews.NodeView;
+import com.example.a21corp.vinca.vincaviews.PauseElementView;
+import com.example.a21corp.vinca.vincaviews.ProcessContainerView;
+import com.example.a21corp.vinca.vincaviews.ProjectContainerView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
-import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
 import java.io.File;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
@@ -42,8 +41,9 @@ public class EditorActivity extends AppCompatActivity
 
     private VincaViewManager viewManager = null;
     private NodeView methodView;
-    private ElementView activityView, pauseView, decisionView;
-    private ExpandableView processView, projectView, iterateView;
+    private ActivityElementView activityView;
+    private ElementView  pauseView, decisionView;
+    private ContainerView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
     private ImageButton backButton, exportView, saveButton;
@@ -89,7 +89,7 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         initiateWorkspace(savedInstanceState);
-        trashBin.setOnDragListener(new TrashBin(viewManager));
+        trashBin.setOnDragListener(new TrashBin(this));
         historian = Historian.getInstance();
 
     }
@@ -120,17 +120,16 @@ public class EditorActivity extends AppCompatActivity
         elementPanel = (LinearLayout) findViewById(R.id.panel);
 
         //Expandables
-        projectView = new ExpandableView(this, VincaElement.ELEMENT_PROJECT);
-        processView = new ExpandableView(this, VincaElement.ELEMENT_PROCESS);
-        iterateView = new ExpandableView(this, VincaElement.ELEMENT_ITERATE);
+        projectView = new ProjectContainerView(this, null);
+        processView = new ProcessContainerView(this, null);
+        iterateView = new IterateContainerView(this, null);
         //Elements
-        activityView = new ElementView(this, VincaElement.ELEMENT_ACTIVITY);
-        pauseView = new ElementView(this, VincaElement.ELEMENT_PAUSE);
-        decisionView = new ElementView(this, VincaElement.ELEMENT_DECISION);
+        pauseView = new PauseElementView(this, null);
+        decisionView = new DecisionElementView(this, null);
         //Nodes
-        methodView = new NodeView(this, VincaElement.ELEMENT_METHOD);
-
-        //Add Vinca Symbols to the panel
+        methodView = new NodeView(this, null);
+        activityView = new ActivityElementView(this, null);
+        //Add Vinca Symbols to the panel-.-
         elementPanel.addView(activityView);
         elementPanel.addView(decisionView);
         elementPanel.addView(pauseView);
@@ -199,11 +198,7 @@ public class EditorActivity extends AppCompatActivity
         if (view instanceof VincaElementView) {
             if (view.getParent() == elementPanel) {
                 viewManager.addElement((VincaElementView) view);
-            } else if (view instanceof ContainerView) {
-                viewManager.setCursor((ContainerView) view);
             }
-        } else if (view == trashBin) {
-            viewManager.deleteElement(viewManager.getCursor());
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();
@@ -263,7 +258,7 @@ public class EditorActivity extends AppCompatActivity
             case DragEvent.ACTION_DROP:
                 draggedView.setVisibility(View.VISIBLE);
                 if (view instanceof VincaElementView) {
-                    viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
+                     viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
                     viewManager.highlightView(viewManager.getCursor());
                     break;
                 }

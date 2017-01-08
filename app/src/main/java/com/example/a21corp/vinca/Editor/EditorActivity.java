@@ -218,7 +218,9 @@ public class EditorActivity extends AppCompatActivity
 
         }
         if (view == exportView) {
-            ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
+            ExportDialog exportDialog = new ExportDialog();
+            exportDialog.show(getFragmentManager(), "Export as");
+            //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         }
             if(view== backButton){
             Log.d("back","clicked");

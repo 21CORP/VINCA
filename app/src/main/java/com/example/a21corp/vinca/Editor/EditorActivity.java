@@ -246,7 +246,7 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public boolean onDrag(View view, DragEvent event) {
         View draggedView = (View) event.getLocalState();
-        if (! (view instanceof VincaElementView)) {
+        if (! (draggedView instanceof VincaElementView)) {
             //Not dragging a VincaElementView, not interested in future drag-events
             return false;
         }
@@ -300,7 +300,6 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            Log.d("WorkspaceController", "touch move event recieved");
             startDragAux(view);
             return true;
         }

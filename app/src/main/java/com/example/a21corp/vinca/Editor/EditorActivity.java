@@ -47,7 +47,7 @@ public class EditorActivity extends AppCompatActivity
     //TODO:
     //private View undoView, redoView
     private ImageButton exportView, saveButton;
-    private ImageButton trashBin;
+    private ImageButton trashBin, confirmName;
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
@@ -145,6 +145,8 @@ public class EditorActivity extends AppCompatActivity
         //redoView = findViewById(R.id.redo);
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
         exportView = (ImageButton) findViewById(R.id.export);
+        confirmName = (ImageButton) findViewById(R.id.confirm);
+        confirmName.setVisibility(View.GONE);
        // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
@@ -182,7 +184,8 @@ public class EditorActivity extends AppCompatActivity
         redoButton = (Button) findViewById(R.id.button2);
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
-
+        projectNameBar.setOnTouchListener(this);
+        confirmName.setOnClickListener(this);
         //TODO flyt til bedre sted?
         if(autoSaver != null){
             autoSaver.timer.cancel();
@@ -190,6 +193,8 @@ public class EditorActivity extends AppCompatActivity
         autoSaver = new AutoSaver(this);
         autoSaver.timer.start();
         //TODO
+
+
     }
 
     @Override
@@ -221,6 +226,13 @@ public class EditorActivity extends AppCompatActivity
             ExportDialog exportDialog = new ExportDialog();
             exportDialog.show(getFragmentManager(), "Export as");
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
+
+
+            if (view == confirmName) {
+                //change title
+
+             // hide again   confirmName.setVisibility(view.GONE);
+            }
         }
           /**  if(view== backButton){
             Log.d("back","clicked");
@@ -303,6 +315,10 @@ public class EditorActivity extends AppCompatActivity
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
             startDragAux(view);
             return true;
+        }
+        if(view == projectNameBar){
+            System.out.println("pressed title");
+            confirmName.setVisibility(View.VISIBLE);
         }
         //Did not consume event
         return false;

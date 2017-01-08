@@ -55,6 +55,14 @@
             android:gravity="center_vertical"
             android:layout_weight="7" />
 
+        <ImageButton
+            android:contentDescription="confirm new name"
+            android:layout_width="@dimen/symbol_max_size"
+            android:layout_height="@dimen/symbol_max_size"
+            app:srcCompat="@android:drawable/checkbox_on_background"
+            android:id="@+id/confirm"
+            />
+
         <TextView
             android:text="Saving..."
             android:layout_width="0dp"

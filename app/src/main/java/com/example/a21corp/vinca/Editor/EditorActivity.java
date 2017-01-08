@@ -46,7 +46,7 @@ public class EditorActivity extends AppCompatActivity
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    private ImageButton backButton, exportView, saveButton;
+    private ImageButton exportView, saveButton;
     private ImageButton trashBin;
     private EditText projectNameBar;
     private TextView saveStatusBar;
@@ -145,7 +145,7 @@ public class EditorActivity extends AppCompatActivity
         //redoView = findViewById(R.id.redo);
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
         exportView = (ImageButton) findViewById(R.id.export);
-        backButton = (ImageButton) findViewById(R.id.button_return);
+       // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -172,7 +172,7 @@ public class EditorActivity extends AppCompatActivity
         //redoView.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         exportView.setOnClickListener(this);
-        backButton.setOnClickListener(this);
+        //backButton.setOnClickListener(this);
         projectNameBar.setOnEditorActionListener(this);
 
         trashBin.setOnClickListener(this);
@@ -222,7 +222,7 @@ public class EditorActivity extends AppCompatActivity
             exportDialog.show(getFragmentManager(), "Export as");
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         }
-            if(view== backButton){
+          /**  if(view== backButton){
             Log.d("back","clicked");
 
             Workspace workspace;
@@ -234,7 +234,7 @@ public class EditorActivity extends AppCompatActivity
                 return;
             }
             viewManager.setWorkspace(workspace);
-        }
+        } **/
         //test
         if(view == undoButton){
             historian.undo();

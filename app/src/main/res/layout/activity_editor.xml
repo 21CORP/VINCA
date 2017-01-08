@@ -22,14 +22,14 @@
         android:background="@color/background_material_light_2">
 
 
-        <ImageButton
+       <!--<ImageButton
             android:contentDescription="Return to main menu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:srcCompat="?android:attr/homeAsUpIndicator"
             android:id="@+id/button_return"
             android:layout_weight="1" />
-
+            -->
 
         <Button
             android:text="Button_undo"
@@ -62,11 +62,12 @@
             android:id="@+id/text_save_status"
             android:layout_weight="2" />
         <View
+            android:contentDescription = "seperation"
             android:layout_height="match_parent"
             android:layout_width="1dp"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:background="@color/colorPrimary"
+            android:background="@android:color/black"
             />
 
         <!--
@@ -143,7 +144,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@android:color/black"
                 />
 
             <ScrollView

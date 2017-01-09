@@ -226,6 +226,7 @@ public class EditorActivity extends AppCompatActivity
                 viewManager.addElement((VincaElementView) view);
             } else if (view instanceof ContainerView) {
                 viewManager.setCursor((ContainerView) view);
+                //TODO minimenu open
             }
         } else if (view == trashBin) {
             viewManager.deleteElement(viewManager.getCursor());

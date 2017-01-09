@@ -45,7 +45,7 @@ public class element_description extends DialogFragment{
         titleTV = (TextView) promptView.findViewById(R.id.TitleEditView);
         descTV = (TextView) promptView.findViewById(R.id.DescriptionEditView);
 
-        titleTV.setText(workElement.title); //Overflødigt?
+        titleTV.setText(workElement.title);
         descTV.setText(workElement.description);
 
         builder.setView(promptView);

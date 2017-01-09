@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.Editor;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +47,8 @@ public class EditorActivity extends AppCompatActivity
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    private ImageButton exportView, saveButton;
-    private ImageButton trashBin, confirmName;
+    private ImageButton exportView, saveButton,undoButton, redoButton;
+    private ImageButton trashBin;
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
@@ -61,8 +62,8 @@ public class EditorActivity extends AppCompatActivity
     private File projDir;
 
     //test
-    Button undoButton;
-    Button redoButton;
+   // Button undoButton;
+   // Button redoButton;
     //test end
     private AutoSaver autoSaver;
     private Date timeLastSaved;
@@ -155,9 +156,7 @@ public class EditorActivity extends AppCompatActivity
         //redoView = findViewById(R.id.redo);
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
         exportView = (ImageButton) findViewById(R.id.export);
-        confirmName = (ImageButton) findViewById(R.id.confirm);
-        confirmName.setVisibility(View.GONE);
-       // backButton = (ImageButton) findViewById(R.id.button_return);
+             // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -190,12 +189,11 @@ public class EditorActivity extends AppCompatActivity
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
-        undoButton = (Button) findViewById(R.id.button);
-        redoButton = (Button) findViewById(R.id.button2);
+        undoButton = (ImageButton) findViewById(R.id.buttonUndo);
+        redoButton = (ImageButton) findViewById(R.id.buttonRedo);
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
-        projectNameBar.setOnTouchListener(this);
-        confirmName.setOnClickListener(this);
+
 
 
     }
@@ -230,12 +228,6 @@ public class EditorActivity extends AppCompatActivity
             exportDialog.show(getFragmentManager(), "Export as");
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
 
-
-            if (view == confirmName) {
-                //change title
-
-             // hide again   confirmName.setVisibility(view.GONE);
-            }
         }
           /**  if(view== backButton){
             Log.d("back","clicked");
@@ -254,9 +246,9 @@ public class EditorActivity extends AppCompatActivity
         if(view == undoButton){
             historian.undo();
         }
-        if(view == redoButton){
-            historian.redo();
-        }
+       if(view == redoButton){
+           historian.redo();
+       }
     }
 
     @Override
@@ -319,11 +311,7 @@ public class EditorActivity extends AppCompatActivity
             startDragAux(view);
             return true;
         }
-        if(view == projectNameBar){
-            System.out.println("pressed title");
-            confirmName.setVisibility(View.VISIBLE);
-        }
-        //Did not consume event
+             //Did not consume event
         return false;
     }
 

@@ -31,17 +31,7 @@
             android:layout_weight="1" />
             -->
 
-        <Button
-            android:text="Button_undo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button" />
 
-        <Button
-            android:text="Button_redo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button2" />
 
         <EditText
             android:text="Project Skeleton"
@@ -49,19 +39,32 @@
             android:inputType="text"
             android:maxLines="1"
             android:background="@android:color/transparent"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/text_project_name"
             android:gravity="center_vertical"
-            android:layout_weight="7" />
+            android:layout_weight="7"
+            android:layout_width="20dp" />
 
         <ImageButton
-            android:contentDescription="confirm new name"
+            android:contentDescription="Save as"
             android:layout_width="@dimen/symbol_max_size"
             android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/checkbox_on_background"
-            android:id="@+id/confirm"
+            app:srcCompat="@android:drawable/ic_menu_save"
+            android:id="@+id/saveas"
+            android:background="@color/background_material_light_1"
+
+
             />
+
+        <ImageButton
+            android:contentDescription="Export"
+            android:layout_width="@dimen/symbol_max_size"
+            android:layout_height="@dimen/symbol_max_size"
+            app:srcCompat="@android:drawable/ic_menu_upload"
+            android:id="@+id/export"
+            android:background="@color/background_material_light_1"
+            />
+
 
         <TextView
             android:text="Saving..."
@@ -93,28 +96,31 @@
                     android:id="@+id/redo" />
         -->
         <ImageButton
-            android:contentDescription="Save as"
-            android:layout_width="@dimen/symbol_max_size"
-            android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/ic_menu_save"
-            android:id="@+id/saveas"
+            app:srcCompat="@drawable/undo"
+            android:id="@+id/buttonUndo"
+            android:background="@color/background_material_light_1"
 
-
-            />
+            android:layout_width="40dp"
+            android:layout_height="60dp" />
 
         <ImageButton
-            android:contentDescription="Export"
-            android:layout_width="@dimen/symbol_max_size"
-            android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/ic_menu_upload"
-            android:id="@+id/export" />
+            app:srcCompat="@drawable/redo"
+            android:text="Button_redo"
+            android:layout_width="40dp"
+            android:id="@+id/buttonRedo"
+            android:background="@color/background_material_light_1"
+            android:layout_height="60dp" />
+
+
 
         <ImageButton
             android:contentDescription="Delete"
             android:layout_width="@dimen/symbol_max_size"
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@android:drawable/ic_menu_delete"
-            android:id="@+id/trashbin" />
+            android:id="@+id/trashbin"
+            android:background="@color/background_material_light_1"
+            />
     </TableRow>
 
     <LinearLayout
@@ -146,15 +152,7 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <View
-                android:contentDescription="panel_seperator_top"
-                android:layout_height="1dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_width="match_parent"
-                android:background="@android:color/black"
-                />
+
 
             <ScrollView
             android:id="@+id/panel_scroller"

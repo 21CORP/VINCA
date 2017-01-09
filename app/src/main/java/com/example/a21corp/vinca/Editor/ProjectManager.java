@@ -1,5 +1,7 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.util.Log;
+
 import com.example.a21corp.vinca.elements.Expandable;
 
 import java.io.File;
@@ -58,13 +60,16 @@ public abstract class ProjectManager {
     }
 
     public static boolean inputCheck(String input, String dirPath){
-        if(input.contains(".")){
+        if(input.contains(".") || input.isEmpty()){
+            Log.d("Input validation", "Validation failed: Illegal name");
             return false;
+
         };
         File[] files = new File(dirPath).listFiles();
         for (File file: files) {
             System.out.println(file.getAbsolutePath());
             if(file.getAbsolutePath().endsWith(input + ".ser")){
+                Log.d("Input validation", "Validation failed: File already exists");
                 return false;
             };
         }

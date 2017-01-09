@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,11 +58,16 @@ private EditText newProjName;
                          Workspace workspace = new Workspace(pName, currentWorkspace.projects);
                          workspace.cursor = currentWorkspace.cursor;
 
-                         if (ProjectManager.saveProject(workspace, dirPath)) {
-                             Intent editor = new Intent(getActivity(), EditorActivity.class);
-                             editor.putExtra("title", pName);
-                             getActivity().finish();
-                             startActivity(editor);
+                         if(ProjectManager.inputCheck(workspace.getTitle(), dirPath)) {
+                             if (ProjectManager.saveProject(workspace, dirPath)) {
+                                 Intent editor = new Intent(getActivity(), EditorActivity.class);
+                                 editor.putExtra("title", pName);
+                                 getActivity().finish();
+                                 startActivity(editor);
+                             }
+                         }
+                         else{
+
                          }
 
                      }

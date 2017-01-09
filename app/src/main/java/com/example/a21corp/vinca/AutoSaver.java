@@ -47,7 +47,7 @@ public class AutoSaver{
                 else{
                     Log.d("Autosave", deltaTime + ", Save time!");
                     editorActivity.setSaveStatusBar(true);
-                    System.out.println(ProjectManager.saveProject(workspace, dir));
+                    ProjectManager.saveProject(workspace, dir);
                 }
                 timer.start();
             }

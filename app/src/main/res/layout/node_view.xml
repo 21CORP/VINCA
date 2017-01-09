@@ -13,7 +13,7 @@
         android:layout_height="@dimen/symbol_max_size"
         android:maxHeight="@dimen/symbol_max_size"
         android:maxWidth="@dimen/symbol_max_size"
-        app:srcCompat="@drawable/method"
+        app:srcCompat="@android:drawable/stat_sys_warning"
         android:adjustViewBounds="true"
         android:layout_gravity="center" />
 </FrameLayout>

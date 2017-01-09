@@ -1,8 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,7 +22,7 @@ public class GhostEditorView extends LinearLayout {
 
     protected void initialize() {
         //Not quite how I would like this to function
-        ImageView image = new ImageView(getContext());
+        ImageView image = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
         this.addView(image);
 
         switch(prototype.type)
@@ -37,7 +35,7 @@ public class GhostEditorView extends LinearLayout {
                 break;
             case VincaElement.ELEMENT_ITERATE:{
                 image.setImageResource(R.drawable.iterate_left);
-                ImageView image2 = new ImageView(getContext());
+                ImageView image2 = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
                 image2.setImageResource(R.drawable.iterate_right);
                 this.addView(image2);
                 break;
@@ -50,14 +48,14 @@ public class GhostEditorView extends LinearLayout {
                 break;
             case VincaElement.ELEMENT_PROCESS: {
                 image.setImageResource(R.drawable.process_left);
-                ImageView image2 = new ImageView(getContext());
+                ImageView image2 = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
                 image2.setImageResource(R.drawable.process_right);
                 this.addView(image2);
                 break;
             }
             case VincaElement.ELEMENT_PROJECT:{
                 image.setImageResource(R.drawable.project_start);
-                ImageView image2 = new ImageView(getContext());
+                ImageView image2 = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
                 image2.setImageResource(R.drawable.project_end);
                 this.addView(image2);
                 break;

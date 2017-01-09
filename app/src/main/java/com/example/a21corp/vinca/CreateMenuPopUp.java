@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
@@ -63,7 +64,7 @@ Button b1;
                             }
                         }
                         else{
-
+                            Toast.makeText(getActivity().getApplicationContext(), "Please try again with another title", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })

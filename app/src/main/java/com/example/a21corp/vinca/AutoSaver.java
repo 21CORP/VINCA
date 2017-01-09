@@ -1,11 +1,17 @@
 package com.example.a21corp.vinca;
 
+import android.app.Fragment;
+import android.app.Service;
+import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
+import com.example.a21corp.vinca.Editor.Workspace;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 
 import java.io.File;
@@ -20,10 +26,9 @@ public class AutoSaver{
     private Historian historian;
     private long interval = 5000;
 
-    public AutoSaver(final EditorActivity editorActivity){
+    public AutoSaver(final EditorActivity editorActivity, final Workspace workspace, final String dir){
         historian = Historian.getInstance();
-
-
+        System.out.println("new Autosaver!");
         timer = new CountDownTimer(interval, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -42,11 +47,10 @@ public class AutoSaver{
                 else{
                     Log.d("Autosave", deltaTime + ", Save time!");
                     editorActivity.setSaveStatusBar(true);
-                    //TODO SAVE THE FILE
+                    System.out.println(ProjectManager.saveProject(workspace, dir));
                 }
                 timer.start();
             }
-        };
-
+        }.start();
     }
 }

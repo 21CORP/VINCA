@@ -94,6 +94,15 @@ public class EditorActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onStart(){
+        if(autoSaver != null){
+            autoSaver.timer.cancel();
+        }
+        autoSaver = new AutoSaver(this, viewManager.workspaceController.workspace, dirPath);
+        super.onStart();
+    }
+
     private void initiateWorkspace(Bundle savedInstanceState) {
         String title;
         if (savedInstanceState == null) {
@@ -111,6 +120,7 @@ public class EditorActivity extends AppCompatActivity
         }
         projectNameBar.setText(title);
         viewManager = new VincaViewManager(this, workspace);
+
     }
 
     private void initiateEditor() {
@@ -186,13 +196,6 @@ public class EditorActivity extends AppCompatActivity
         redoButton.setOnClickListener(this);
         projectNameBar.setOnTouchListener(this);
         confirmName.setOnClickListener(this);
-        //TODO flyt til bedre sted?
-        if(autoSaver != null){
-            autoSaver.timer.cancel();
-        }
-        autoSaver = new AutoSaver(this);
-        autoSaver.timer.start();
-        //TODO
 
 
     }
@@ -363,5 +366,11 @@ public class EditorActivity extends AppCompatActivity
             viewManager.renameWorkspace(title, dirPath);
             return true;
         }
+    }
+    @Override
+    protected void onStop(){
+        ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
+        autoSaver.timer.cancel();
+        super.onStop();
     }
 }

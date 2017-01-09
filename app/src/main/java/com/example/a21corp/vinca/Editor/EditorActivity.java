@@ -20,6 +20,10 @@ import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
+import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Expandable;
+import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ActivityElementView;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.DecisionElementView;
@@ -40,10 +44,10 @@ public class EditorActivity extends AppCompatActivity
         , View.OnTouchListener, TextView.OnEditorActionListener {
 
     private VincaViewManager viewManager = null;
-    private NodeView methodView;
-    private ActivityElementView activityView;
-    private ElementView  pauseView, decisionView;
-    private ContainerView processView, projectView, iterateView;
+    private GhostEditorView methodView;
+    private GhostEditorView activityView;
+    private GhostEditorView  pauseView, decisionView;
+    private GhostEditorView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
     private ImageButton backButton, exportView, saveButton;
@@ -120,15 +124,15 @@ public class EditorActivity extends AppCompatActivity
         elementPanel = (LinearLayout) findViewById(R.id.panel);
 
         //Expandables
-        projectView = new ProjectContainerView(this, null);
-        processView = new ProcessContainerView(this, null);
-        iterateView = new IterateContainerView(this, null);
+        projectView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_PROJECT));
+        processView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_PROCESS));
+        iterateView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_ITERATE));
         //Elements
-        pauseView = new PauseElementView(this, null);
-        decisionView = new DecisionElementView(this, null);
+        pauseView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_PAUSE));
+        decisionView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_DECISION));
         //Nodes
-        methodView = new NodeView(this, null);
-        activityView = new ActivityElementView(this, null);
+        methodView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_METHOD));
+        activityView = new GhostEditorView(this, new Node(VincaElement.ELEMENT_ACTIVITY));
         //Add Vinca Symbols to the panel-.-
         elementPanel.addView(activityView);
         elementPanel.addView(decisionView);

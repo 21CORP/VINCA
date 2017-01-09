@@ -1,9 +1,17 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.app.Application;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +19,7 @@ import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -31,10 +40,16 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import static android.R.attr.height;
+import static android.R.attr.width;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
@@ -51,7 +66,7 @@ public class EditorActivity extends AppCompatActivity
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
-    private HorizontalScrollView scrollView;
+    public HorizontalScrollView scrollView;
     public LinearLayout elementPanel;
 
     private Historian historian;
@@ -372,5 +387,107 @@ public class EditorActivity extends AppCompatActivity
         ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         autoSaver.timer.cancel();
         super.onStop();
+    }
+
+    public void canvasToJPG() {
+        File file = saveBitMap(canvas);    //which view you want to pass that view as parameter
+        if (file != null) {
+            Log.i("TAG", "Drawing saved to the gallery!");
+        } else {
+            Log.i("TAG", "Oops! Image could not be saved.");
+        }
+    }
+
+    private File saveBitMap(View drawView){
+        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"JPG Test");
+        if (!pictureFileDir.exists()) {
+            boolean isDirectoryCreated = pictureFileDir.mkdirs();
+            if(!isDirectoryCreated)
+                Log.i("TAG", "Can't create directory to save the image");
+            return null;
+        }
+        String filename = pictureFileDir.getPath() +File.separator+ "VINCA.jpg";
+        File pictureFile = new File(filename);
+        Bitmap bitmap =getBitmapFromView(drawView);
+        if (bitmap == null) {
+            Log.d("TAG", "Bitmap == Null");
+            return null;
+        }
+        try {
+            pictureFile.createNewFile();
+            FileOutputStream oStream = new FileOutputStream(pictureFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream);
+            oStream.flush();
+            oStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("TAG", "There was an issue saving the image.");
+        }
+        scanGallery(pictureFile.getAbsolutePath());
+        return pictureFile;
+    }
+//create bitmap from view and returns it
+    private Bitmap getBitmapFromView(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int width = view.getMeasuredWidth();
+        int height = view.getMeasuredHeight();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        view.layout(0, 0, width, height);
+        Bitmap bitmap = view.getDrawingCache();
+        return bitmap;
+        /**
+        int width = view.getWidth();
+        int height = view.getHeight();
+        if (width <= 0 || height <= 0) {
+            Log.d("TAG", "Width or Height is wrong");
+            return null;
+        }
+        //Define a bitmap with the same size as the view
+        view.layout(0, 0, width, height);
+        Bitmap returnedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null) {
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        }   else{
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        }
+        // draw the view on the canvas
+        //((ViewGroup) view).addView(this.canvas);
+        //drawViewsToCanvas(view, canvas);
+        view.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
+         **/
+    }
+
+    private void drawViewsToCanvas(ViewGroup view, Canvas canvas) {
+        view.draw(canvas);
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View child = view.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                drawViewsToCanvas((ViewGroup) child, canvas);
+            }
+            else {
+                child.draw(canvas);
+            }
+        }
+    }
+
+    // used for scanning gallery
+    private void scanGallery(String path) {
+        try {
+            MediaScannerConnection.scanFile(this, new String[] { path },null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

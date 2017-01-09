@@ -56,4 +56,18 @@ public abstract class ProjectManager {
         File file = new File(absoluteFilePath);
         file.delete();
     }
+
+    public static boolean inputCheck(String input, String dirPath){
+        if(input.contains(".")){
+            return false;
+        };
+        File[] files = new File(dirPath).listFiles();
+        for (File file: files) {
+            System.out.println(file.getAbsolutePath());
+            if(file.getAbsolutePath().endsWith(input + ".ser")){
+                return false;
+            };
+        }
+        return true;
+    }
 }

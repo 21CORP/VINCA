@@ -37,12 +37,13 @@ public class element_description extends DialogFragment{
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View promptView = inflater.inflate(R.layout.fragment_element_description, null);
-        titleTV = (TextView) promptView.findViewById(R.id.TitleTextView);
-        descTV = (TextView) promptView.findViewById(R.id.DescriptionTextView);
+        titleTV = (TextView) promptView.findViewById(R.id.TitleEditView);
+        descTV = (TextView) promptView.findViewById(R.id.DescriptionEditView);
 
         titleTV.setText(workElement.title); //Overflødigt?
         descTV.setText(workElement.description);
@@ -61,11 +62,22 @@ public class element_description extends DialogFragment{
                     }
 
                 });
-
+        setRetainInstance(true);
         return builder.create();
     }
 
     public void setElement(VincaElement element){
         workElement = element;
     }
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
+    }
+
+
 }

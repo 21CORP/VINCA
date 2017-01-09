@@ -3,33 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
         android:background="@color/White"
-        >
+        > -->
+        <TextView
+            android:text="Title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:id="@+id/TitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <EditText
+            android:layout_below = "@id/TitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:text=" "
             android:ems="10"
-            android:id="@+id/TitleTextView"
-            android:hint="Title"
+            android:id="@+id/TitleEditView"
+            android:hint=" Enter Title Here"
             android:textColor="?android:attr/textColorSecondary" />
+
+
+    <TextView
+        android:text="Description"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:id="@+id/DescriptionTextView"
+        android:layout_below = "@id/TitleEditView"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
+            android:layout_below = "@id/DescriptionTextView"
             android:text=" "
             android:ems="10"
-            android:id="@+id/DescriptionTextView"
-            android:hint="Description"
+            android:id="@+id/DescriptionEditView"
+            android:hint="Enter Description"
             android:textColor="?android:attr/textColorSecondary" />
 
-    </LinearLayout>
-</RelativeLayout>
+    <!-- </LinearLayout> -->
+ </RelativeLayout>

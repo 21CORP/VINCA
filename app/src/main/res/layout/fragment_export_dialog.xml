@@ -30,7 +30,7 @@
                 android:padding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/radioButton3"
+                android:id="@+id/export_svg"
                 android:layout_weight="1" />
 
             <RadioButton
@@ -38,7 +38,7 @@
                 android:padding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/radioButton2"
+                android:id="@+id/export_png"
                 android:layout_weight="1" />
         </RadioGroup>
 
@@ -51,7 +51,7 @@
             android:paddingLeft="48dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button3" />
+            android:id="@+id/button_perform_export" />
 
     </LinearLayout>
 

@@ -39,6 +39,10 @@ public class VincaElementView extends LinearLayout {
         return;
     }
 
+    public String getTitle() {
+        return element.title;
+    }
+
 
     public void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);

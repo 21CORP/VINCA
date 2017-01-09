@@ -1,19 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,17 +8,16 @@ import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
@@ -43,23 +29,15 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.jar.Manifest;
-
-import static android.R.attr.height;
-import static android.R.attr.width;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
         , View.OnTouchListener, TextView.OnEditorActionListener {
 
     private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
+    private ImageExporter imgExp = new ImageExporter();
     private VincaViewManager viewManager = null;
     private NodeView methodView;
     private ElementView activityView, pauseView, decisionView;
@@ -244,25 +222,11 @@ public class EditorActivity extends AppCompatActivity
 
         }
         if (view == exportView) {
-            ExportDialog exportDialog = new ExportDialog();
-            exportDialog.show(getFragmentManager(), "Export as");
+            canvasToJPG();
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
 
 
         }
-          /**  if(view== backButton){
-            Log.d("back","clicked");
-
-            Workspace workspace;
-            try {
-                workspace = ProjectManager.loadProject(dirPath + "/"
-                        + viewManager.getWorkspaceTitle() + ".ser");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-            viewManager.setWorkspace(workspace);
-        } **/
         //test
         if(view == undoButton){
             historian.undo();
@@ -385,82 +349,14 @@ public class EditorActivity extends AppCompatActivity
     }
 
     public void canvasToJPG() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkPermissionForWriting();
-            requestPermissions
-                    (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
+        if (viewManager == null) {
+            return;
         }
-        File file = saveBitMap(canvas);    //which view you want to pass that view as parameter
-        if (file != null) {
-            Log.i("TAG", "Drawing saved to the gallery!");
-        } else {
-            Log.i("TAG", "Oops! Image could not be saved.");
-        }
-    }
-
-    private void checkPermissionForWriting() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            int permissionCheck =
-                    checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                if (shouldShowRequestPermissionRationale
-                        (android.Manifest.permission.READ_PHONE_STATE)) {
-                } else {
-                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
-                }
-            }
-        }
-    }
-
-    private File saveBitMap(View drawView){
-        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"JPG Test");
-        if (!pictureFileDir.exists()) {
-            boolean isDirectoryCreated = pictureFileDir.mkdirs();
-            if(!isDirectoryCreated)
-                Log.i("TAG", "Can't create directory to save the image");
-            return null;
-        }
-        String filename = pictureFileDir.getPath() +File.separator+ "VINCA.jpg";
-        File pictureFile = new File(filename);
-        Bitmap bitmap =getBitmapFromView(drawView);
-        if (bitmap == null) {
-            Log.d("TAG", "Bitmap == Null");
-            return null;
-        }
-        try {
-            pictureFile.createNewFile();
-            FileOutputStream oStream = new FileOutputStream(pictureFile);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream);
-            oStream.flush();
-            oStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i("TAG", "There was an issue saving the image.");
-        }
-        scanGallery(pictureFile.getAbsolutePath());
-        return pictureFile;
-    }
-//create bitmap from view and returns it
-    private Bitmap getBitmapFromView(View view) {
-        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int width = view.getMeasuredWidth();
-        int height = view.getMeasuredHeight();
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        view.layout(0, 0, width, height);
-        Bitmap bitmap = view.getDrawingCache();
-        return bitmap;
-    }
-
-    // used for scanning gallery
-    private void scanGallery(String path) {
-        try {
-            MediaScannerConnection.scanFile(this, new String[] { path },null, new MediaScannerConnection.OnScanCompletedListener() {
-                public void onScanCompleted(String path, Uri uri) {
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        View viewToExport =
+                viewManager.makeViewFromClass
+                        (viewManager.workspaceController.workspace.projects.get(0));
+        ExportDialog exportDialog = new ExportDialog();
+        exportDialog.setExportTarget(this, viewToExport, viewManager.getWorkspaceTitle());
+        exportDialog.show(getFragmentManager(), "Export as");
     }
 }

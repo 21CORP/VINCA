@@ -1,7 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -301,11 +300,6 @@ public class VincaViewManager implements WorkspaceObserver {
             listener.canvas.setDrawingCacheEnabled(true);
             listener.canvas.addView(this.projectView);
             listener.canvas.invalidate();
-            //Time to draw image
-            Long start = SystemClock.currentThreadTimeMillis();
-            listener.canvasToJPG();
-            Long total = start - SystemClock.currentThreadTimeMillis();
-            Log.d("Save Image", "Took " + total + " ms to save image");
             getCursor();
             highlightView(cursor);
         }

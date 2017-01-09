@@ -18,17 +18,18 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class NodeView extends FrameLayout implements VincaElementView {
     Node node;
+    ImageView image;
     public NodeView(Context context, Node node) {
         super(context);
         this.node = node;
-        inflate(context, R.layout.node_view, this);
+        //inflate(context, R.layout.node_view, this);
+        image = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
         onFinishInflate();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ImageView image = (ImageView)findViewById(R.id.symbol);
         image.setImageResource(R.drawable.method);
         Log.d("NodeView", "finished inflating");
     }

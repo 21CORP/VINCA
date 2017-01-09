@@ -24,13 +24,13 @@ public class ElementView extends FrameLayout implements VincaElementView{
     public ElementView(Context context, Element element) {
        super(context);
        this.element = element;
-       inflate(context, R.layout.element_view, this);
+       //inflate(context, R.layout.element_view, this);
+       symbol = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
        onFinishInflate();
     }
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        symbol = (ImageView)findViewById(R.id.symbol);
         symbol.setImageResource(R.drawable.decision);
         Log.d("ElementView", "finished inflating");
     }

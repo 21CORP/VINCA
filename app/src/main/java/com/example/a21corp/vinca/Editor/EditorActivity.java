@@ -1,7 +1,9 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,6 +28,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
@@ -47,6 +50,7 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.jar.Manifest;
 
 import static android.R.attr.height;
 import static android.R.attr.width;
@@ -55,6 +59,7 @@ public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
         , View.OnTouchListener, TextView.OnEditorActionListener {
 
+    private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
     private VincaViewManager viewManager = null;
     private NodeView methodView;
     private ElementView activityView, pauseView, decisionView;
@@ -390,11 +395,30 @@ public class EditorActivity extends AppCompatActivity
     }
 
     public void canvasToJPG() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissionForWriting();
+            requestPermissions
+                    (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
+        }
         File file = saveBitMap(canvas);    //which view you want to pass that view as parameter
         if (file != null) {
             Log.i("TAG", "Drawing saved to the gallery!");
         } else {
             Log.i("TAG", "Oops! Image could not be saved.");
+        }
+    }
+
+    private void checkPermissionForWriting() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int permissionCheck =
+                    checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale
+                        (android.Manifest.permission.READ_PHONE_STATE)) {
+                } else {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
+                }
+            }
         }
     }
 
@@ -436,47 +460,6 @@ public class EditorActivity extends AppCompatActivity
         view.layout(0, 0, width, height);
         Bitmap bitmap = view.getDrawingCache();
         return bitmap;
-        /**
-        int width = view.getWidth();
-        int height = view.getHeight();
-        if (width <= 0 || height <= 0) {
-            Log.d("TAG", "Width or Height is wrong");
-            return null;
-        }
-        //Define a bitmap with the same size as the view
-        view.layout(0, 0, width, height);
-        Bitmap returnedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        //Bind a canvas to it
-        Canvas canvas = new Canvas(returnedBitmap);
-        //Get the view's background
-        Drawable bgDrawable =view.getBackground();
-        if (bgDrawable!=null) {
-            //has background drawable, then draw it on the canvas
-            bgDrawable.draw(canvas);
-        }   else{
-            //does not have background drawable, then draw white background on the canvas
-            canvas.drawColor(Color.WHITE);
-        }
-        // draw the view on the canvas
-        //((ViewGroup) view).addView(this.canvas);
-        //drawViewsToCanvas(view, canvas);
-        view.draw(canvas);
-        //return the bitmap
-        return returnedBitmap;
-         **/
-    }
-
-    private void drawViewsToCanvas(ViewGroup view, Canvas canvas) {
-        view.draw(canvas);
-        for (int i = 0; i < view.getChildCount(); i++) {
-            View child = view.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                drawViewsToCanvas((ViewGroup) child, canvas);
-            }
-            else {
-                child.draw(canvas);
-            }
-        }
     }
 
     // used for scanning gallery

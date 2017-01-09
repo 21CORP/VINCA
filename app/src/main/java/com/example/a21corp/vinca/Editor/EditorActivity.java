@@ -1,10 +1,19 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.media.Image;
+import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,12 +21,14 @@ import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
@@ -32,27 +43,35 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.ExpandableView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.jar.Manifest;
+
+import static android.R.attr.height;
+import static android.R.attr.width;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
         , View.OnTouchListener, TextView.OnEditorActionListener {
 
+    private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
     private VincaViewManager viewManager = null;
     private NodeView methodView;
     private ElementView activityView, pauseView, decisionView;
     private ExpandableView processView, projectView, iterateView;
     //TODO:
     //private View undoView, redoView
-    private ImageButton exportView, saveButton,undoButton, redoButton;
-    private ImageButton trashBin;
+    private ImageButton exportView, saveButton;
+    private ImageButton trashBin, confirmName;
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
-    private HorizontalScrollView scrollView;
+    public HorizontalScrollView scrollView;
     public LinearLayout elementPanel;
 
     private Historian historian;
@@ -62,8 +81,8 @@ public class EditorActivity extends AppCompatActivity
     private File projDir;
 
     //test
-   // Button undoButton;
-   // Button redoButton;
+    Button undoButton;
+    Button redoButton;
     //test end
     private AutoSaver autoSaver;
     private Date timeLastSaved;
@@ -156,7 +175,9 @@ public class EditorActivity extends AppCompatActivity
         //redoView = findViewById(R.id.redo);
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
         exportView = (ImageButton) findViewById(R.id.export);
-             // backButton = (ImageButton) findViewById(R.id.button_return);
+        confirmName = (ImageButton) findViewById(R.id.confirm);
+        confirmName.setVisibility(View.GONE);
+       // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -189,11 +210,12 @@ public class EditorActivity extends AppCompatActivity
         trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
-        undoButton = (ImageButton) findViewById(R.id.buttonUndo);
-        redoButton = (ImageButton) findViewById(R.id.buttonRedo);
+        undoButton = (Button) findViewById(R.id.button);
+        redoButton = (Button) findViewById(R.id.button2);
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
-
+        projectNameBar.setOnTouchListener(this);
+        confirmName.setOnClickListener(this);
 
 
     }
@@ -228,6 +250,12 @@ public class EditorActivity extends AppCompatActivity
             exportDialog.show(getFragmentManager(), "Export as");
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
 
+
+            if (view == confirmName) {
+                //change title
+
+             // hide again   confirmName.setVisibility(view.GONE);
+            }
         }
           /**  if(view== backButton){
             Log.d("back","clicked");
@@ -246,9 +274,9 @@ public class EditorActivity extends AppCompatActivity
         if(view == undoButton){
             historian.undo();
         }
-       if(view == redoButton){
-           historian.redo();
-       }
+        if(view == redoButton){
+            historian.redo();
+        }
     }
 
     @Override
@@ -311,7 +339,11 @@ public class EditorActivity extends AppCompatActivity
             startDragAux(view);
             return true;
         }
-             //Did not consume event
+        if(view == projectNameBar){
+            System.out.println("pressed title");
+            confirmName.setVisibility(View.VISIBLE);
+        }
+        //Did not consume event
         return false;
     }
 
@@ -360,5 +392,85 @@ public class EditorActivity extends AppCompatActivity
         ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         autoSaver.timer.cancel();
         super.onStop();
+    }
+
+    public void canvasToJPG() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissionForWriting();
+            requestPermissions
+                    (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
+        }
+        File file = saveBitMap(canvas);    //which view you want to pass that view as parameter
+        if (file != null) {
+            Log.i("TAG", "Drawing saved to the gallery!");
+        } else {
+            Log.i("TAG", "Oops! Image could not be saved.");
+        }
+    }
+
+    private void checkPermissionForWriting() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int permissionCheck =
+                    checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale
+                        (android.Manifest.permission.READ_PHONE_STATE)) {
+                } else {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_STATE);
+                }
+            }
+        }
+    }
+
+    private File saveBitMap(View drawView){
+        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"JPG Test");
+        if (!pictureFileDir.exists()) {
+            boolean isDirectoryCreated = pictureFileDir.mkdirs();
+            if(!isDirectoryCreated)
+                Log.i("TAG", "Can't create directory to save the image");
+            return null;
+        }
+        String filename = pictureFileDir.getPath() +File.separator+ "VINCA.jpg";
+        File pictureFile = new File(filename);
+        Bitmap bitmap =getBitmapFromView(drawView);
+        if (bitmap == null) {
+            Log.d("TAG", "Bitmap == Null");
+            return null;
+        }
+        try {
+            pictureFile.createNewFile();
+            FileOutputStream oStream = new FileOutputStream(pictureFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, oStream);
+            oStream.flush();
+            oStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("TAG", "There was an issue saving the image.");
+        }
+        scanGallery(pictureFile.getAbsolutePath());
+        return pictureFile;
+    }
+//create bitmap from view and returns it
+    private Bitmap getBitmapFromView(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int width = view.getMeasuredWidth();
+        int height = view.getMeasuredHeight();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        view.layout(0, 0, width, height);
+        Bitmap bitmap = view.getDrawingCache();
+        return bitmap;
+    }
+
+    // used for scanning gallery
+    private void scanGallery(String path) {
+        try {
+            MediaScannerConnection.scanFile(this, new String[] { path },null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

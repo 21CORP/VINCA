@@ -92,8 +92,7 @@ Button b1;
 
     public void importFile() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        //intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        intent.setType("*/*"); //TODO change to "*/*.ser" when we know it works
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
             startActivityForResult(Intent.createChooser(intent, "Select a file to import"), FILE_SELECT_CODE);

@@ -10,7 +10,7 @@ public class Element extends VincaElement implements Serializable {
     private static final long serialVersionUID = 12345;
     //Pause, Activity, conclusion
 
-    public Element(int elementType) {
+    protected Element(int elementType) {
         super(elementType);
     }
 }

@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Container extends Element implements Serializable {
     private static final long serialVersionUID = 12345;
-
-    public boolean isCursor;
+    public List<Element> containerList = new ArrayList<>();
+    //public boolean isCursor;
     public boolean isOpen;
-    public Container(int elementType) {
+    protected Container(int elementType) {
         super(elementType);
-        isCursor = false;
+       // isCursor = false;
         isOpen = false;
         parent = null;
     }

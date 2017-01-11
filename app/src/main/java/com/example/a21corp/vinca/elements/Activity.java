@@ -10,7 +10,7 @@ import java.util.List;
 public class Activity extends Element {
     public List<Node> nodes = new ArrayList<Node>();
 
-    public Activity(int elementType) {
+    protected Activity(int elementType) {
         super(elementType);
     }
 }

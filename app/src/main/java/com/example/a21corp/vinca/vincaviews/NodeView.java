@@ -20,11 +20,12 @@ import com.example.a21corp.vinca.elements.VincaElement;
  */
 
 public class NodeView extends FrameLayout implements VincaElementView {
-    Node node;
-    ImageView image;
+    private Node node;
+    private ImageView image;
     protected Historian project;
-    public NodeView(Context context, Node node) {
+    public NodeView(Context context, Node node, Historian histo) {
         super(context);
+        this.project = histo;
         this.node = node;
         //inflate(context, R.layout.node_view, this);
         image = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);

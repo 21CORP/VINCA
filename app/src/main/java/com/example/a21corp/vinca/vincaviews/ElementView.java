@@ -25,8 +25,9 @@ public class ElementView extends FrameLayout implements VincaElementView{
     public Element vincaElement;
     protected ImageView symbol;
     protected Historian project;
-    public ElementView(Context context, Element element) {
+    public ElementView(Context context, Element element, Historian histo) {
        super(context);
+       this.project = histo;
        this.vincaElement = element;
        //inflate(context, R.layout.element_view, this);
        symbol = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);

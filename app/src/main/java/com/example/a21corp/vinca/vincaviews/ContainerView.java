@@ -1,23 +1,18 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
-import com.example.a21corp.vinca.Editor.VincaViewManager;
-import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
-import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
+import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -31,8 +26,9 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     protected ImageView borderRight;
     public Container vincaElement;
 
-    public ContainerView(Context context, Container element) {
+    public ContainerView(Context context, Container element, Historian histo) {
         super(context);
+        project = histo;
         this.vincaElement = element;
         inflate(getContext(), R.layout.expandable_element_view, this);
        onFinishInflate();
@@ -69,7 +65,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public VincaElement getVincaSymbol() {
-        return element;
+        return vincaElement;
     }
 
     @Override
@@ -79,12 +75,12 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void moveHere(ElementView element) {
-        project.move(vincaElement, (ElementView)element.getVincaSymbol());
+        project.move(vincaElement, (Element)element.getVincaSymbol());
     }
 
     @Override
     public void moveHere(NodeView node) {
-        project.move(vincaElement, (NodeView)node.getVincaSymbol());
+        project.move(vincaElement, (Node)node.getVincaSymbol());
     }
 
     @Override

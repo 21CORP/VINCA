@@ -1,6 +1,6 @@
 package com.example.a21corp.vinca;
 
-import android.app.AlertDialog;
+import  android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -29,6 +29,8 @@ Button b1;
     EditText projectName;
     private String dirPath;
     private File projDir;
+
+    FileImporter fileImporter = new FileImporter();
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -83,10 +85,8 @@ Button b1;
     @Override
     public void onClick(View view) {
         System.out.println("Import trykt");
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        startActivity(intent);
+        fileImporter.importFile();
+
     }
 }
 

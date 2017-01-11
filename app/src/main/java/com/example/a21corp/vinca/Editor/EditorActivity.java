@@ -101,6 +101,8 @@ public class EditorActivity extends AppCompatActivity
             e.printStackTrace();
             workspace = ProjectManager.createProject(title);
         }
+        controller = new WorkspaceController(workspace);
+        updateCanvas();
         projectNameBar.setText(title);
     }
 

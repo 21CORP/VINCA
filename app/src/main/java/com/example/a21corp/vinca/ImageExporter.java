@@ -28,7 +28,7 @@ public class ImageExporter {
         Long start = SystemClock.currentThreadTimeMillis();
         if (!checkPermissionForWriting(act)) {
             Log.d("ImageExporter", "No permission to save in Gallery!");
-            return;
+            return; //TODO Billedet skal gemmes hvis vi får tilladelse til at gemme i galleriet
         }
         File file = saveBitMap(act, view, title);
         if (file != null) {

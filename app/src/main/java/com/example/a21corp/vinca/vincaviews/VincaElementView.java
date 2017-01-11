@@ -18,7 +18,7 @@ public interface VincaElementView{
     void moveHere(ContainerView container);
     void moveHere(ElementView element);
     void moveHere(NodeView node);
-    void add(GhostEditorView view);
+    void addGhost(GhostEditorView view);
     void remove();
 
 }

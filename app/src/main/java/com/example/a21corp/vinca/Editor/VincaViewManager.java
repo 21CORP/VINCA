@@ -125,7 +125,6 @@ public class VincaViewManager implements WorkspaceObserver {
             view.addView(textView, width, height);
         }
     }
-
     private ContainerView makeExpandableView(Expandable element) {
 
         ContainerView view = new ContainerView(context, element);
@@ -234,7 +233,9 @@ public class VincaViewManager implements WorkspaceObserver {
             historian.storeAndExecute(dCmd);
         }
     }
+    public void moveElement(GhostEditorView newSymbol, VincaElementView parent){
 
+    }
     public void moveElement(VincaElementView elementView, VincaElementView parentView) {//TODO Convert to command pattern
         VincaElement element;
         if (elementView.getVincaSymbol() == null) {

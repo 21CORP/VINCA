@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
@@ -36,6 +37,31 @@ public class NodeView extends FrameLayout implements VincaElementView {
     @Override
     public VincaElement getVincaSymbol() {
         return node;
+    }
+
+    @Override
+    public void moveHere(ContainerView container) {
+
+    }
+
+    @Override
+    public void moveHere(ElementView element) {
+
+    }
+
+    @Override
+    public void moveHere(NodeView node) {
+
+    }
+
+    @Override
+    public void add(GhostEditorView view) {
+
+    }
+
+    @Override
+    public void remove() {
+
     }
 
 }

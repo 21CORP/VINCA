@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.VincaViewManager;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
@@ -21,7 +23,7 @@ import com.example.a21corp.vinca.elements.VincaElement;
  * Created by ymuslu on 19-11-2016.
  */
 
-public class ContainerView extends LinearLayout implements View.OnClickListener, View.OnDragListener, VincaElementView {
+public abstract class ContainerView extends LinearLayout implements View.OnClickListener, View.OnDragListener, VincaElementView {
 
     private VincaViewManager project;
     private Historian historian;
@@ -62,14 +64,37 @@ public class ContainerView extends LinearLayout implements View.OnClickListener,
         {
 
         }
-
-
         return true;
     }
 
     @Override
     public VincaElement getVincaSymbol() {
         return element;
+    }
+
+    @Override
+    public void moveHere(ContainerView container) {
+        project.move(this, container);
+    }
+
+    @Override
+    public void moveHere(ElementView element) {
+
+    }
+
+    @Override
+    public void moveHere(NodeView node) {
+
+    }
+
+    @Override
+    public void add(GhostEditorView view) {
+
+    }
+
+    @Override
+    public void remove() {
+
     }
 
     /*

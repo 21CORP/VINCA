@@ -28,7 +28,7 @@ public class MoveCommand implements Command {
     @Override
     public void inverse(){
         if(oldParent == null){
-            workspaceController.deleteElement(element);
+            //workspaceController.deleteElement(element);
         }
         workspaceController.moveElement(element, oldParent);
     }

@@ -1,16 +1,11 @@
 package com.example.a21corp.vinca.Editor;
 
-import android.util.Log;
-
-import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
-import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 
 import java.io.Serializable;
-import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,29 +27,29 @@ public class WorkspaceController implements Serializable {
     }
 
 
-    public Expandable initiateWorkspace(Expandable project) {
+    public Container initiateWorkspace(Container project) {
         if (project == null) {
-            project = new Expandable(VincaElement.ELEMENT_PROJECT);
+            project = (Container) VincaElement.create(VincaElement.ELEMENT_PROJECT);
         }
-        workspace.projects = new ArrayList<Expandable>();
+        workspace.projects = new ArrayList<Container>();
         workspace.projects.add(project);
-        setCursor(findCursor(project));
+       // setCursor(findCursor(project));
         notifyObservers();
         return project;
     }
 
-    public Expandable initiateWorkspace() {
+    public Container initiateWorkspace() {
         return initiateWorkspace(null);
     }
-
+/*
     private Container findCursor(Container scope) {
         Container cursor;
         if (scope.isCursor) {
             setCursor(scope);
             return scope;
         }
-        if (scope instanceof Expandable && ((Expandable) scope).containerList != null) {
-            for (Container container : ((Expandable) scope).containerList) {
+        if (scope instanceof Container && ((Container) scope).containerList != null) {
+            for (Container container : ((Container) scope).containerList) {
                 if (container.isCursor) {
                     setCursor(container);
                     return container;
@@ -69,21 +64,21 @@ public class WorkspaceController implements Serializable {
         }
         return null;
     }
-
+*/
 
     public void setCursor(Container cursor) {
         if (cursor == null) {
             if (workspace.projects.size() == 0) {
-                workspace.projects = new ArrayList<Expandable>();
-                workspace.projects.add(new Expandable(VincaElement.ELEMENT_PROJECT));
+                workspace.projects = new ArrayList<Container>();
+                //workspace.projects.add(new Container(VincaElement.ELEMENT_PROJECT));
             }
             cursor = workspace.projects.get(0);
         }
         if (workspace.cursor != null) {
-            workspace.cursor.isCursor = false;
+           // workspace.cursor.isCursor = false;
         }
         workspace.cursor = cursor;
-        cursor.isCursor = true;
+       // cursor.isCursor = true;
         notifyObservers();
     }
 
@@ -97,32 +92,21 @@ public class WorkspaceController implements Serializable {
         }
     }
 
-    private void moveElement(Container container, Container parent) {
+    public void moveElement(Container container, Container parent) {
         parent.isOpen = true;
-        Expandable oldParent = container.parent;
+        Container oldParent = container.parent;
         if (oldParent != null) {
             oldParent.containerList.remove(container);
         }
-        if (parent instanceof Expandable) {
-            ((Expandable) parent).containerList.add(container);
-            container.parent = ((Expandable) parent);
+        if (parent instanceof Container) {
+            ((Container) parent).containerList.add(container);
+            container.parent = ((Container) parent);
         } else if (parent instanceof Element) {
-            Expandable trueParent = parent.parent;
+            Container trueParent = parent.parent;
             int position = trueParent.containerList.indexOf(parent) + 1;
             trueParent.containerList.add(position, container);
             container.parent = trueParent;
         }
-        notifyObservers();
-    }
-
-    private void moveElement(Node element, Container parent) {
-        parent.isOpen = true;
-        Container oldParent = element.parent;
-        if (oldParent != null) {
-            oldParent.vincaNodeList.remove(element);
-        }
-        parent.vincaNodeList.add(element);
-        element.parent = parent;
         notifyObservers();
     }
 
@@ -133,42 +117,14 @@ public class WorkspaceController implements Serializable {
             moveElement((Node) element, workspace.cursor);
         }
     }
-
-    public void deleteElement(VincaElement element) {
-        if (workspace.projects.remove(element)) {
-            //Removed element was a top-level projects
-            if (workspace.projects.size() == 0) {
-                initiateWorkspace();
-                return;
-            }
-        }
-        if (element == workspace.cursor) {
-            //Trying to delete the cursor - reset cursor to the main projects symbol
-            setCursor(workspace.projects.get(0));
-        } else if (element instanceof Container) {
-            Container currentCursor = workspace.cursor;
-            if (findCursor((Container) element) != null) {
-                //Cursor within deleted element - reset cursor to the main projects symbol
-                setCursor(workspace.projects.get(0));
-            } else {
-                setCursor(currentCursor);
-            }
-        }
-        if (element instanceof Container) {
-            element.parent.containerList.remove(element);
-        } else if (element instanceof Node) {
-            ((Node) element).parent.vincaNodeList.remove(element);
-        }
-        notifyObservers();
-    }
-
+    
     private void notifyObservers() {
         for (WorkspaceObserver observer : observerList) {
             observer.updateCanvas();
         }
     }
 
-    public void toggleOpenExpandable(Container element) {
+    public void toggleOpenContainer(Container element) {
         element.isOpen = !element.isOpen;
         notifyObservers();
     }
@@ -184,5 +140,63 @@ public class WorkspaceController implements Serializable {
         if (ProjectManager.saveProject(workspace, path)) {
             ProjectManager.removeProject(oldTitle, path);
         }
+    }
+    //Generic...
+    public void setParent(Node vincaElement, Container parent) {
+        return; //You cant add a node to a container
+    }
+    public void setParent(Element vincaElement, Container parent)
+    {
+        if(vincaElement.parent!=null)
+            vincaElement.parent.containerList.remove(vincaElement);
+        parent.containerList.add(vincaElement);
+        notifyObservers();
+    }
+    public void setParent(Container vincaElement, Container parent){
+        if(vincaElement.parent!=null)
+            vincaElement.parent.containerList.remove(vincaElement);
+        parent.containerList.add(vincaElement);
+        notifyObservers();
+    }
+    public void setParent(VincaElement vincaElement, Node node)
+    {
+        return; //Nodes cannot contain any elements
+    }
+    public void setParent(VincaElement vincaElement, Container parent)
+    {
+        if(VincaElement.Elements.contains(vincaElement.type)){
+            parent.containerList.add((Element)vincaElement);
+        }
+        else if(VincaElement.Expendables.contains(vincaElement.type))
+        {
+            parent.containerList.add((Container)vincaElement);
+        }
+        // Can't add node to a container
+        notifyObservers();
+    }
+
+    public void setParent(Container vincaElement, Element parent) {
+        return; //Cant add Container to Element
+    }
+
+    public void remove(Container vincaElement) {
+        vincaElement.parent.containerList.remove(vincaElement);
+        notifyObservers();
+    }
+
+    public void setParent(Node node, Node vincaSymbol) {
+        return; //Nodes cant contain anything
+    }
+
+    public void setParent(Node node, Element parent) {
+
+    }
+
+    public void remove(Node node) {
+        node.parent.nodes.remove(node);
+    }
+
+    public void setParent(VincaElement newView, Element parent) {
+        return; //Elements cant contain elements
     }
 }

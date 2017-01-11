@@ -4,6 +4,9 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.util.TimeUtils;
 
+import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.VincaElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -54,4 +57,6 @@ public void redo(){
         System.out.println("historyStack: " + historyStack.toString());
         System.out.println("redoStack: " + redoStack.toString());
         }
-        }
+
+
+}

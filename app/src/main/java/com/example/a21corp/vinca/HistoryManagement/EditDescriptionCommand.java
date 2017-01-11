@@ -1,8 +1,6 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
-import com.example.a21corp.vinca.Editor.VincaViewManager;
 import com.example.a21corp.vinca.elements.VincaElement;
-import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
 /**
  * Created by Thomas on 04-01-2017.

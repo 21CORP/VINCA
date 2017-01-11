@@ -23,7 +23,7 @@ public class CreateCommand implements Command{
 
     @Override
     public void inverse(){
-        workspaceController.deleteElement(element);
+       // workspaceController.deleteElement(element);
     }
 
 }

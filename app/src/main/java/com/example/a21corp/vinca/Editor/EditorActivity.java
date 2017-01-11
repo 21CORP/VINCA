@@ -19,21 +19,10 @@ import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
-import com.example.a21corp.vinca.element_description;
-import com.example.a21corp.vinca.elements.Element;
-import com.example.a21corp.vinca.elements.Expandable;
-import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.VincaElement;
-import com.example.a21corp.vinca.vincaviews.ActivityElementView;
-import com.example.a21corp.vinca.vincaviews.ContainerView;
-import com.example.a21corp.vinca.vincaviews.DecisionElementView;
-import com.example.a21corp.vinca.vincaviews.ElementView;
-import com.example.a21corp.vinca.vincaviews.IterateContainerView;
-import com.example.a21corp.vinca.vincaviews.NodeView;
-import com.example.a21corp.vinca.vincaviews.PauseElementView;
-import com.example.a21corp.vinca.vincaviews.ProcessContainerView;
-import com.example.a21corp.vinca.vincaviews.ProjectContainerView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
+import com.example.a21corp.vinca.vincaviews.VincaViewFabricator;
 
 import java.io.File;
 import java.util.Calendar;
@@ -41,9 +30,8 @@ import java.util.Date;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
-        , View.OnTouchListener, TextView.OnEditorActionListener {
-
-    private VincaViewManager viewManager = null;
+        , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver {
+    private WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
     private GhostEditorView  pauseView, decisionView;
@@ -74,8 +62,8 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
-        outState.putString("title", viewManager.getWorkspaceTitle());
+        ProjectManager.saveProject(controller.workspace, dirPath);
+        outState.putString("title", controller.workspace.getTitle());
         Log.d("Editor - onSaveInstance", outState.toString());
         super.onSaveInstanceState(outState);
     }
@@ -114,7 +102,6 @@ public class EditorActivity extends AppCompatActivity
             workspace = ProjectManager.createProject(title);
         }
         projectNameBar.setText(title);
-        viewManager = new VincaViewManager(this, workspace);
     }
 
     private void initiateEditor() {
@@ -123,16 +110,16 @@ public class EditorActivity extends AppCompatActivity
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollView);
         elementPanel = (LinearLayout) findViewById(R.id.panel);
 
-        //Expandables
-        projectView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_PROJECT));
-        processView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_PROCESS));
-        iterateView = new GhostEditorView(this, new Expandable(VincaElement.ELEMENT_ITERATE));
+        //Containers
+        projectView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_PROJECT));
+        processView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_PROCESS));
+        iterateView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_ITERATE));
         //Elements
-        pauseView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_PAUSE));
-        decisionView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_DECISION));
+        pauseView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_PAUSE));
+        decisionView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_DECISION));
         //Nodes
-        methodView = new GhostEditorView(this, new Element(VincaElement.ELEMENT_METHOD));
-        activityView = new GhostEditorView(this, new Node(VincaElement.ELEMENT_ACTIVITY));
+        methodView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_METHOD));
+        activityView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_ACTIVITY));
         //Add Vinca Symbols to the panel-.-
         elementPanel.addView(activityView);
         elementPanel.addView(decisionView);
@@ -199,14 +186,14 @@ public class EditorActivity extends AppCompatActivity
     public void onClick(View view) {
 
 
-        if (view instanceof VincaElementView) {
+        if (view instanceof GhostEditorView) {
             if (view.getParent() == elementPanel) {
-                viewManager.addElement((VincaElementView) view);
+                controller.addElement(((GhostEditorView) view).getType());
             }
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();
-            savepop.setCurrentWorkspace(viewManager.workspaceController.workspace);
+            savepop.setCurrentWorkspace(controller.workspace);
             savepop.show(getFragmentManager(),"save as");
 
             Log.d("export","serialized");
@@ -221,19 +208,20 @@ public class EditorActivity extends AppCompatActivity
             exportDialog.show(getFragmentManager(), "Export as");
             //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
         }
+        /*
             if(view== backButton){
-            Log.d("back","clicked");
+                Log.d("back","clicked");
 
-            Workspace workspace;
-            try {
-                workspace = ProjectManager.loadProject(dirPath + "/"
-                        + viewManager.getWorkspaceTitle() + ".ser");
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
+                Workspace workspace;
+                try {
+                    workspace = ProjectManager.loadProject(dirPath + "/"
+                            + workspace.getTitle() + ".ser");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
             }
-            viewManager.setWorkspace(workspace);
-        }
+        */
         //test
         if(view == undoButton){
             historian.undo();
@@ -252,18 +240,18 @@ public class EditorActivity extends AppCompatActivity
         }
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_EXITED:
-                    viewManager.highlightView(viewManager.getCursor());
+                   // viewManager.highlightView(viewManager.getCursor());
                 break;
 
             case DragEvent.ACTION_DRAG_ENTERED:
-                    viewManager.highlightView(view);
+                    //viewManager.highlightView(view);
                 break;
 
             case DragEvent.ACTION_DROP:
                 draggedView.setVisibility(View.VISIBLE);
                 if (view instanceof VincaElementView) {
-                     viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
-                    viewManager.highlightView(viewManager.getCursor());
+                   /*  viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
+                    viewManager.highlightView(viewManager.getCursor());*/
                     break;
                 }
                 break;
@@ -280,8 +268,9 @@ public class EditorActivity extends AppCompatActivity
     public boolean onLongClick(View view) {
         //PLACEHOLDER
         //TODO: REPLACE
+        /*
         if (view instanceof ContainerView) {
-            viewManager.toggleOpenExpandableView((ContainerView) view);
+            viewManager.toggleOpenContainerView((ContainerView) view);
 
             element_description ed = new element_description();
             ed.setElement(((ContainerView) view).element);
@@ -294,6 +283,7 @@ public class EditorActivity extends AppCompatActivity
             //Show menu for title, description etc.
             Log.d("WorkspaceController", "LongClick detected!");
         }
+        */
         return true;
     }
 
@@ -340,11 +330,21 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         String title = projectNameBar.getText().toString();
-        if (title.isEmpty() || title.equals(viewManager.getWorkspaceTitle())) {
+        if (title.isEmpty() || title.equals(controller.workspace.getTitle())) {
             return false;
         } else {
-            viewManager.renameWorkspace(title, dirPath);
+            controller.renameWorkspace(title, dirPath);
             return true;
         }
+    }
+
+    @Override
+    public void updateCanvas() {
+        Container vincaRoot = controller.workspace.projects.get(0);
+        VincaViewFabricator fabricator = new VincaViewFabricator(getBaseContext(), controller);
+        View root = fabricator.getVincaView(vincaRoot);
+        this.canvas.removeAllViews();
+        this.canvas.addView(root);
+        this.canvas.invalidate();
     }
 }

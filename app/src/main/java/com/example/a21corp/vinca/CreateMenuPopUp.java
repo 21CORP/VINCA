@@ -18,6 +18,8 @@ import com.example.a21corp.vinca.Editor.Workspace;
 
 import java.io.File;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * Created by Oliver on 04-11-2016.
@@ -29,8 +31,7 @@ Button b1;
     EditText projectName;
     private String dirPath;
     private File projDir;
-
-    FileImporter fileImporter = new FileImporter();
+    private static final int FILE_SELECT_CODE = 1;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -85,7 +86,36 @@ Button b1;
     @Override
     public void onClick(View view) {
         System.out.println("Import trykt");
-        fileImporter.importFile();
+        importFile();
+
+    }
+
+    public void importFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a file to import"), FILE_SELECT_CODE);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == FILE_SELECT_CODE){
+            if(resultCode == RESULT_OK){
+                try {
+                    ProjectManager.loadProject(data.getDataString());
+                } catch (Exception e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "File not compatible, please load a VincaApp file", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+            }
+        }
 
     }
 }

@@ -1,6 +1,6 @@
 package com.example.a21corp.vinca.Editor;
 
-import com.example.a21corp.vinca.elements.Expandable;
+import com.example.a21corp.vinca.elements.Container;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public abstract class ProjectManager {
 
 
     public static Workspace createProject(String title) {
-        Workspace workspace = new Workspace(title, new ArrayList<Expandable>());
+        Workspace workspace = new Workspace(title, new ArrayList<Container>());
         return workspace;
     }
 

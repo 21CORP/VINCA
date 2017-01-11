@@ -11,7 +11,7 @@ import java.util.List;
 public class Expandable extends Container implements Serializable {
     private static final long serialVersionUID = 12345;
 
-    public List<Container> containerList = new ArrayList<Container>();
+    public List<Element> containerList = new ArrayList<Element>();
 
     public Expandable(int elementType){
         super(elementType);

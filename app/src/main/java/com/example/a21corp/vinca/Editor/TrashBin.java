@@ -13,7 +13,7 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
  */
 
 public class TrashBin extends View implements View.OnClickListener, View.OnDragListener {
-    private VincaViewManager manager;
+    private WorkspaceController manager;
 
     public TrashBin(Context context) {
         super(context);
@@ -41,7 +41,7 @@ public class TrashBin extends View implements View.OnClickListener, View.OnDragL
                 //User dropped a view into trash bin?
                 Log.d("WorkspaceController", "Dropped on view trashbin! - Deleting");
                 view.setBackgroundColor(0);
-                manager.deleteElement(draggedView);
+                ((VincaElementView)draggedView).remove();
                 break;
             }
             case DragEvent.ACTION_DRAG_EXITED:
@@ -60,6 +60,6 @@ public class TrashBin extends View implements View.OnClickListener, View.OnDragL
 
     @Override
     public void onClick(View view) {
-        manager.deleteElement(manager.getCursor());
+
     }
 }

@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
+import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
@@ -20,6 +22,7 @@ import com.example.a21corp.vinca.elements.VincaElement;
 public class NodeView extends FrameLayout implements VincaElementView {
     Node node;
     ImageView image;
+    protected Historian project;
     public NodeView(Context context, Node node) {
         super(context);
         this.node = node;
@@ -41,27 +44,28 @@ public class NodeView extends FrameLayout implements VincaElementView {
 
     @Override
     public void moveHere(ContainerView container) {
-
+        project.move(node, (Container)container.getVincaSymbol());
     }
 
     @Override
     public void moveHere(ElementView element) {
-
+        project.move(node, (Element)element.getVincaSymbol());
     }
 
     @Override
     public void moveHere(NodeView node) {
-
+        project.move(node, (Node)node.getVincaSymbol());
     }
 
     @Override
     public void add(GhostEditorView view) {
-
+        VincaElement newView = new VincaElement(view.getType());
+        project.move(newView, node);
     }
 
     @Override
     public void remove() {
-
+        project.remove(this);
     }
 
 }

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.VincaViewManager;
+import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
@@ -25,15 +26,14 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public abstract class ContainerView extends LinearLayout implements View.OnClickListener, View.OnDragListener, VincaElementView {
 
-    private VincaViewManager project;
-    private Historian historian;
+    protected Historian project;
     protected ImageView borderLeft;
     protected ImageView borderRight;
-    public Container element;
+    public Container vincaElement;
 
     public ContainerView(Context context, Container element) {
         super(context);
-        this.element = element;
+        this.vincaElement = element;
         inflate(getContext(), R.layout.expandable_element_view, this);
        onFinishInflate();
     }
@@ -74,39 +74,27 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void moveHere(ContainerView container) {
-        project.move(this, container);
+        project.move(vincaElement, (Container)container.getVincaSymbol());
     }
 
     @Override
     public void moveHere(ElementView element) {
-
+        project.move(vincaElement, (ElementView)element.getVincaSymbol());
     }
 
     @Override
     public void moveHere(NodeView node) {
-
+        project.move(vincaElement, (NodeView)node.getVincaSymbol());
     }
 
     @Override
     public void add(GhostEditorView view) {
-
+        VincaElement newView = new VincaElement(view.getType());
+        project.move(newView, vincaElement);
     }
 
     @Override
     public void remove() {
-
+        project.remove(vincaElement);
     }
-
-    /*
-        public void setType(Context context, int elementType, ContainerView root) {
-            if (root == null) {
-                LayoutInflater inflater = (LayoutInflater)
-                        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                root = (ElementView)
-                        inflater.inflate(R.layout.element_view, this, true);
-            }
-            super.setType(context, elementType, root);
-            nodes = (LinearLayout) root.findViewById(R.id.nodes);
-        }
-    */
 }

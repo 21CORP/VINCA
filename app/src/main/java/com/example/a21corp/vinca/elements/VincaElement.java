@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Created by ymuslu on 12-11-2016
  */
 
-public abstract class VincaElement implements Serializable {
+public class VincaElement implements Serializable {
     private static final long serialVersionUID = 12345;
 
     public int symbol;
@@ -43,7 +43,15 @@ public abstract class VincaElement implements Serializable {
             new ArrayList<Integer>(Arrays.asList(new Integer[] {
         ELEMENT_METHOD
     }));
-
+    /*
+    public VincaElement(VincaElement src)
+    {
+        this.description = src.description;
+        this.parent = src.parent;
+        this.symbol = src.symbol;
+        this.type = src.type;
+        this.title = src.title;
+    }*/
     public VincaElement(int type) {
         parent = null;
         if (type >= 0) {

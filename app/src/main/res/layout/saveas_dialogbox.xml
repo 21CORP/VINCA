@@ -6,8 +6,6 @@
     android:background="@color/White" >
 
 
-
-
     <EditText
         android:id="@+id/saveasnewname"
         android:hint=" New Project name"

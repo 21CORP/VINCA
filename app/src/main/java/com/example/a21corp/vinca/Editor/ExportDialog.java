@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.example.a21corp.vinca.ImageExporter;
@@ -23,10 +24,11 @@ import com.example.a21corp.vinca.R;
  */
 public class ExportDialog extends DialogFragment implements View.OnClickListener {
 
-    private RadioButton svg, png;
+    private RadioButton svg, png,pdf,file;
     private Activity act;
     private View view;
     private String title;
+    private EditText enterTitle;
 
     public ExportDialog() {
         // Required empty public constructor
@@ -41,11 +43,14 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_export_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_export_dialog2, container, false);
 
         svg = (RadioButton) view.findViewById(R.id.export_svg);
         png = (RadioButton) view.findViewById(R.id.export_png);
+        pdf = (RadioButton) view.findViewById(R.id.export_pdf);
+        file = (RadioButton) view.findViewById(R.id.export_file);
         Button export = (Button) view.findViewById(R.id.button_perform_export);
+        enterTitle = (EditText) view.findViewById(R.id.export_name);
 
         export.setOnClickListener(this);
 
@@ -59,13 +64,29 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+
+    //switch case here?
+
         if (png.isChecked()) {
             if (act == null) {
                 Log.d("ExportDialog", "Attempting to export before calling setExportTarger()");
                 return;
             }
+            title = enterTitle.getText().toString();
             ImageExporter imgexp = new ImageExporter();
             imgexp.viewToJPG(act, view, title);
+        }
+        else if(svg.isChecked()){
+            //export to svg
+            Log.d("ExportDialog", "svg checked");
+        }
+        else if(file.isChecked()){
+            //export to file
+            Log.d("ExportDialog", "file checked");
+        }
+        else if(pdf.isChecked()){
+            //export to pdf
+            Log.d("ExportDialog", "pdf checked");
         }
         dismiss();
     }

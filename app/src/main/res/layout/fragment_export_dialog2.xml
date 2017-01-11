@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/White" >
+
+
+    <TextView
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create"
+        android:height="60dp"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_marginStart="30dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:height="60dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
+        android:textColor="@color/White"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Export"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/button_perform_export" />
+
+    <TextView
+        android:id="@+id/chooseformat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Export format"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_below="@+id/create"
+        android:layout_alignParentStart="true" />
+
+    <RadioGroup
+
+        android:id="@+id/radiogroup"
+        android:layout_below="@id/chooseformat"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:text="SVG"
+            android:padding="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/export_svg"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="File"
+            android:padding="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/export_file"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="PDF"
+            android:padding="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/export_pdf"
+            android:layout_weight="1"
+            android:layout_below="@+id/chooseformat"
+            android:layout_toStartOf="@+id/button_perform_export" />
+
+        <RadioButton
+            android:text="PNG"
+            android:padding="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/export_png"
+            android:layout_weight="1"
+            android:layout_below="@+id/export_pdf" />
+
+
+    </RadioGroup>
+
+
+
+    <Button
+        android:text="Export"
+
+        style="@style/MyButton"
+
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_perform_export"
+        android:layout_below="@+id/export_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium" />
+
+    <EditText
+
+        android:id="@+id/export_name"
+        android:hint="Project name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:backgroundTint="#303f9f"
+        android:textColor="#000000"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:inputType="textCapSentences"
+        android:layout_below="@+id/radiogroup"
+        android:layout_alignParentStart="true">
+         />
+
+    </EditText>
+
+
+</RelativeLayout>
+
+

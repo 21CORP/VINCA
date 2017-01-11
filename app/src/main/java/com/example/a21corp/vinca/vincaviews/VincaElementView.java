@@ -15,9 +15,9 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public interface VincaElementView{
     VincaElement getVincaSymbol();
-    void moveHere(ContainerView container);
-    void moveHere(ElementView element);
-    void moveHere(NodeView node);
+    void setParent(ContainerView container);
+    void setParent(ElementView element);
+    void setParent(NodeView node);
     void addGhost(GhostEditorView view);
     void remove();
 

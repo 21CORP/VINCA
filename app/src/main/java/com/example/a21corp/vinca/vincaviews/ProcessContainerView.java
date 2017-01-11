@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 
+import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
@@ -11,7 +12,9 @@ import com.example.a21corp.vinca.elements.Container;
  */
 
 public class ProcessContainerView extends ContainerView {
-    public ProcessContainerView(Context context, Container element, Historian histo) {
+
+
+    public ProcessContainerView(Context context, Container element, WorkspaceController histo) {
         super(context, element, histo);
     }
 

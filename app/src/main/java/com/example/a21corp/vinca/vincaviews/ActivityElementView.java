@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Element;
@@ -19,8 +20,9 @@ import com.example.a21corp.vinca.elements.Element;
 
 public class ActivityElementView extends ElementView {
 
-    public ActivityElementView(Context context, Element element, Historian histo) {
-        super(context, element, histo);
+
+    public ActivityElementView(Context context, Element element, WorkspaceController controller) {
+        super(context, element, controller);
     }
 
     @Override

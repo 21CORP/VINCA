@@ -1,17 +1,15 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
-import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.elements.Container;
+import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
 
@@ -22,8 +20,8 @@ import com.example.a21corp.vinca.elements.VincaElement;
 public class NodeView extends FrameLayout implements VincaElementView {
     private Node node;
     private ImageView image;
-    protected Historian project;
-    public NodeView(Context context, Node node, Historian histo) {
+    protected WorkspaceController project;
+    public NodeView(Context context, Node node, WorkspaceController histo) {
         super(context);
         this.project = histo;
         this.node = node;
@@ -44,29 +42,29 @@ public class NodeView extends FrameLayout implements VincaElementView {
     }
 
     @Override
-    public void moveHere(ContainerView container) {
-        project.move(node, (Container)container.getVincaSymbol());
+    public void setParent(ContainerView container) {
+        project.setParent(node, (Container)container.getVincaSymbol());
     }
 
     @Override
-    public void moveHere(ElementView element) {
-        project.move(node, (Element)element.getVincaSymbol());
+    public void setParent(ElementView element) {
+        project.setParent(node, (Element)element.getVincaSymbol());
     }
 
     @Override
-    public void moveHere(NodeView node) {
-        project.move(node, (Node)node.getVincaSymbol());
+    public void setParent(NodeView n) {
+        project.setParent(node, (Node)n.getVincaSymbol());
     }
 
     @Override
-    public void add(GhostEditorView view) {
-        VincaElement newView = new VincaElement(view.getType());
-        project.move(newView, node);
+    public void addGhost(GhostEditorView view) {
+        VincaElement newView = VincaElement.create(view.getType().type);
+        project.setParent(newView, node);
     }
 
     @Override
     public void remove() {
-        project.remove(this);
+        project.remove(node);
     }
 
 }

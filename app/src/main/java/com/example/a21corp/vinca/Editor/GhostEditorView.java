@@ -62,9 +62,9 @@ public class GhostEditorView extends LinearLayout {
             }
             }
     }
-    public int getType()
+    public VincaElement getType()
     {
-        return prototype.type;
+        return prototype;
     }
 
 

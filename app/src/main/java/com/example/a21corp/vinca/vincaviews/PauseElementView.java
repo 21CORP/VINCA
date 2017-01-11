@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Element;
 
@@ -10,8 +11,9 @@ import com.example.a21corp.vinca.elements.Element;
  */
 
 public class PauseElementView extends ElementView {
-    public PauseElementView(Context context, Element element) {
-        super(context, element);
+
+    public PauseElementView(Context context, Element element, Historian histo) {
+        super(context, element, histo);
     }
 
     @Override

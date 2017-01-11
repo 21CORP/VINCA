@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 
@@ -10,8 +11,8 @@ import com.example.a21corp.vinca.elements.Container;
  */
 
 public class IterateContainerView extends ContainerView {
-    public IterateContainerView(Context context, Container element) {
-        super(context, element);
+    public IterateContainerView(Context context, Container element, Historian histo) {
+        super(context, element, histo);
     }
 
     @Override

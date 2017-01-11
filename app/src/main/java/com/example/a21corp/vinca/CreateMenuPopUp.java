@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,11 +108,20 @@ Button b1;
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == FILE_SELECT_CODE){
             if(resultCode == RESULT_OK){
-                try {
-                    ProjectManager.loadProject(data.getDataString());
-                } catch (Exception e) {
-                    Toast.makeText(getActivity().getApplicationContext(), "File not compatible, please load a VincaApp file", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                String path = data.getDataString();
+                String title = path.substring(path.lastIndexOf("/")+1).replace(".ser", "");
+                System.out.println(path);
+                System.out.println(title);
+                if(ProjectManager.inputCheck(title, dirPath)) {
+                    try {
+                        ProjectManager.loadProject(data.getDataString()); //TODO useless path
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), "File not compatible, please load a VincaApp file", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(), "There is already a file with that name", Toast.LENGTH_SHORT).show();
                 }
             }
         }

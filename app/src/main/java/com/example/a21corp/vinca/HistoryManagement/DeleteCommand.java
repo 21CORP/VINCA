@@ -21,11 +21,11 @@ public class DeleteCommand implements Command{
 
     @Override
     public void execute(){
-        workspaceController.remove(element);
+        //workspaceController.remove(element);
     }
 
     @Override
     public void inverse(){
-        workspaceController.setParent(element, oldParent);
+        //workspaceController.setParent(element, oldParent, );
     }
 }

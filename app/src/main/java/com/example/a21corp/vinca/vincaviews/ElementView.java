@@ -2,8 +2,6 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,6 +12,8 @@ import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -69,7 +69,7 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     }
 
     @Override
-    public VincaElement getVincaElement() {
+    public Element getVincaElement() {
         return vincaElement;
     }
 
@@ -79,43 +79,54 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     }
 
     @Override
-    public void setParent(ContainerView container) {
+    public void setParent(ContainerView view) {
         /*Expandable oldParent = vincaElement.parent;
         VincaElement newParent = container.getVincaElement();
         MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
         move.execute();*/
-        project.setParent(vincaElement, (Container)container.getVincaElement());
+        Container container = view.getVincaElement();
+        int index = container.containerList.size();
+        project.setParent(vincaElement, container, index);
     }
 
     @Override
-    public void setParent(ElementView element) {
+    public void setParent(ElementView view) {
         //Trying to setParent Element onto a new Element. Add next to instead
         /*Expandable oldParent = vincaElement.parent;
         VincaElement newParent = element.getVincaElement().parent;
         MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
         move.execute();*/
-        project.setParent(vincaElement, element.getVincaElement().parent);
+        Element element = view.getVincaElement();
+        Container parent = element.parent;
+        int index = parent.containerList.indexOf(element) + 1;
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
-    public void setParent(NodeView node) {
+    public void setParent(NodeView view) {
         //Trying to setParent Element onto Node. Add to Node's paren instead
         /*Expandable oldParent = vincaElement.parent;
         VincaElement newParent = node.getVincaElement().parent;
         MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
         move.execute();*/
-        project.setParent(vincaElement, node.getVincaElement().parent);
+        Node node = view.getVincaElement();
+        VincaActivity nodeParent = node.parent;
+        Container parent = nodeParent.parent;
+        int index = parent.containerList.indexOf(nodeParent) + 1;
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
     public void addGhost(GhostEditorView view) {
-        VincaElement newView = VincaElement.create(view.getType().type);
-        project.setParent(newView, vincaElement.parent);
+        Container parent = vincaElement.parent;
+        VincaElement newElement = VincaElement.create(view.getVincaElement().type);
+        int index = parent.containerList.indexOf(vincaElement) + 1;
+        project.setParent(newElement, parent, index);
     }
 
     @Override
     public void remove() {
-
+        project.remove(vincaElement);
     }
 
     public void highlight() {

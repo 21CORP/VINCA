@@ -2,18 +2,18 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -78,7 +78,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     }
 
     @Override
-    public VincaElement getVincaElement() {
+    public Container getVincaElement() {
         return vincaElement;
     }
 
@@ -88,24 +88,33 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     }
 
     @Override
-    public void setParent(ContainerView container) {
-        project.setParent(vincaElement, (Container)container.getVincaElement());
+    public void setParent(ContainerView view) {
+        Container container = view.getVincaElement();
+        int index = container.containerList.size();
+        project.setParent(vincaElement, container, index);
     }
 
     @Override
-    public void setParent(ElementView element) {
-        project.setParent(vincaElement, (Element)element.getVincaElement());
+    public void setParent(ElementView view) {
+        Element element = view.getVincaElement();
+        Container parent = element.parent;
+        int index = parent.containerList.indexOf(element) + 1;
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
-    public void setParent(NodeView node) {
-        project.setParent(vincaElement, node.getVincaElement().parent);
+    public void setParent(NodeView view) {
+        Node node = view.getVincaElement();
+        VincaActivity nodeParent = node.parent;
+        Container parent = nodeParent.parent;
+        int index = parent.containerList.indexOf(nodeParent) + 1;
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
     public void addGhost(GhostEditorView view) {
-        VincaElement newView = VincaElement.create(view.getType().type);
-        project.setParent(newView, vincaElement);
+        VincaElement newElement = VincaElement.create(view.getVincaElement().type);
+        project.setParent(newElement, vincaElement, vincaElement.containerList.size());
     }
 
     @Override

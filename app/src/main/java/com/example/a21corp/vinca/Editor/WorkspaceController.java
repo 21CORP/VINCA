@@ -101,18 +101,19 @@ public class WorkspaceController implements Serializable {
     private void addElement(Element element) {
         VincaElement cursor = workspace.getCursor();
         if (cursor instanceof Container) {
-            setParent(element, (Container) cursor);
+            setParent(element, (Container) cursor, ((Container) cursor).containerList.size());
         }
         else {
             Container parent = cursor.parent;
-            setParent(element, parent);
+            int index = parent.containerList.indexOf(cursor) + 1;
+            setParent(element, parent, index);
         }
     }
 
     private boolean addNode(Node node) {
         try {
             VincaActivity parent = (VincaActivity) workspace.getCursor();
-            setParent(node, parent);
+            setParent(node, parent, 0);
             return true;
         } catch (ClassCastException e) {
             e.printStackTrace();
@@ -120,12 +121,12 @@ public class WorkspaceController implements Serializable {
         }
     }
 
-    public void setParent(VincaElement vincaElement, Element parent) {
+    public void setParent(VincaElement vincaElement, Element parent, int index) {
         if (vincaElement instanceof Element && parent instanceof Container) {
-            setParent((Element) vincaElement, (Container) parent);
+            setParent((Element) vincaElement, (Container) parent, index);
         }
         else if (vincaElement instanceof Node && parent instanceof VincaActivity) {
-            setParent((Node) vincaElement, (VincaActivity) parent);
+            setParent((Node) vincaElement, (VincaActivity) parent, index);
         }
         else {
             Log.d("WorkspaceController", "Illegal operation attempted!");
@@ -133,44 +134,37 @@ public class WorkspaceController implements Serializable {
         notifyObservers();
     }
 
-    private void setParent(Element element, Container parent)
+    private void setParent(Element element, Container parent, int index)
     {
         if(element.parent!=null)
             element.parent.containerList.remove(element);
-        parent.containerList.add(element);
+        parent.containerList.add(index, element);
         element.parent = parent;
     }
 
-    private void setParent(Node node, VincaActivity parent) {
+    private void setParent(Node node, VincaActivity parent, int index) {
         if (node.parent != null) {
             node.parent.nodes.remove(node);
         }
-        parent.nodes.add(node);
+        parent.nodes.add(index, node);
         node.parent = parent;
-    }
-
-    public void remove(VincaElement vincaElement) {
-        if (vincaElement instanceof Node) {
-            remove((Node) vincaElement);
-        }
-        else {
-            remove((Element) vincaElement);
-        }
         notifyObservers();
     }
 
-    private void remove(Element vincaElement) {
-        Container parent = vincaElement.parent;
-        if (workspace.projects.remove(parent)) {
+    public void remove(Element vincaElement) {
+        if (workspace.projects.remove(vincaElement)) {
             //The deleted element was a root-element
             if (workspace.projects.isEmpty()) {
                 initiateWorkspace();
             }
         }
-        vincaElement.parent.containerList.remove(vincaElement);
+        else {
+            vincaElement.parent.containerList.remove(vincaElement);
+        }
+        notifyObservers();
     }
 
-    private void remove(Node node) {
+    public void remove(Node node) {
         node.parent.nodes.remove(node);
     }
 }

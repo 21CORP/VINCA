@@ -23,14 +23,14 @@ public class MoveCommand implements Command {
 
     @Override
     public void execute(){
-        workspaceController.setParent(element, newParent);
+        //workspaceController.setParent(element, newParent, );
     }
 
     @Override
     public void inverse(){
         if(oldParent == null){
-            workspaceController.remove(element);
+            //workspaceController.remove(element);
         }
-        workspaceController.setParent(element, oldParent);
+        //workspaceController.setParent(element, oldParent, );
     }
 }

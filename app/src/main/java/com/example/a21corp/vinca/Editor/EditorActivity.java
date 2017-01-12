@@ -191,7 +191,7 @@ public class EditorActivity extends AppCompatActivity
 
 
         if (view instanceof GhostEditorView) {
-            controller.addVincaElement(((GhostEditorView) view).getType());
+            controller.addVincaElement(((GhostEditorView) view).getVincaElement());
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();

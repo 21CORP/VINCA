@@ -78,7 +78,7 @@ public class VincaViewFabricator {
             case VincaElement.ELEMENT_ACTIVITY:
             {
                 ActivityElementView activityElementView
-                        = new ActivityElementView(context, element, project);
+                        = new ActivityElementView(context, (VincaActivity) element, project);
 
                 int maxSize = (int) context.getResources().getDimension(R.dimen.symbol_max_size);
                 if (((VincaActivity) element).nodes.size() > 1) {

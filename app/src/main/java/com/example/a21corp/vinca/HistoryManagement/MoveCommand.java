@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -9,11 +10,11 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class MoveCommand implements Command {
     VincaElement element;
-    VincaElement newParent;
-    VincaElement oldParent;
+    Element newParent;
+    Element oldParent;
     WorkspaceController workspaceController;
 
-    public MoveCommand(VincaElement element, VincaElement newParent, VincaElement oldParent, WorkspaceController workspaceController){
+    public MoveCommand(VincaElement element, Element newParent, Element oldParent, WorkspaceController workspaceController){
         this.element = element;
         this.newParent = newParent;
         this.oldParent = oldParent;
@@ -22,14 +23,14 @@ public class MoveCommand implements Command {
 
     @Override
     public void execute(){
-        workspaceController.moveElement(element, newParent);
+        workspaceController.setParent(element, newParent);
     }
 
     @Override
     public void inverse(){
         if(oldParent == null){
-            //workspaceController.deleteElement(element);
+            workspaceController.remove(element);
         }
-        workspaceController.moveElement(element, oldParent);
+        workspaceController.setParent(element, oldParent);
     }
 }

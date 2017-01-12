@@ -13,10 +13,10 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
  */
 
 public class TrashBin extends View implements View.OnClickListener, View.OnDragListener {
-    private WorkspaceController manager;
 
     public TrashBin(Context context) {
         super(context);
+        setOnDragListener(this);
     }
     /*TrashBin(VincaViewManager manager)
     {
@@ -26,32 +26,28 @@ public class TrashBin extends View implements View.OnClickListener, View.OnDragL
     @Override
     public boolean onDrag(View view, DragEvent event) {
         VincaElementView draggedView = null;
-        if(event.getAction()!=DragEvent.ACTION_DRAG_ENDED)
-        {
-            try {
-                draggedView = (VincaElementView) event.getLocalState();
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.d("TrashBin", "DraggedView "  + (draggedView!=null));
         switch (event.getAction()) {
             case DragEvent.ACTION_DROP:
             {
                 //User dropped a view into trash bin?
-                Log.d("WorkspaceController", "Dropped on view trashbin! - Deleting");
-                view.setBackgroundColor(0);
-                ((VincaElementView)draggedView).remove();
-                break;
-            }
-            case DragEvent.ACTION_DRAG_EXITED:
-            {
-                view.setBackgroundColor(0);
+                setBackgroundColor(0);
+                try {
+                    draggedView = (VincaElementView) event.getLocalState();
+                    Log.d("WorkspaceController", "Dropped on view trashbin! - Deleting");
+                    draggedView.remove();
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             case DragEvent.ACTION_DRAG_ENTERED:
             {
-                view.setBackgroundColor(Color.RED);
+                setBackgroundColor(Color.RED);
+                break;
+            }
+            case DragEvent.ACTION_DRAG_EXITED:
+            {
+                setBackgroundColor(0);
                 break;
             }
         }

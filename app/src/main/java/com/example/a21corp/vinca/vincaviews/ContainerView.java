@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
-import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -30,6 +30,8 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         super(context);
         project = histo;
         this.vincaElement = element;
+        setOnClickListener(this);
+        setOnDragListener(this);
         inflate(getContext(), R.layout.expandable_element_view, this);
         onFinishInflate();
     }
@@ -52,38 +54,43 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        if(!(v instanceof VincaElementView))
+        if(event.getAction()==DragEvent.ACTION_DROP)
         {
-            return false;
-        }
-        switch(event.getAction())
-        {
-            case DragEvent.ACTION_DRAG_ENTERED:
-            {
+            View draggedView = (View) event.getLocalState();
 
+            if (draggedView instanceof GhostEditorView) {
+                addGhost((GhostEditorView) draggedView);
+            }
+            else if (draggedView instanceof VincaElementView) {
+                ((VincaElementView) draggedView).setParent(this);
             }
         }
         return true;
     }
 
     @Override
-    public VincaElement getVincaSymbol() {
+    public VincaElement getVincaElement() {
         return vincaElement;
     }
 
     @Override
+    public ContainerView getView() {
+        return this;
+    }
+
+    @Override
     public void setParent(ContainerView container) {
-        project.setParent(vincaElement, (Container)container.getVincaSymbol());
+        project.setParent(vincaElement, (Container)container.getVincaElement());
     }
 
     @Override
     public void setParent(ElementView element) {
-        project.setParent(vincaElement, (Element)element.getVincaSymbol());
+        project.setParent(vincaElement, (Element)element.getVincaElement());
     }
 
     @Override
     public void setParent(NodeView node) {
-        project.setParent(vincaElement, (Node)node.getVincaSymbol());
+        project.setParent(vincaElement, node.getVincaElement().parent);
     }
 
     @Override

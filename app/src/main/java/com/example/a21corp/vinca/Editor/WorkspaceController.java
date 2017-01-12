@@ -1,6 +1,9 @@
 package com.example.a21corp.vinca.Editor;
 
+import android.util.Log;
+
 import com.example.a21corp.vinca.elements.Container;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
@@ -66,7 +69,7 @@ public class WorkspaceController implements Serializable {
     }
 */
 
-    public void setCursor(Container cursor) {
+    public void setCursor(Element cursor) {
         if (cursor == null) {
             if (workspace.projects.size() == 0) {
                 workspace.projects = new ArrayList<Container>();
@@ -80,42 +83,6 @@ public class WorkspaceController implements Serializable {
         workspace.cursor = cursor;
        // cursor.isCursor = true;
         notifyObservers();
-    }
-
-    public void moveElement(VincaElement element, VincaElement parent) {
-        if (parent instanceof Container) {
-            if (element instanceof Container) {
-                moveElement((Container) element, (Container) parent);
-            } else if (element instanceof Node) {
-                moveElement((Node) element, (Container) parent);
-            }
-        }
-    }
-
-    public void moveElement(Container container, Container parent) {
-        parent.isOpen = true;
-        Container oldParent = container.parent;
-        if (oldParent != null) {
-            oldParent.containerList.remove(container);
-        }
-        if (parent instanceof Container) {
-            ((Container) parent).containerList.add(container);
-            container.parent = ((Container) parent);
-        } else if (parent instanceof Element) {
-            Container trueParent = parent.parent;
-            int position = trueParent.containerList.indexOf(parent) + 1;
-            trueParent.containerList.add(position, container);
-            container.parent = trueParent;
-        }
-        notifyObservers();
-    }
-
-    public void addElement(VincaElement element) {
-        if (element instanceof Container) {
-            moveElement((Container) element, workspace.cursor);
-        } else if (element instanceof Node) {
-            moveElement((Node) element, workspace.cursor);
-        }
     }
     
     private void notifyObservers() {
@@ -136,67 +103,86 @@ public class WorkspaceController implements Serializable {
 
     public void renameWorkspace(String title, String path) {
         String oldTitle = workspace.getTitle();
+        if (title == oldTitle) {
+            return;
+        }
         workspace.setTitle(title);
         if (ProjectManager.saveProject(workspace, path)) {
             ProjectManager.removeProject(oldTitle, path);
         }
     }
-    //Generic...
-    public void setParent(Node vincaElement, Container parent) {
-        return; //You cant add a node to a container
-    }
-    public void setParent(Element vincaElement, Container parent)
-    {
-        if(vincaElement.parent!=null)
-            vincaElement.parent.containerList.remove(vincaElement);
-        parent.containerList.add(vincaElement);
-        notifyObservers();
-    }
-    public void setParent(Container vincaElement, Container parent){
-        if(vincaElement.parent!=null)
-            vincaElement.parent.containerList.remove(vincaElement);
-        parent.containerList.add(vincaElement);
-        notifyObservers();
-    }
-    public void setParent(VincaElement vincaElement, Node node)
-    {
-        return; //Nodes cannot contain any elements
-    }
-    public void setParent(VincaElement vincaElement, Container parent)
-    {
-        if(VincaElement.Elements.contains(vincaElement.type)){
-            parent.containerList.add((Element)vincaElement);
+
+    public void addVincaElement(VincaElement element) {
+        if (element instanceof Node) {
+            addNode((Node) element);
         }
-        else if(VincaElement.Expendables.contains(vincaElement.type))
-        {
-            parent.containerList.add((Container)vincaElement);
+        if (element instanceof Element) {
+            addElement((Element) element);
         }
-        // Can't add node to a container
         notifyObservers();
     }
 
-    public void setParent(Container vincaElement, Element parent) {
-        return; //Cant add Container to Element
+    private void addElement(Element element) {
+        VincaElement cursor = workspace.getCursor();
+        if (cursor instanceof Container) {
+            setParent(element, (Container) cursor);
+        }
+        else {
+            Container parent = cursor.parent;
+            setParent(element, parent);
+        }
     }
 
-    public void remove(Container vincaElement) {
+    private boolean addNode(Node node) {
+        try {
+            VincaActivity parent = (VincaActivity) workspace.getCursor();
+            setParent(node, parent);
+            return true;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void setParent(VincaElement vincaElement, Element parent) {
+        if (vincaElement instanceof Element && parent instanceof Container) {
+            setParent((Element) vincaElement, (Container) parent);
+        }
+        else if (parent instanceof VincaActivity) {
+            setParent((Node) vincaElement, (VincaActivity) parent);
+        }
+        notifyObservers();
+    }
+
+    private void setParent(Element element, Container parent)
+    {
+        if(element.parent!=null)
+            element.parent.containerList.remove(element);
+        parent.containerList.add(element);
+    }
+
+    private void setParent(Node node, VincaActivity parent) {
+        if (node.parent != null) {
+            node.parent.nodes.remove(node);
+        }
+        parent.nodes.remove(node);
+    }
+
+    public void remove(VincaElement vincaElement) {
+        if (vincaElement instanceof Node) {
+            remove((Node) vincaElement);
+        }
+        else {
+            remove((Element) vincaElement);
+        }
+        notifyObservers();
+    }
+
+    private void remove(Element vincaElement) {
         vincaElement.parent.containerList.remove(vincaElement);
-        notifyObservers();
     }
 
-    public void setParent(Node node, Node vincaSymbol) {
-        return; //Nodes cant contain anything
-    }
-
-    public void setParent(Node node, Element parent) {
-
-    }
-
-    public void remove(Node node) {
+    private void remove(Node node) {
         node.parent.nodes.remove(node);
-    }
-
-    public void setParent(VincaElement newView, Element parent) {
-        return; //Elements cant contain elements
     }
 }

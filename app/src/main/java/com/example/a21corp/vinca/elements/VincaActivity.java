@@ -7,10 +7,10 @@ import java.util.List;
  * Created by root on 1/11/17.
  */
 
-public class Activity extends Element {
+public class VincaActivity extends Element {
     public List<Node> nodes = new ArrayList<Node>();
 
-    protected Activity(int elementType) {
+    protected VincaActivity(int elementType) {
         super(elementType);
     }
 }

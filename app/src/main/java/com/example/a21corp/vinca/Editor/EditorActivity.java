@@ -29,8 +29,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EditorActivity extends AppCompatActivity
-        implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
-        , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver {
+        implements View.OnClickListener, View.OnLongClickListener
+        , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, View.OnDragListener {
     private WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
@@ -102,6 +102,7 @@ public class EditorActivity extends AppCompatActivity
             workspace = ProjectManager.createProject(title);
         }
         controller = new WorkspaceController(workspace);
+        controller.observerList.add(this);
         updateCanvas();
         projectNameBar.setText(title);
     }
@@ -123,6 +124,7 @@ public class EditorActivity extends AppCompatActivity
         methodView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_METHOD));
         activityView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_ACTIVITY));
         //Add Vinca Symbols to the panel-.-
+
         elementPanel.addView(activityView);
         elementPanel.addView(decisionView);
         elementPanel.addView(pauseView);
@@ -189,9 +191,7 @@ public class EditorActivity extends AppCompatActivity
 
 
         if (view instanceof GhostEditorView) {
-            if (view.getParent() == elementPanel) {
-                controller.addElement(((GhostEditorView) view).getType());
-            }
+            controller.addVincaElement(((GhostEditorView) view).getType());
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();
@@ -234,39 +234,6 @@ public class EditorActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onDrag(View view, DragEvent event) {
-        View draggedView = (View) event.getLocalState();
-        if (! (draggedView instanceof VincaElementView)) {
-            //Not dragging a VincaElementView, not interested in future drag-events
-            return false;
-        }
-        switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_EXITED:
-                   // viewManager.highlightView(viewManager.getCursor());
-                break;
-
-            case DragEvent.ACTION_DRAG_ENTERED:
-                    //viewManager.highlightView(view);
-                break;
-
-            case DragEvent.ACTION_DROP:
-                draggedView.setVisibility(View.VISIBLE);
-                if (view instanceof VincaElementView) {
-                   /*  viewManager.moveElement((VincaElementView) draggedView, (VincaElementView) view);
-                    viewManager.highlightView(viewManager.getCursor());*/
-                    break;
-                }
-                break;
-
-            case DragEvent.ACTION_DRAG_ENDED:
-                draggedView.setVisibility(View.VISIBLE);
-                break;
-        }
-        //This listener should always receive drag-events, so always return true!
-        return true;
-    }
-
-    @Override
     public boolean onLongClick(View view) {
         //PLACEHOLDER
         //TODO: REPLACE
@@ -291,6 +258,7 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
+        view.setOnDragListener(this);
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
             startDragAux(view);
             return true;
@@ -343,10 +311,27 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public void updateCanvas() {
         Container vincaRoot = controller.workspace.projects.get(0);
-        VincaViewFabricator fabricator = new VincaViewFabricator(getBaseContext(), controller);
+        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
         View root = fabricator.getVincaView(vincaRoot);
         this.canvas.removeAllViews();
         this.canvas.addView(root);
         this.canvas.invalidate();
+    }
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+            View draggedView = (View) event.getLocalState();
+            draggedView.setVisibility(View.VISIBLE);
+            if (! (draggedView instanceof GhostEditorView)) {
+                try {
+                    draggedView.setOnDragListener((VincaElementView) draggedView);
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return true;
     }
 }

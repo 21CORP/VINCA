@@ -47,7 +47,7 @@ public class VincaElement implements Serializable{
     public static VincaElement create(int type){
         switch(type){
             case VincaElement.ELEMENT_ACTIVITY:
-                return new Activity(type);
+                return new VincaActivity(type);
             case VincaElement.ELEMENT_DECISION:
                 return new Element(type);
             case VincaElement.ELEMENT_ITERATE:

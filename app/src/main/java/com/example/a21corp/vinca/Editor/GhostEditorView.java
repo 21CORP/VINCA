@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -13,9 +14,11 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class GhostEditorView extends LinearLayout {
     private VincaElement prototype;
+    private int type;
     public GhostEditorView(Context context, VincaElement prototype)
     {
         super(context);
+        type = prototype.type;
         this.prototype = prototype;
         initialize();
     }
@@ -64,7 +67,7 @@ public class GhostEditorView extends LinearLayout {
     }
     public VincaElement getType()
     {
-        return prototype;
+        return VincaElement.create(type);
     }
 
 

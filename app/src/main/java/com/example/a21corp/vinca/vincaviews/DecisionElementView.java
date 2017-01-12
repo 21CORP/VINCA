@@ -3,7 +3,6 @@ package com.example.a21corp.vinca.vincaviews;
 import android.content.Context;
 
 import com.example.a21corp.vinca.Editor.WorkspaceController;
-import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Element;
 
@@ -20,6 +19,6 @@ public class DecisionElementView extends ElementView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        symbol.setImageResource(R.drawable.decision);
+        view.setImageResource(R.drawable.decision);
     }
 }

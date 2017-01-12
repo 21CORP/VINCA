@@ -1,7 +1,10 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -19,52 +22,62 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class NodeView extends FrameLayout implements VincaElementView {
     private Node node;
-    private ImageView image;
+    private ImageView view;
     protected WorkspaceController project;
     public NodeView(Context context, Node node, WorkspaceController histo) {
         super(context);
         this.project = histo;
         this.node = node;
         //inflate(context, R.layout.node_view, this);
-        image = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
+        //view = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
+        view = (ImageView) ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
         onFinishInflate();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        image.setImageResource(R.drawable.method);
+        view.setImageResource(R.drawable.method);
         Log.d("NodeView", "finished inflating");
     }
     @Override
-    public VincaElement getVincaSymbol() {
+    public VincaElement getVincaElement() {
         return node;
     }
 
     @Override
+    public View getView() {
+        return view;
+    }
+
+    @Override
     public void setParent(ContainerView container) {
-        project.setParent(node, (Container)container.getVincaSymbol());
+        project.setParent(node, (Container)container.getVincaElement());
     }
 
     @Override
     public void setParent(ElementView element) {
-        project.setParent(node, (Element)element.getVincaSymbol());
+        project.setParent(node, (Element)element.getVincaElement());
     }
 
     @Override
     public void setParent(NodeView n) {
-        project.setParent(node, (Node)n.getVincaSymbol());
+        project.setParent(node, n.getVincaElement().parent);
     }
 
     @Override
     public void addGhost(GhostEditorView view) {
-        VincaElement newView = VincaElement.create(view.getType().type);
-        project.setParent(newView, node);
+
     }
 
     @Override
     public void remove() {
         project.remove(node);
+    }
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        return false;
     }
 
 }

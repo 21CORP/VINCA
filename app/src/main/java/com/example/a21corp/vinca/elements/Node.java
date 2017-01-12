@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Node extends VincaElement implements Serializable {
     private static final long serialVersionUID = 12345;
 
-    public Activity parent;
+    public VincaActivity parent;
 
     protected Node(int elementType) {
         super(elementType);

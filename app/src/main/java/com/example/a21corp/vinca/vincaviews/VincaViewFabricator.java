@@ -2,7 +2,9 @@ package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
@@ -15,39 +17,50 @@ import com.example.a21corp.vinca.elements.VincaElement;
 
 public class VincaViewFabricator {
     private Context context;
+    private EditorActivity editor;
     private WorkspaceController project;
-    public VincaViewFabricator(Context c, WorkspaceController proj)
+    public VincaViewFabricator(EditorActivity editor, WorkspaceController proj)
     {
+        this.editor = editor;
         project = proj;
-        context = c;
+        context = editor.getBaseContext();
     }
     public View getVincaView(VincaElement element)
     {
+        View view = null;
         if(VincaElement.Expendables.contains(element.type))
         {
-            return getVincaContainerView((Container)element);
+            view = getVincaContainerView((Container)element);
         }
         else if(VincaElement.Elements.contains(element.type)){
-            return getVincaElementView((Element)element);
+            view = getVincaElementView((Element)element);
         }
         else if(VincaElement.Nodes.contains(element.type)){
-            return getVincaNodeView((Node)element);
+            view = getVincaNodeView((Node)element);
         }
-        return null;
+        view.setOnTouchListener(editor);
+        return view;
     }
 
-    private NodeView getVincaNodeView(Node element) {
+    private View getVincaNodeView(Node element) {
         switch(element.type)
         {
             case VincaElement.ELEMENT_METHOD:
             {
-                return new NodeView(context, element, project);
+                NodeView newView = new NodeView(context, element, project);
+                View viewToReturn = newView.getView();
+                return viewToReturn;
             }
+        }
+        try {
+            throw new ClassNotFoundException("Unable to determine type of element");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public ElementView getVincaElementView(Element element){
+    public View getVincaElementView(Element element){
         ElementView newView = null;
         switch (element.type)
         {
@@ -68,7 +81,15 @@ public class VincaViewFabricator {
             }
 
         }
-        return newView;
+        try {
+            if (newView == null) {
+                throw new ClassNotFoundException("Unable to determine type of element");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        View viewToReturn = newView.getView();
+        return viewToReturn;
     }
 
 
@@ -94,10 +115,19 @@ public class VincaViewFabricator {
                 break;
             }
         }
+        try {
+            if (newView == null) {
+                throw new ClassNotFoundException("Unable to determine type of element");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < element.containerList.size(); i++) {
             View child = getVincaView(element.containerList.get(i));
+            child.setOnTouchListener(editor);
             newView.add(child);
         }
-        return newView;
+        ContainerView viewToReturn = newView.getView();
+        return viewToReturn;
     }
 }

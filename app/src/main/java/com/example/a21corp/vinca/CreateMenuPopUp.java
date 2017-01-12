@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,9 +24,8 @@ import static android.app.Activity.RESULT_OK;
  * Created by Oliver on 04-11-2016.
  */
 
-public class CreateMenuPopUp extends DialogFragment implements View.OnClickListener {
+public class CreateMenuPopUp extends DialogFragment {
 
-Button b1;
     EditText projectName;
     private String dirPath;
     private File projDir;
@@ -48,10 +46,7 @@ Button b1;
         View promptView = inflater.inflate(R.layout.create_dialogbox, null);
         builder.setView(promptView);
 
-        b1 = (Button) promptView.findViewById(R.id.button4);
         projectName = (EditText) promptView.findViewById(R.id.edittextname);
-
-      b1.setOnClickListener(this);
 
         //builder.setTitle("Create new Project")
               builder
@@ -77,17 +72,15 @@ Button b1;
                     public void onClick(DialogInterface dialog, int id) {
                     }
 
+                })
+
+                .setNeutralButton("Import", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        importFile();
+                    }
                 });
 
         return builder.create();
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        System.out.println("Import trykt");
-        importFile();
-
     }
 
     public void importFile() {

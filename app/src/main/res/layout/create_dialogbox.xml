@@ -7,16 +7,6 @@
     android:background="@color/White" >
 
 
-    <TextView
-        android:id="@+id/imgview"
-        android:text="or"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/edittextname"
-        android:layout_centerHorizontal="true"
-        />
-
-
     <EditText
         android:id="@+id/edittextname"
         android:hint="Project name"
@@ -48,21 +38,6 @@
         android:layout_alignParentEnd="true" />
 
 
-    <Button
-        android:text="Import"
-
-        style="@style/MyButton"
-
-        android:layout_width="171dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/button4"
-        android:layout_below="@+id/imgview"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/primary_text_light"
-        android:background="@color/colorPrimaryDark" />
-
     <TextView
         android:background="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
@@ -73,9 +48,10 @@
         android:textColor="@color/White"
         android:textSize="24sp"
         android:fontFamily="sans-serif-medium"
-        android:text="Create new Project"
+        android:text="Create New Project"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="false" />
 
 
 </RelativeLayout>

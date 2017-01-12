@@ -206,8 +206,6 @@ public class EditorActivity extends AppCompatActivity
                 viewManager.setCursor((ContainerView) view);
                 //TODO minimenu open
             }
-        } else if (view == trashBin) {
-            viewManager.deleteElement(viewManager.getCursor());
         }
         if(view==saveButton){
             SaveAsDialog savepop = new SaveAsDialog();

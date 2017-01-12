@@ -86,6 +86,7 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
             Intent editor = new Intent(this, EditorActivity.class);
             editor.putExtra("title", title);
             startActivity(editor);
+            overridePendingTransition( R.anim.slide_up_in, R.anim.slide_up_out);
         }
         else {
             CreateMenuPopUp p = new CreateMenuPopUp();
@@ -114,4 +115,12 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         Log.v("LoadActivity", "Added fragment");
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
+
+    }
+
 }

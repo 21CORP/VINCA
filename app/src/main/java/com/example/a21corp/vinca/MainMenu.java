@@ -38,6 +38,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             }
             case R.id.loadMenuButton:{
                 startActivity(new Intent(this, LoadActivity.class));
+                //overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
                 break;
             }
 

@@ -8,7 +8,7 @@ import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -210,9 +210,13 @@ public class EditorActivity extends AppCompatActivity
             viewManager.deleteElement(viewManager.getCursor());
         }
         if(view==saveButton){
+           ;
             SaveAsDialog savepop = new SaveAsDialog();
             savepop.setCurrentWorkspace(viewManager.workspaceController.workspace);
             savepop.show(getFragmentManager(),"save as");
+
+
+
 
             Log.d("export","serialized");
 
@@ -359,4 +363,13 @@ public class EditorActivity extends AppCompatActivity
         exportDialog.setExportTarget(this, viewToExport, viewManager.getWorkspaceTitle());
         exportDialog.show(getFragmentManager(), "Export as");
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_down_in, R.anim.slide_down_out);
+
+    }
+
+
 }

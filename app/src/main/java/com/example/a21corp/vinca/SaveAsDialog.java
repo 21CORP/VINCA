@@ -67,6 +67,7 @@ private EditText newProjName;
                                  editor.putExtra("title", pName);
                                  getActivity().finish();
                                  startActivity(editor);
+
                              }
                          }
                          else{

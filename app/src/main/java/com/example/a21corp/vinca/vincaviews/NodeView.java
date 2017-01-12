@@ -38,7 +38,6 @@ public class NodeView extends FrameLayout implements VincaElementView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         view.setImageResource(R.drawable.method);
-        Log.d("NodeView", "finished inflating");
     }
     @Override
     public VincaElement getVincaElement() {
@@ -52,12 +51,12 @@ public class NodeView extends FrameLayout implements VincaElementView {
 
     @Override
     public void setParent(ContainerView container) {
-        project.setParent(node, (Container)container.getVincaElement());
+        //project.setParent(node, (Container)container.getVincaElement());
     }
 
     @Override
     public void setParent(ElementView element) {
-        project.setParent(node, (Element)element.getVincaElement());
+        //project.setParent(node, (Element)element.getVincaElement());
     }
 
     @Override
@@ -73,6 +72,11 @@ public class NodeView extends FrameLayout implements VincaElementView {
     @Override
     public void remove() {
         project.remove(node);
+    }
+
+    @Override
+    public void highlight() {
+
     }
 
     @Override

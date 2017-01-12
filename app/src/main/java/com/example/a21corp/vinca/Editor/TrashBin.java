@@ -30,7 +30,7 @@ public class TrashBin extends View implements View.OnClickListener, View.OnDragL
             case DragEvent.ACTION_DROP:
             {
                 //User dropped a view into trash bin?
-                setBackgroundColor(0);
+                view.setBackgroundColor(0);
                 try {
                     draggedView = (VincaElementView) event.getLocalState();
                     Log.d("WorkspaceController", "Dropped on view trashbin! - Deleting");
@@ -42,12 +42,12 @@ public class TrashBin extends View implements View.OnClickListener, View.OnDragL
             }
             case DragEvent.ACTION_DRAG_ENTERED:
             {
-                setBackgroundColor(Color.RED);
+                view.setBackgroundColor(Color.RED);
                 break;
             }
             case DragEvent.ACTION_DRAG_EXITED:
             {
-                setBackgroundColor(0);
+                view.setBackgroundColor(0);
                 break;
             }
         }

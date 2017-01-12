@@ -1,14 +1,20 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
+import android.media.Image;
+import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
@@ -38,7 +44,12 @@ public class VincaViewFabricator {
         else if(VincaElement.Nodes.contains(element.type)){
             view = getVincaNodeView((Node)element);
         }
-        view.setOnTouchListener(editor);
+        if (view instanceof VincaElementView) {
+            view.setOnTouchListener(editor);
+            if (project.workspace.getCursor() == ((VincaElementView) view).getVincaElement()) {
+                ((VincaElementView) view).highlight();
+            }
+        }
         return view;
     }
 
@@ -66,7 +77,20 @@ public class VincaViewFabricator {
         {
             case VincaElement.ELEMENT_ACTIVITY:
             {
-                newView = new ActivityElementView(context, element, project);
+                ActivityElementView activityElementView
+                        = new ActivityElementView(context, element, project);
+
+                int maxSize = (int) context.getResources().getDimension(R.dimen.symbol_max_size);
+                if (((VincaActivity) element).nodes.size() > 1) {
+                    maxSize = (int) context.getResources().getDimension(R.dimen.symbol_mid_size);
+                }
+                for (int i = 0; i < ((VincaActivity) element).nodes.size(); i++) {
+                    ImageView child = (ImageView) getVincaView(((VincaActivity) element).nodes.get(i));
+                    child.setMaxHeight(maxSize);
+                    child.setMaxWidth(maxSize);
+                    activityElementView.add(child);
+                }
+                newView = activityElementView;
                 break;
             }
             case VincaElement.ELEMENT_DECISION:
@@ -124,7 +148,7 @@ public class VincaViewFabricator {
         }
         for (int i = 0; i < element.containerList.size(); i++) {
             View child = getVincaView(element.containerList.get(i));
-            child.setOnTouchListener(editor);
+            //child.setOnTouchListener(editor);
             newView.add(child);
         }
         ContainerView viewToReturn = newView.getView();

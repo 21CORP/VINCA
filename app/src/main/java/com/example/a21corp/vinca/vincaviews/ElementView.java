@@ -1,6 +1,8 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -27,8 +29,9 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
         super(context);
         this.project = controller;
         this.vincaElement = element;
-        //inflate(context, R.layout.element_view, this);
-        view = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
+        inflate(context, R.layout.vinca_icon_layout, this);
+        view = (ImageView) findViewById(R.id.symbol);
+        //view = (ImageView)ImageView.inflate(getContext(), R.layout.vinca_icon_layout, null);
         setOnClickListener(this);
         setOnDragListener(this);
         onFinishInflate();
@@ -38,21 +41,29 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     protected void onFinishInflate() {
         super.onFinishInflate();
         view.setImageResource(R.drawable.decision);
-        Log.d("ElementView", "finished inflating");
     }
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        if(event.getAction()==DragEvent.ACTION_DROP)
+        switch (event.getAction())
         {
-            View draggedView = (View) event.getLocalState();
+            case DragEvent.ACTION_DROP:
+                View draggedView = (View) event.getLocalState();
 
-            if (draggedView instanceof GhostEditorView) {
-                addGhost((GhostEditorView) draggedView);
-            }
-            else if (draggedView instanceof VincaElementView) {
-                ((VincaElementView) draggedView).setParent(this);
-            }
+                if (draggedView instanceof GhostEditorView) {
+                    addGhost((GhostEditorView) draggedView);
+                }
+                else if (draggedView instanceof VincaElementView) {
+                    ((VincaElementView) draggedView).setParent(this);
+                }
+                break;
+
+            case DragEvent.ACTION_DRAG_ENTERED:
+                draghighlight();
+                break;
+            case DragEvent.ACTION_DRAG_EXITED:
+                dragdehighlight();
+                break;
         }
         return true;
     }
@@ -64,7 +75,7 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
 
     @Override
     public View getView() {
-        return view;
+        return this;
     }
 
     @Override
@@ -83,7 +94,7 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
         VincaElement newParent = element.getVincaElement().parent;
         MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
         move.execute();*/
-        project.setParent(vincaElement, (Element)element.getVincaElement());
+        project.setParent(vincaElement, element.getVincaElement().parent);
     }
 
     @Override
@@ -105,6 +116,27 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     @Override
     public void remove() {
 
+    }
+
+    public void highlight() {
+        view.setBackgroundColor(Color.GREEN);
+    }
+
+    public void dehighlight() {
+        view.setBackgroundColor(0);
+    }
+
+    private void draghighlight() {
+        view.setBackgroundColor(Color.GRAY);
+    }
+
+    private void dragdehighlight() {
+        if (project.workspace.getCursor() == vincaElement) {
+            highlight();
+        }
+        else {
+            dehighlight();
+        }
     }
 
     @Override

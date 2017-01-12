@@ -1,6 +1,7 @@
 package com.example.a21corp.vinca.vincaviews;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.example.a21corp.vinca.elements.VincaElement;
  * Created by ymuslu on 19-11-2016.
  */
 
-public abstract class ContainerView extends LinearLayout implements View.OnClickListener, View.OnDragListener, VincaElementView {
+public abstract class ContainerView extends LinearLayout implements View.OnClickListener, View.OnDragListener, VincaElementView, View.OnLongClickListener {
 
     protected WorkspaceController project;
     protected ImageView borderLeft;
@@ -32,6 +33,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         this.vincaElement = element;
         setOnClickListener(this);
         setOnDragListener(this);
+        setOnLongClickListener(this);
         inflate(getContext(), R.layout.expandable_element_view, this);
         onFinishInflate();
     }
@@ -44,7 +46,6 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         super.onFinishInflate();
         borderLeft = (ImageView) findViewById(R.id.border_start);
         borderRight = (ImageView) findViewById(R.id.border_end);
-        Log.d("ContainerView", "finished inflating");
     }
 
     @Override
@@ -54,16 +55,24 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        if(event.getAction()==DragEvent.ACTION_DROP)
+        switch (event.getAction())
         {
-            View draggedView = (View) event.getLocalState();
+            case DragEvent.ACTION_DROP:
+                View draggedView = (View) event.getLocalState();
 
-            if (draggedView instanceof GhostEditorView) {
-                addGhost((GhostEditorView) draggedView);
-            }
-            else if (draggedView instanceof VincaElementView) {
-                ((VincaElementView) draggedView).setParent(this);
-            }
+                if (draggedView instanceof GhostEditorView) {
+                    addGhost((GhostEditorView) draggedView);
+                }
+                else if (draggedView instanceof VincaElementView) {
+                    ((VincaElementView) draggedView).setParent(this);
+                }
+                break;
+            case DragEvent.ACTION_DRAG_ENTERED:
+                draghighlight();
+                break;
+            case DragEvent.ACTION_DRAG_EXITED:
+                dragdehighlight();
+                break;
         }
         return true;
     }
@@ -102,5 +111,32 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     @Override
     public void remove() {
         project.remove(vincaElement);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        project.toggleOpenContainer(vincaElement);
+        return true;
+    }
+
+    public void highlight() {
+        setBackgroundColor(Color.GREEN);
+    }
+
+    public void dehighlight() {
+        setBackgroundColor(0);
+    }
+
+    private void draghighlight() {
+        setBackgroundColor(Color.GRAY);
+    }
+
+    private void dragdehighlight() {
+        if (project.workspace.getCursor() == vincaElement) {
+            highlight();
+        }
+        else {
+            dehighlight();
+        }
     }
 }

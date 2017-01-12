@@ -23,6 +23,7 @@ public interface VincaElementView extends View.OnDragListener {
     void setParent(NodeView node);
     void addGhost(GhostEditorView view);
     void remove();
+    void highlight();
 
     @Override
     boolean onDrag(View v, DragEvent event);

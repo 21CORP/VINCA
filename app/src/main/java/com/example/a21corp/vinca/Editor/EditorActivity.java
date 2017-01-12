@@ -205,6 +205,7 @@ public class EditorActivity extends AppCompatActivity
             } else if (view instanceof ContainerView) {
                 viewManager.setCursor((ContainerView) view);
                 //TODO minimenu open
+                ((ContainerView) view).quickTitle.setText(((ContainerView) view).element.title);
             }
         }
         if(view==saveButton){
@@ -277,10 +278,6 @@ public class EditorActivity extends AppCompatActivity
         //TODO: REPLACE
         if (view instanceof ContainerView) {
             viewManager.toggleOpenExpandableView((ContainerView) view);
-
-            element_description ed = new element_description();
-            ed.setElement(((ContainerView) view).element);
-            ed.show(getFragmentManager(), "DescriptionWindow");
 
             return true;
         }

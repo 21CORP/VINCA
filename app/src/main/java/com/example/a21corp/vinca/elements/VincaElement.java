@@ -13,8 +13,8 @@ public abstract class VincaElement implements Serializable {
 
     public int symbol;
     public int type;
-    public String title;
-    public String description;
+    public String title = "";
+    public String description = "";
     public Expandable parent;
 
     public static final int ELEMENT_PROJECT = 0;

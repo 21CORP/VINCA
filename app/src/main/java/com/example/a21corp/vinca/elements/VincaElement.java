@@ -8,14 +8,14 @@ import java.util.Arrays;
  * Created by ymuslu on 12-11-2016
  */
 
-public abstract class VincaElement implements Serializable {
+public class VincaElement implements Serializable{
     private static final long serialVersionUID = 12345;
 
     public int symbol;
     public int type;
     public String title = "";
     public String description = "";
-    public Expandable parent;
+    public Container parent;
 
     public static final int ELEMENT_PROJECT = 0;
     public static final int ELEMENT_PROCESS = 1;
@@ -32,6 +32,7 @@ public abstract class VincaElement implements Serializable {
         ELEMENT_ITERATE
     }));
 
+
     public static final ArrayList<Integer> Elements =
             new ArrayList<Integer>(Arrays.asList(new Integer[] {
         ELEMENT_ACTIVITY,
@@ -43,8 +44,27 @@ public abstract class VincaElement implements Serializable {
             new ArrayList<Integer>(Arrays.asList(new Integer[] {
         ELEMENT_METHOD
     }));
+    public static VincaElement create(int type){
+        switch(type){
+            case VincaElement.ELEMENT_ACTIVITY:
+                return new VincaActivity(type);
+            case VincaElement.ELEMENT_DECISION:
+                return new Element(type);
+            case VincaElement.ELEMENT_ITERATE:
+                return new Container(type);
+            case VincaElement.ELEMENT_METHOD:
+                return new Node(type);
+            case VincaElement.ELEMENT_PAUSE:
+                return new Element(type);
+            case VincaElement.ELEMENT_PROCESS:
+                return new Container(type);
+            case VincaElement.ELEMENT_PROJECT:
+                return new Container(type);
+        }
+        return null;
+    }
 
-    public VincaElement(int type) {
+    protected VincaElement(int type) {
         parent = null;
         if (type >= 0) {
             this.type = type;

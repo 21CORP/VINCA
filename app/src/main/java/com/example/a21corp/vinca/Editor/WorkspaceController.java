@@ -2,15 +2,14 @@ package com.example.a21corp.vinca.Editor;
 
 import android.util.Log;
 
-import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.elements.Container;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
-import com.example.a21corp.vinca.elements.Expandable;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.vincaviews.ContainerView;
 
 import java.io.Serializable;
-import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,143 +31,44 @@ public class WorkspaceController implements Serializable {
     }
 
 
-    public Expandable initiateWorkspace(Expandable project) {
+    public Container initiateWorkspace(Container project) {
         if (project == null) {
-            project = new Expandable(VincaElement.ELEMENT_PROJECT);
+            project = (Container) VincaElement.create(VincaElement.ELEMENT_PROJECT);
         }
-        workspace.projects = new ArrayList<Expandable>();
+        workspace.projects = new ArrayList<Container>();
         workspace.projects.add(project);
-        setCursor(findCursor(project));
+       // setCursor(findCursor(project));
         notifyObservers();
         return project;
     }
 
-    public Expandable initiateWorkspace() {
+    public Container initiateWorkspace() {
         return initiateWorkspace(null);
     }
 
-    private Container findCursor(Container scope) {
-        Container cursor;
-        if (scope.isCursor) {
-            setCursor(scope);
-            return scope;
-        }
-        if (scope instanceof Expandable && ((Expandable) scope).containerList != null) {
-            for (Container container : ((Expandable) scope).containerList) {
-                if (container.isCursor) {
-                    setCursor(container);
-                    return container;
-                } else {
-                    cursor = findCursor(container);
-                    if (cursor != null) {
-                        setCursor(cursor);
-                        return cursor;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-
-    public void setCursor(Container cursor) {
+    public void setCursor(Element cursor) {
         if (cursor == null) {
             if (workspace.projects.size() == 0) {
-                workspace.projects = new ArrayList<Expandable>();
-                workspace.projects.add(new Expandable(VincaElement.ELEMENT_PROJECT));
+                workspace.projects = new ArrayList<Container>();
+                //workspace.projects.add(new Container(VincaElement.ELEMENT_PROJECT));
             }
             cursor = workspace.projects.get(0);
         }
         if (workspace.cursor != null) {
-            workspace.cursor.isCursor = false;
+           // workspace.cursor.isCursor = false;
         }
         workspace.cursor = cursor;
-        cursor.isCursor = true;
+       // cursor.isCursor = true;
         notifyObservers();
     }
-
-    public void moveElement(VincaElement element, VincaElement parent) {
-        if (parent instanceof Container) {
-            if (element instanceof Container) {
-                moveElement((Container) element, (Container) parent);
-            } else if (element instanceof Node) {
-                moveElement((Node) element, (Container) parent);
-            }
-        }
-    }
-
-    private void moveElement(Container container, Container parent) {
-        parent.isOpen = true;
-        Expandable oldParent = container.parent;
-        if (oldParent != null) {
-            oldParent.containerList.remove(container);
-        }
-        if (parent instanceof Expandable) {
-            ((Expandable) parent).containerList.add(container);
-            container.parent = ((Expandable) parent);
-        } else if (parent instanceof Element) {
-            Expandable trueParent = parent.parent;
-            int position = trueParent.containerList.indexOf(parent) + 1;
-            trueParent.containerList.add(position, container);
-            container.parent = trueParent;
-        }
-        notifyObservers();
-    }
-
-    private void moveElement(Node element, Container parent) {
-        parent.isOpen = true;
-        Container oldParent = element.parent;
-        if (oldParent != null) {
-            oldParent.vincaNodeList.remove(element);
-        }
-        parent.vincaNodeList.add(element);
-        element.parent = parent;
-        notifyObservers();
-    }
-
-    public void addElement(VincaElement element) {
-        if (element instanceof Container) {
-            moveElement((Container) element, workspace.cursor);
-        } else if (element instanceof Node) {
-            moveElement((Node) element, workspace.cursor);
-        }
-    }
-
-    public void deleteElement(VincaElement element) {
-        if (workspace.projects.remove(element)) {
-            //Removed element was a top-level projects
-            if (workspace.projects.size() == 0) {
-                initiateWorkspace();
-                return;
-            }
-        }
-        if (element == workspace.cursor) {
-            //Trying to delete the cursor - reset cursor to the main projects symbol
-            setCursor(workspace.projects.get(0));
-        } else if (element instanceof Container) {
-            Container currentCursor = workspace.cursor;
-            if (findCursor((Container) element) != null) {
-                //Cursor within deleted element - reset cursor to the main projects symbol
-                setCursor(workspace.projects.get(0));
-            } else {
-                setCursor(currentCursor);
-            }
-        }
-        if (element instanceof Container) {
-            element.parent.containerList.remove(element);
-        } else if (element instanceof Node) {
-            ((Node) element).parent.vincaNodeList.remove(element);
-        }
-        notifyObservers();
-    }
-
+    
     private void notifyObservers() {
         for (WorkspaceObserver observer : observerList) {
             observer.updateCanvas();
         }
     }
 
-    public void toggleOpenExpandable(Container element) {
+    public void toggleOpenContainer(Container element) {
         element.isOpen = !element.isOpen;
         notifyObservers();
     }
@@ -180,9 +80,96 @@ public class WorkspaceController implements Serializable {
 
     public void renameWorkspace(String title, String path) {
         String oldTitle = workspace.getTitle();
+        if (title == oldTitle) {
+            return;
+        }
         workspace.setTitle(title);
         if (ProjectManager.saveProject(workspace, path)) {
             ProjectManager.removeProject(oldTitle, path);
         }
+    }
+
+    public void addVincaElement(VincaElement element) {
+        if (element instanceof Node) {
+            addNode((Node) element);
+        }
+        if (element instanceof Element) {
+            addElement((Element) element);
+        }
+        notifyObservers();
+    }
+
+    private void addElement(Element element) {
+        VincaElement cursor = workspace.getCursor();
+        if (cursor instanceof Container) {
+            setParent(element, (Container) cursor, ((Container) cursor).containerList.size());
+        }
+        else {
+            Container parent = cursor.parent;
+            int index = parent.containerList.indexOf(cursor) + 1;
+            setParent(element, parent, index);
+        }
+    }
+
+    private boolean addNode(Node node) {
+        try {
+            VincaActivity parent = (VincaActivity) workspace.getCursor();
+            setParent(node, parent, 0);
+            return true;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void setParent(VincaElement vincaElement, Element parent, int index) {
+        if (vincaElement instanceof Element && parent instanceof Container) {
+            setParent((Element) vincaElement, (Container) parent, index);
+        }
+        else if (vincaElement instanceof Node && parent instanceof VincaActivity) {
+            setParent((Node) vincaElement, (VincaActivity) parent, index);
+        }
+        else {
+            Log.d("WorkspaceController", "Illegal operation attempted!");
+        }
+        notifyObservers();
+    }
+
+    private void setParent(Element element, Container parent, int index)
+    {
+        if(element.parent!=null)
+            element.parent.containerList.remove(element);
+        parent.containerList.add(index, element);
+        element.parent = parent;
+    }
+
+    private void setParent(Node node, VincaActivity parent, int index) {
+        if (node.parent != null) {
+            node.parent.nodes.remove(node);
+        }
+        parent.nodes.add(index, node);
+        node.parent = parent;
+        notifyObservers();
+    }
+
+    public void remove(Element vincaElement) {
+        if (workspace.projects.remove(vincaElement)) {
+            //The deleted element was a root-element
+            if (workspace.projects.isEmpty()) {
+                initiateWorkspace();
+            }
+        }
+        else {
+            vincaElement.parent.containerList.remove(vincaElement);
+        }
+        notifyObservers();
+    }
+
+    public void remove(Node node) {
+        node.parent.nodes.remove(node);
+    }
+
+    public String getWorkspaceTitle() {
+        return workspace.getTitle();
     }
 }

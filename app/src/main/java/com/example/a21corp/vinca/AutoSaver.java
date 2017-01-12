@@ -32,7 +32,7 @@ public class AutoSaver{
         timer = new CountDownTimer(interval, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.d("Autosave","time left: " + (historian.timeSinceChange - millisUntilFinished));
+              //  Log.d("Autosave","time left: " + (historian.timeSinceChange - millisUntilFinished));
                 editorActivity.setSaveStatusBar(false);
             }
 

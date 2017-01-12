@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
@@ -75,6 +76,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             title = enterTitle.getText().toString();
             ImageExporter imgexp = new ImageExporter();
             imgexp.viewToJPG(act, view, title);
+            Toast.makeText(getActivity(), "File exported to Gallery", Toast.LENGTH_LONG).show();
         }
         else if(svg.isChecked()){
             //export to svg

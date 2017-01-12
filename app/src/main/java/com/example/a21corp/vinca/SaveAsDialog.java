@@ -67,7 +67,7 @@ private EditText newProjName;
                                  editor.putExtra("title", pName);
                                  getActivity().finish();
                                  startActivity(editor);
-
+                                 getActivity().overridePendingTransition( R.anim.slide_up_in, R.anim.slide_up_out);
                              }
                          }
                          else{

@@ -51,7 +51,8 @@
         android:text="Save Project As"
         android:layout_alignBaseline="@+id/create"
         android:layout_alignBottom="@+id/create"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAllCaps="false" />
 
 
 </RelativeLayout>

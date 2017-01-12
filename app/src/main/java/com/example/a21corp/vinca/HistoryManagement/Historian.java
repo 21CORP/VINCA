@@ -32,7 +32,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
         cmd.execute();
         timeSinceChange = SystemClock.uptimeMillis();
         redoStack.clear();
-        Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
+        //Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
     }
 
     public void undo(){
@@ -41,8 +41,8 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
             redoStack.push(historyStack.peek());
             historyStack.pop();
         }
-        System.out.println("historyStack: " + historyStack.toString());
-        System.out.println("redoStack: " + redoStack.toString());
+        //System.out.println("historyStack: " + historyStack.toString());
+        //System.out.println("redoStack: " + redoStack.toString());
         }
 
 public void redo(){
@@ -51,7 +51,7 @@ public void redo(){
         historyStack.push(redoStack.peek());
         redoStack.pop();
         }
-        System.out.println("historyStack: " + historyStack.toString());
-        System.out.println("redoStack: " + redoStack.toString());
+        //System.out.println("historyStack: " + historyStack.toString());
+        //System.out.println("redoStack: " + redoStack.toString());
         }
         }

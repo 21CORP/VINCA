@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
@@ -54,5 +55,8 @@ public class VincaElementView extends LinearLayout implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
+    }
+
+    public void miniMenuVisibility(int visibility){
     }
 }

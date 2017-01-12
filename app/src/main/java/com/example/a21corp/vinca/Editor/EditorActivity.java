@@ -31,6 +31,7 @@ import com.example.a21corp.vinca.vincaviews.ExpandableView;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.RunnableFuture;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnDragListener, View.OnLongClickListener
@@ -196,7 +197,7 @@ public class EditorActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(final View view) {
 
 
         if (view instanceof VincaElementView) {
@@ -205,8 +206,15 @@ public class EditorActivity extends AppCompatActivity
             } else if (view instanceof ContainerView) {
                 viewManager.setCursor((ContainerView) view);
                 //TODO minimenu open
-                ((ContainerView) view).quickTitle.setText(((ContainerView) view).element.title);
+                //((ContainerView) view).quickTitle.setText(((ContainerView) view).element.title);
+                //((ContainerView) view).miniMenuVisibility(View.VISIBLE);
             }
+            else{
+                //((ContainerView) view).miniMenuVisibility(View.INVISIBLE);
+            }
+        }
+        else{
+            //((ContainerView) view).miniMenuVisibility(View.INVISIBLE);
         }
         if(view==saveButton){
            ;

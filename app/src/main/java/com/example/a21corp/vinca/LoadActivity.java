@@ -97,9 +97,11 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         Bundle newBundle = new Bundle();
         String name = f.getName();
         name = name.substring(0, name.length() - 4);
+        String size = Long.toString(f.length()/1024); //Kilobytes
         newBundle.putString("title", name);
         newBundle.putString("created", "Unknown");
         newBundle.putString("edited",dateFormatter.format(new Date(f.lastModified())));
+        newBundle.putString("size", size + " kB");
         return newBundle;
     }
 

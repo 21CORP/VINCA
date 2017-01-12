@@ -46,10 +46,27 @@
 
     <TextView
         android:text="Edited:"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true"
         android:translationX="-50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:layout_alignBaseline="@+id/LoadActivityWorkspaceEdited"
+        android:layout_alignBottom="@+id/LoadActivityWorkspaceEdited"
+        android:layout_toStartOf="@+id/LoadActivityWorkspaceEdited" />
+
+    <TextView
+        android:text="Size:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoadActivityWorkspaceEdited"
+        android:layout_toStartOf="@+id/LoadActivityWorkspaceEdited"
+        android:id="@+id/textView9" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoadActivityWorkspaceEdited"
+        android:layout_toEndOf="@+id/textView9"
+        android:id="@+id/LoadActivityWorkspaceSize"
+        android:text="size" />
 </RelativeLayout>

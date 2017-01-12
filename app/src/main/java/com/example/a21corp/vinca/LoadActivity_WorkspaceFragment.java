@@ -23,6 +23,7 @@ public class LoadActivity_WorkspaceFragment extends Fragment {
     private TextView title;
     private TextView created;
     private TextView edited;
+    private TextView size;
 
     public LoadActivity_WorkspaceFragment() {
     }
@@ -40,6 +41,7 @@ public class LoadActivity_WorkspaceFragment extends Fragment {
         title = (TextView)view.findViewById(R.id.LoadActivityWorkspaceTitle);
         created = (TextView)view.findViewById(R.id.LoadActivityWorkspaceCreated);
         edited = (TextView)view.findViewById(R.id.LoadActivityWorkspaceEdited);
+        size = (TextView)view.findViewById(R.id.LoadActivityWorkspaceSize);
         updateFragment();
     }
 
@@ -49,5 +51,6 @@ public class LoadActivity_WorkspaceFragment extends Fragment {
         title.setText(state.getString("title", "Unknown"));
         created.setText(state.getString("created", "Unknown"));
         edited.setText(state.getString("edited", "Unknown"));
+        size.setText(state.getString("size", "Unknown"));
     }
 }

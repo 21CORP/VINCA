@@ -81,14 +81,8 @@ public class VincaViewFabricator {
                 ActivityElementView activityElementView
                         = new ActivityElementView(context, (VincaActivity) element, project);
 
-                int maxSize = (int) context.getResources().getDimension(R.dimen.symbol_max_size);
-                if (((VincaActivity) element).nodes.size() > 1) {
-                    maxSize = (int) context.getResources().getDimension(R.dimen.symbol_mid_size);
-                }
                 for (int i = 0; i < ((VincaActivity) element).nodes.size(); i++) {
                     ImageView child = (ImageView) getVincaView(((VincaActivity) element).nodes.get(i));
-                    child.setMaxHeight(maxSize);
-                    child.setMaxWidth(maxSize);
                     activityElementView.add(child);
                 }
                 newView = activityElementView;

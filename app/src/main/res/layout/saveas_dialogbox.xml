@@ -18,7 +18,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:inputType="textCapSentences"
-        android:layout_below="@+id/create"
+        android:layout_below="@+id/saveas_title"
         android:layout_centerHorizontal="true">
         <requestFocus />
 
@@ -28,31 +28,15 @@
         android:background="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/create"
+        android:id="@+id/saveas_title"
+        android:text="Save as"
         android:height="60dp"
         android:textColor="@android:color/background_light"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:background="@color/colorPrimaryDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/textView"
-        android:height="60dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
-        android:textColor="@color/White"
-        android:textSize="24sp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Save Project As"
-        android:layout_alignBaseline="@+id/create"
-        android:layout_alignBottom="@+id/create"
-        android:layout_centerHorizontal="true"
-        android:textAllCaps="false" />
 
 
 </RelativeLayout>

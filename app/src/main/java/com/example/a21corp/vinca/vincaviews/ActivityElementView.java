@@ -43,12 +43,21 @@ public class ActivityElementView extends ElementView {
     }
 
     public void add(View v){
-        int gridSize = ((int)Math.ceil(Math.sqrt(nodeLine.getChildCount() + 1)));
+        int columns = ((int)Math.ceil(Math.sqrt(nodeLine.getChildCount() + 1)));
+        int rows = columns > 2 ? 2 : columns;
         ImageView image = (ImageView)v;
-        image.setMaxHeight(image.getMaxHeight()/8);
-        image.setMaxWidth(image.getMaxWidth()/8);
-        nodeLine.setColumnCount(gridSize);
-        nodeLine.setRowCount(gridSize);
+        int scaleX = image.getMaxHeight()/rows;
+        int scaleY = image.getMaxWidth()/rows;
+        image.setMaxHeight(scaleX);
+        image.setMaxWidth(scaleY);
+        if(nodeLine.getChildCount() > 0)
+        {
+            ((ImageView)nodeLine.getChildAt(0)).setMaxHeight(scaleY);
+            ((ImageView)nodeLine.getChildAt(0)).setMaxWidth(scaleX);
+
+        }
+        nodeLine.setColumnCount(columns);
+        nodeLine.setRowCount(rows);
         nodeLine.addView(v);
     }
 

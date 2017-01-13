@@ -47,15 +47,13 @@
 
         <ImageButton
             android:contentDescription="Save as"
-            android:layout_width="@dimen/symbol_max_size"
             android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/ic_menu_save"
+            app:srcCompat="@drawable/save"
             android:id="@+id/saveas"
             android:background="@color/background_material_light_1"
 
 
-            />
-
+            android:layout_width="40dp" />
 
 
         <TextView
@@ -99,9 +97,9 @@
 
         <ImageButton
             android:contentDescription="Delete"
-            android:layout_width="@dimen/symbol_max_size"
+            android:layout_width="60dp"
             android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/ic_menu_delete"
+            app:srcCompat="@drawable/trashbin"
             android:id="@+id/trashbin"
             android:background="@color/background_material_light_1"
             />
@@ -109,7 +107,7 @@
             android:contentDescription="Settings"
             android:layout_width="@dimen/symbol_max_size"
             android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@android:drawable/ic_menu_manage"
+            app:srcCompat="@drawable/settings"
             android:id="@+id/settings"
             android:background="@color/background_material_light_1"
 

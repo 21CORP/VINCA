@@ -108,6 +108,7 @@ public class WorkspaceController implements Serializable {
             Container parent = cursor.parent;
             int index = parent.containerList.indexOf(cursor) + 1;
             setParent(element, parent, index);
+            setCursor(element);
         }
     }
 
@@ -152,7 +153,7 @@ public class WorkspaceController implements Serializable {
         notifyObservers();
     }
 
-    public void remove(Element vincaElement) {
+    public void remove(VincaElement vincaElement) {
         if (workspace.projects.remove(vincaElement)) {
             //The deleted element was a root-element
             if (workspace.projects.isEmpty()) {

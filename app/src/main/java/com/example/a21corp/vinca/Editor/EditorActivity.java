@@ -4,9 +4,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
@@ -38,13 +41,13 @@ import java.util.concurrent.RunnableFuture;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener
-        , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver {
+        , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, PopupMenu.OnMenuItemClickListener {
     private WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
     private GhostEditorView  pauseView, decisionView;
     private GhostEditorView processView, projectView, iterateView;
-    private ImageButton exportView, saveButton, undoButton, redoButton;
+    private ImageButton saveButton, undoButton, redoButton, settings;
     private ImageButton trashBin;
     private EditText projectNameBar;
     private TextView saveStatusBar;
@@ -152,9 +155,8 @@ public class EditorActivity extends AppCompatActivity
         //undoView = findViewById(R.id.undo);
         //redoView = findViewById(R.id.redo);
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
-        exportView = (ImageButton) findViewById(R.id.export);
-
-       // backButton = (ImageButton) findViewById(R.id.button_return);
+        settings = (ImageButton) findViewById(R.id.settings);
+        // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
@@ -180,7 +182,8 @@ public class EditorActivity extends AppCompatActivity
         //undoView.setOnClickListener(this);
         //redoView.setOnClickListener(this);
         saveButton.setOnClickListener(this);
-        exportView.setOnClickListener(this);
+
+        settings.setOnClickListener(this);
         //backButton.setOnClickListener(this);
         projectNameBar.setOnEditorActionListener(this);
 
@@ -199,29 +202,17 @@ public class EditorActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
 
-
         if (view instanceof GhostEditorView) {
             controller.addVincaElement(((GhostEditorView) view).getVincaElement());
         }
-        if(view==saveButton){
-            SaveAsDialog savepop = new SaveAsDialog();
-            savepop.setCurrentWorkspace(controller.workspace);
-            savepop.show(getFragmentManager(),"save as");
 
-            Log.d("export","serialized");
-
-            for (String s : projDir.list()) {
-                System.out.println(s);
-            }
-
+        if(view == settings){
+            PopupMenu popup = new PopupMenu(EditorActivity.this, settings);
+            popup.getMenuInflater().inflate(R.menu.editor_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(this);
+            popup.show();
         }
-        if (view == exportView) {
-            canvasToJPG();
-            //ProjectManager.saveProject(viewManager.workspaceController.workspace, dirPath);
 
-
-        }
-        //test
         if(view == undoButton){
             historian.undo();
         }
@@ -360,4 +351,27 @@ public class EditorActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item_export:
+                canvasToJPG();
+                break;
+
+            case R.id.item_saveas:
+                SaveAsDialog savepop = new SaveAsDialog();
+                savepop.setCurrentWorkspace(controller.workspace);
+                savepop.show(getFragmentManager(),"save as");
+                break;
+
+            default:
+
+
+                break;
+        }
+
+        return true;
+
+    }
 }

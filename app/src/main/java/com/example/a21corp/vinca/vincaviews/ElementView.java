@@ -3,8 +3,11 @@ package com.example.a21corp.vinca.vincaviews;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -95,40 +98,45 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
 
     @Override
     public void setParent(ContainerView view) {
-        /*Expandable oldParent = vincaElement.parent;
-        VincaElement newParent = container.getVincaElement();
-        MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
-        move.execute();*/
-        Container container = view.getVincaElement();
-        int index = container.containerList.size();
-        project.setParent(vincaElement, container, index);
+        Container parent = view.getVincaElement();
+        int index = parent.containerList.size() - 1;
+        index = getIndex(parent, index);
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
     public void setParent(ElementView view) {
-        //Trying to setParent Element onto a new Element. Add next to instead
-        /*Expandable oldParent = vincaElement.parent;
-        VincaElement newParent = element.getVincaElement().parent;
-        MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
-        move.execute();*/
         Element element = view.getVincaElement();
         Container parent = element.parent;
-        int index = parent.containerList.indexOf(element) + 1;
+        int index = parent.containerList.indexOf(element);
+        index = getIndex(parent, index);
         project.setParent(vincaElement, parent, index);
     }
 
     @Override
     public void setParent(NodeView view) {
-        //Trying to setParent Element onto Node. Add to Node's paren instead
-        /*Expandable oldParent = vincaElement.parent;
-        VincaElement newParent = node.getVincaElement().parent;
-        MoveCommand move = new MoveCommand(vincaElement, newParent, oldParent, controller);
-        move.execute();*/
         Node node = view.getVincaElement();
         VincaActivity nodeParent = node.parent;
         Container parent = nodeParent.parent;
-        int index = parent.containerList.indexOf(nodeParent) + 1;
+        int index = parent.containerList.indexOf(nodeParent);
+        index = getIndex(parent, index);
         project.setParent(vincaElement, parent, index);
+    }
+
+    private int getIndex(Container parent, int index) {
+        if (parent == vincaElement.parent) {
+            int oldIndex = parent.containerList.indexOf(vincaElement);
+            if ((oldIndex - 1) == index) {
+                return index;
+            }
+            if (oldIndex > index) {
+                index = index + 1;
+            }
+        }
+        else {
+            index = index + 1;
+        }
+        return index;
     }
 
     @Override
@@ -167,6 +175,9 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     @Override
     public void onClick(View v) {
         project.setCursor(vincaElement);
+        System.out.println("Animate!");
+        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+        v.startAnimation(pressAnimation);
         /**
         if (v == this) {
             project.setCursor(vincaElement);

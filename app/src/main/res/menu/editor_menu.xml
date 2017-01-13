@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/item_saveas"
+
+        android:title="Save as"
+
+        />
+
+    <item android:id="@+id/item_export"
+
+        android:title="Export" />
+
+
+    <item android:id="@+id/Help"
+
+        android:title="Help" />
+
+
+</menu>

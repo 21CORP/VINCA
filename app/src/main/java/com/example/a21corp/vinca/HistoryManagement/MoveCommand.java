@@ -14,7 +14,7 @@ public class MoveCommand implements Command {
     Element newParent;
     Element oldParent;
     int newIndex;
-    int oldIndex;
+    Integer oldIndex;
     WorkspaceController workspaceController;
 
     public MoveCommand(VincaElement element, Element newParent, Element oldParent, int newIndex, int oldIndex, WorkspaceController workspaceController){

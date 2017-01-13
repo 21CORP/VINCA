@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
@@ -99,7 +102,8 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         Container parent = view.getVincaElement();
         int index = parent.containerList.size() - 1;
         index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        //project.setParent(vincaElement, parent, index);
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     @Override
@@ -108,7 +112,8 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         Container parent = element.parent;
         int index = parent.containerList.indexOf(element);
         index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        //project.setParent(vincaElement, parent, index);
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     @Override
@@ -118,7 +123,8 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         Container parent = nodeParent.parent;
         int index = parent.containerList.indexOf(nodeParent);
         index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        //project.setParent(vincaElement, parent, index);
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     private int getIndex(Container parent, int index) {
@@ -140,12 +146,13 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     @Override
     public void addGhost(GhostEditorView view) {
         VincaElement newElement = VincaElement.create(view.getVincaElement().type);
-        project.setParent(newElement, vincaElement, vincaElement.containerList.size());
+        //project.setParent(newElement, vincaElement, vincaElement.containerList.size());
+        Historian.getInstance().storeAndExecute(new MoveCommand(newElement, vincaElement.parent, newElement.parent, vincaElement.containerList.size(), null, project));
     }
 
     @Override
     public void remove() {
-        project.remove(vincaElement);
+        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     @Override

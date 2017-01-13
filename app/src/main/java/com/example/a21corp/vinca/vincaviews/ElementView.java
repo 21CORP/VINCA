@@ -16,6 +16,10 @@ import android.widget.TextView;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
+import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
@@ -99,18 +103,16 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     @Override
     public void setParent(ContainerView view) {
         Container parent = view.getVincaElement();
-        int index = parent.containerList.size() - 1;
-        index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        int index = getIndex(parent, parent.containerList.size() - 1);
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     @Override
     public void setParent(ElementView view) {
         Element element = view.getVincaElement();
         Container parent = element.parent;
-        int index = parent.containerList.indexOf(element);
-        index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        int index = getIndex(parent, parent.containerList.indexOf(element));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     @Override
@@ -118,9 +120,8 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
         Node node = view.getVincaElement();
         VincaActivity nodeParent = node.parent;
         Container parent = nodeParent.parent;
-        int index = parent.containerList.indexOf(nodeParent);
-        index = getIndex(parent, index);
-        project.setParent(vincaElement, parent, index);
+        int index = getIndex(parent, parent.containerList.indexOf(nodeParent));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     private int getIndex(Container parent, int index) {
@@ -144,12 +145,13 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
         Container parent = vincaElement.parent;
         VincaElement newElement = VincaElement.create(view.getVincaElement().type);
         int index = parent.containerList.indexOf(vincaElement) + 1;
-        project.setParent(newElement, parent, index);
+        //project.setParent(newElement, parent, index);
+        Historian.getInstance().storeAndExecute(new MoveCommand(newElement, parent, newElement.parent, index, null, project));
     }
 
     @Override
     public void remove() {
-        project.remove(vincaElement);
+        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, vincaElement.parent.containerList.indexOf(vincaElement), project));
     }
 
     public void highlight() {

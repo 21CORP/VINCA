@@ -39,13 +39,13 @@ public class AutoSaver{
             @Override
             public void onFinish() {
                 Long deltaTime = (SystemClock.uptimeMillis() - historian.timeSinceChange);
-                System.out.println("nowTime: " + SystemClock.uptimeMillis());
-                System.out.println("historianTime: " + historian.timeSinceChange);
+                //System.out.println("nowTime: " + SystemClock.uptimeMillis());
+                //System.out.println("historianTime: " + historian.timeSinceChange);
                 if(deltaTime >= interval) {
-                    Log.d("Autosave", deltaTime + ", no fun...");
+                    //Log.d("Autosave", deltaTime + ", no fun...");
                 }
                 else{
-                    Log.d("Autosave", deltaTime + ", Save time!");
+                    //Log.d("Autosave", deltaTime + ", Save time!");
                     editorActivity.setSaveStatusBar(true);
                     ProjectManager.saveProject(workspace, dir);
                 }

@@ -1,9 +1,12 @@
 package com.example.a21corp.vinca.vincaviews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -51,6 +54,10 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     @Override
     public void onClick(View v) {
         project.setCursor(vincaElement);
+
+        System.out.println("Animate!");
+        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+        v.startAnimation(pressAnimation);
     }
 
     @Override
@@ -89,16 +96,18 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void setParent(ContainerView view) {
-        Container container = view.getVincaElement();
-        int index = container.containerList.size();
-        project.setParent(vincaElement, container, index);
+        Container parent = view.getVincaElement();
+        int index = parent.containerList.size() - 1;
+        index = getIndex(parent, index);
+        project.setParent(vincaElement, parent, index);
     }
 
     @Override
     public void setParent(ElementView view) {
         Element element = view.getVincaElement();
         Container parent = element.parent;
-        int index = parent.containerList.indexOf(element) + 1;
+        int index = parent.containerList.indexOf(element);
+        index = getIndex(parent, index);
         project.setParent(vincaElement, parent, index);
     }
 
@@ -107,8 +116,25 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         Node node = view.getVincaElement();
         VincaActivity nodeParent = node.parent;
         Container parent = nodeParent.parent;
-        int index = parent.containerList.indexOf(nodeParent) + 1;
+        int index = parent.containerList.indexOf(nodeParent);
+        index = getIndex(parent, index);
         project.setParent(vincaElement, parent, index);
+    }
+
+    private int getIndex(Container parent, int index) {
+        if (parent == vincaElement.parent) {
+            int oldIndex = parent.containerList.indexOf(vincaElement);
+            if ((oldIndex - 1) == index) {
+                return index;
+            }
+            if (oldIndex > index) {
+                index = index + 1;
+            }
+        }
+        else {
+            index = index + 1;
+        }
+        return index;
     }
 
     @Override

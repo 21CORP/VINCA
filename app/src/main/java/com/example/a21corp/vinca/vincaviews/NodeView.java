@@ -3,6 +3,8 @@ package com.example.a21corp.vinca.vincaviews;
 import android.content.Context;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -16,7 +18,7 @@ import com.example.a21corp.vinca.elements.VincaActivity;
  * Created by ymuslu on 12-11-2016
  */
 
-public class NodeView extends FrameLayout implements VincaElementView {
+public class NodeView extends FrameLayout implements VincaElementView, View.OnClickListener{
     private Node vincaElement;
     private ImageView view;
     protected WorkspaceController project;
@@ -85,6 +87,13 @@ public class NodeView extends FrameLayout implements VincaElementView {
     @Override
     public boolean onDrag(View v, DragEvent event) {
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        System.out.println("Animate!");
+        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+        v.startAnimation(pressAnimation);
     }
 
 }

@@ -46,6 +46,7 @@ public class VincaViewFabricator {
         }
         if (view instanceof VincaElementView) {
             view.setOnTouchListener(editor);
+            view.setOnLongClickListener(editor);
             if (project.workspace.getCursor() == ((VincaElementView) view).getVincaElement()) {
                 ((VincaElementView) view).highlight();
             }

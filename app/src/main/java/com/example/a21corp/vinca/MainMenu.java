@@ -5,7 +5,11 @@ import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
@@ -13,12 +17,16 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
     Button create;
     Button load;
+    ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu2);
+        logo = (ImageView) findViewById(R.id.logoImage);
+        Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
+        logo.startAnimation(rotateLogo);
         create = (Button) findViewById(R.id.newProjectButton);
         create.setOnClickListener(this);
         load = (Button) findViewById(R.id.loadMenuButton);

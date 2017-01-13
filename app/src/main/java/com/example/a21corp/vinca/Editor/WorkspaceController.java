@@ -138,8 +138,7 @@ public class WorkspaceController implements Serializable {
 
     private void setParent(Element element, Container parent, int index)
     {
-        if(element.parent!=null)
-            element.parent.containerList.remove(element);
+        remove(element);
         parent.containerList.add(index, element);
         element.parent = parent;
     }
@@ -161,7 +160,9 @@ public class WorkspaceController implements Serializable {
             }
         }
         else {
-            vincaElement.parent.containerList.remove(vincaElement);
+            if (vincaElement.parent != null) {
+                vincaElement.parent.containerList.remove(vincaElement);
+            }
         }
         notifyObservers();
     }
@@ -172,5 +173,11 @@ public class WorkspaceController implements Serializable {
 
     public String getWorkspaceTitle() {
         return workspace.getTitle();
+    }
+
+    public void addProject(Container element) {
+        remove(element);
+        workspace.projects.add(element);
+        notifyObservers();
     }
 }

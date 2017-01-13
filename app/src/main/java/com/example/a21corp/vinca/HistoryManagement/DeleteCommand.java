@@ -12,8 +12,11 @@ public class DeleteCommand implements Command{
     VincaElement element;
     Element oldParent;
     WorkspaceController workspaceController;
+    int oldIndex;
 
-    public DeleteCommand(VincaElement element, Element oldParent, WorkspaceController workspaceController){
+    public DeleteCommand(VincaElement element, Element oldParent
+            , int oldIndex, WorkspaceController workspaceController){
+        this.oldIndex = oldIndex;
         this.element = element;
         this.oldParent = oldParent;
         this.workspaceController = workspaceController;
@@ -21,11 +24,11 @@ public class DeleteCommand implements Command{
 
     @Override
     public void execute(){
-        //workspaceController.remove(element);
+        workspaceController.remove(element);
     }
 
     @Override
     public void inverse(){
-        //workspaceController.setParent(element, oldParent, );
+        workspaceController.setParent(element, oldParent, oldIndex);
     }
 }

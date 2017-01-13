@@ -3,6 +3,7 @@ package com.example.a21corp.vinca;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -95,16 +96,13 @@ public class ImageExporter {
     //create bitmap from view and returns it
     private Bitmap getBitmapFromView(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int left = view.getLeft();
-        int top = view.getTop();
-        left = 0;
-        top = 0;
-        int width = view.getMeasuredWidth() - left;
-        int height = view.getMeasuredHeight() - top;
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight()
+                , Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        view.layout(view.getLeft(), view.getTop(), width, height);
-        Bitmap bitmap = view.getDrawingCache();
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.draw(canvas);
         return bitmap;
     }
 

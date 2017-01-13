@@ -1,18 +1,24 @@
 package com.example.a21corp.vinca.Editor;
 
 import android.content.Context;
+import android.view.DragEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaElement;
+import com.example.a21corp.vinca.vincaviews.ContainerView;
+import com.example.a21corp.vinca.vincaviews.ElementView;
+import com.example.a21corp.vinca.vincaviews.NodeView;
+import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
 /**
  * Created by Sebastian on 1/9/2017.
  */
 
-public class GhostEditorView extends LinearLayout {
+public class GhostEditorView extends LinearLayout implements VincaElementView {
     private VincaElement prototype;
     private int type;
     public GhostEditorView(Context context, VincaElement prototype)
@@ -68,6 +74,46 @@ public class GhostEditorView extends LinearLayout {
     public VincaElement getVincaElement()
     {
         return VincaElement.create(type);
+    }
+
+    @Override
+    public View getView() {
+        return null;
+    }
+
+    @Override
+    public void setParent(ContainerView container) {
+
+    }
+
+    @Override
+    public void setParent(ElementView element) {
+
+    }
+
+    @Override
+    public void setParent(NodeView node) {
+
+    }
+
+    @Override
+    public void addGhost(GhostEditorView view) {
+
+    }
+
+    @Override
+    public void remove() {
+
+    }
+
+    @Override
+    public void highlight() {
+
+    }
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        return false;
     }
 
 

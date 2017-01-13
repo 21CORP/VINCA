@@ -11,8 +11,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -22,22 +20,18 @@ import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
-import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
-import com.example.a21corp.vinca.vincaviews.ElementView;
-import com.example.a21corp.vinca.vincaviews.NodeView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.VincaViewFabricator;
 
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.RunnableFuture;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener
@@ -131,9 +125,9 @@ public class EditorActivity extends AppCompatActivity
         elementPanel = (LinearLayout) findViewById(R.id.panel);
 
         //Containers
-        projectView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_PROJECT));
-        processView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_PROCESS));
-        iterateView = new GhostEditorView(this, (Container)VincaElement.create(VincaElement.ELEMENT_ITERATE));
+        projectView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_PROJECT));
+        processView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_PROCESS));
+        iterateView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_ITERATE));
         //Elements
         pauseView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_PAUSE));
         decisionView = new GhostEditorView(this, VincaElement.create(VincaElement.ELEMENT_DECISION));
@@ -187,7 +181,6 @@ public class EditorActivity extends AppCompatActivity
         //backButton.setOnClickListener(this);
         projectNameBar.setOnEditorActionListener(this);
 
-        trashBin.setOnClickListener(this);
         //trashBin.setClickable(false);
 
         undoButton = (ImageButton) findViewById(R.id.buttonUndo);
@@ -195,6 +188,7 @@ public class EditorActivity extends AppCompatActivity
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
 
+        scrollView.setOnDragListener(this);
 
 
     }
@@ -292,27 +286,46 @@ public class EditorActivity extends AppCompatActivity
 
     @Override
     public void updateCanvas() {
-        Container vincaRoot = controller.workspace.projects.get(0);
-        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
-        View root = fabricator.getVincaView(vincaRoot);
         this.canvas.removeAllViews();
-        this.canvas.addView(root);
+        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
+        for (Container vincaRoot : controller.workspace.projects) {
+            View root = fabricator.getVincaView(vincaRoot);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT
+                            , LinearLayout.LayoutParams.WRAP_CONTENT);
+            root.setLayoutParams(lp);
+            this.canvas.addView(root);
+        }
         this.canvas.invalidate();
     }
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-            View draggedView = (View) event.getLocalState();
-            draggedView.setVisibility(View.VISIBLE);
-            if (! (draggedView instanceof GhostEditorView)) {
-                try {
-                    draggedView.setOnDragListener((VincaElementView) draggedView);
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DROP:
+                if (v == scrollView) {
+                    try {
+                        VincaElementView draggedView = (VincaElementView) event.getLocalState();
+                        Container element = (Container) draggedView.getVincaElement();
+                        if (element.type == VincaElement.ELEMENT_PROJECT) {
+                            controller.addProject(element);
+                        }
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
+            case DragEvent.ACTION_DRAG_ENDED:
+                View draggedView = (View) event.getLocalState();
+                draggedView.setVisibility(View.VISIBLE);
+                if (!(draggedView instanceof GhostEditorView)) {
+                    try {
+                        draggedView.setOnDragListener((VincaElementView) draggedView);
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
         }
         return true;
     }
@@ -330,17 +343,28 @@ public class EditorActivity extends AppCompatActivity
         Element cursor = controller.workspace.getCursor();
         controller.setCursor(null);
 
-        Container vincaRoot = controller.workspace.projects.get(0);
-        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
-        ViewGroup viewToExport = (ViewGroup) fabricator.getVincaView(vincaRoot);
-
-        controller.setCursor(cursor);
-
+        LinearLayout viewToExport = new LinearLayout(this);
+        viewToExport.setOrientation(LinearLayout.VERTICAL);
         viewToExport.setBackgroundColor(Color.WHITE);
-        viewToExport.getChildAt(0).setBackgroundColor(Color.WHITE);
+
+        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
+        for (Container vincaRoot : controller.workspace.projects) {
+            View root = fabricator.getVincaView(vincaRoot);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT
+                            , LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(20, 0, 20, 0);
+            root.setLayoutParams(lp);
+            viewToExport.addView(root);
+        }
+
+        viewToExport.getChildAt(0).setBackgroundColor(0);
+
         ExportDialog exportDialog = new ExportDialog();
         exportDialog.setExportTarget(this, viewToExport, controller.getWorkspaceTitle());
         exportDialog.show(getFragmentManager(), "Export as");
+
+        controller.setCursor(cursor);
     }
 
     @Override

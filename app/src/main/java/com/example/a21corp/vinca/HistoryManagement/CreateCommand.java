@@ -18,12 +18,12 @@ public class CreateCommand implements Command{
 
     @Override
     public void execute(){
-        //workspaceController.addVincaElement(element);
+        workspaceController.addVincaElement(element);
     }
 
     @Override
     public void inverse(){
-        //workspaceController.remove(element);
+        workspaceController.remove(element);
     }
 
 }

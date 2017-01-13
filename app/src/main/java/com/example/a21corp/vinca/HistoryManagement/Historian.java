@@ -16,7 +16,6 @@ import java.util.Stack;
  */
 
 public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
-    private static final long serialVersionUID = 12345;
     private static Historian instance;
     public long timeSinceChange = SystemClock.uptimeMillis();
     private Stack<Command> historyStack = new Stack<Command>();

@@ -1,9 +1,12 @@
 package com.example.a21corp.vinca.vincaviews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -51,6 +54,10 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     @Override
     public void onClick(View v) {
         project.setCursor(vincaElement);
+
+        System.out.println("Animate!");
+        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+        v.startAnimation(pressAnimation);
     }
 
     @Override

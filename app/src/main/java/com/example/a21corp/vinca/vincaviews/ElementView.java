@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.DragEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -167,6 +169,9 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     @Override
     public void onClick(View v) {
         project.setCursor(vincaElement);
+        System.out.println("Animate!");
+        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+        v.startAnimation(pressAnimation);
         /**
         if (v == this) {
             project.setCursor(vincaElement);

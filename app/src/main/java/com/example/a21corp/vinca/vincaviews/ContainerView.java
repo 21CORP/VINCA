@@ -147,7 +147,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     public void addGhost(GhostEditorView view) {
         VincaElement newElement = VincaElement.create(view.getVincaElement().type);
         //project.setParent(newElement, vincaElement, vincaElement.containerList.size());
-        Historian.getInstance().storeAndExecute(new MoveCommand(newElement, vincaElement.parent, newElement.parent, vincaElement.containerList.size(), null, project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(newElement, vincaElement, null, vincaElement.containerList.size(), null, project));
     }
 
     @Override

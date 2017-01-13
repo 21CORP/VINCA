@@ -13,12 +13,11 @@ public class MoveCommand implements Command {
     VincaElement element;
     Element newParent;
     Element oldParent;
-    WorkspaceController workspaceController;
     int newIndex;
     int oldIndex;
+    WorkspaceController workspaceController;
 
-    public MoveCommand(VincaElement element, VincaActivity newParent, VincaActivity oldParent
-            , int newIndex, int oldIndex, WorkspaceController workspaceController){
+    public MoveCommand(VincaElement element, Element newParent, Element oldParent, int newIndex, int oldIndex, WorkspaceController workspaceController){
         this.newIndex = newIndex;
         this.oldIndex = oldIndex;
         this.element = element;
@@ -37,6 +36,8 @@ public class MoveCommand implements Command {
         if(oldParent == null){
             workspaceController.remove(element);
         }
-        workspaceController.setParent(element, oldParent, oldIndex);
+        else {
+            workspaceController.setParent(element, oldParent, oldIndex);
+        }
     }
 }

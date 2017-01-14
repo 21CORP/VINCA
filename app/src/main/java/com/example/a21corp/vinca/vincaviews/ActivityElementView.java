@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaActivity;
@@ -70,7 +72,8 @@ public class ActivityElementView extends ElementView {
     public void addGhost(GhostEditorView view) {
         try {
             Node newElement = (Node) VincaElement.create(view.getVincaElement().type);
-            project.setParent(newElement, vincaElement, 0);
+            Historian.getInstance().storeAndExecute(new MoveCommand(newElement
+                    , vincaElement, null, vincaElement.nodes.size(), null, project));
         } catch (ClassCastException e) {
             super.addGhost(view);
         }

@@ -124,6 +124,9 @@ public class WorkspaceController implements Serializable {
     }
 
     public void setParent(VincaElement vincaElement, Element parent, int index) {
+        if (parent == null && vincaElement.type == VincaElement.ELEMENT_PROJECT) {
+            addProject((Container) vincaElement, index);
+        }
         if (vincaElement instanceof Element && parent instanceof Container) {
             setParent((Element) vincaElement, (Container) parent, index);
         }
@@ -184,10 +187,14 @@ public class WorkspaceController implements Serializable {
         return workspace.getTitle();
     }
 
-    public void addProject(Container element) {
+    public void addProject(Container element, int index) {
         remove(element);
-        workspace.projects.add(element);
+        workspace.projects.add(index, element);
         notifyObservers();
+    }
+
+    public void addProject(Container element) {
+        addProject(element, workspace.projects.size());
     }
 
     public Element getCursor() {

@@ -9,8 +9,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.example.a21corp.vinca.Editor.ProjectManager;
+
+import java.io.File;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener{
@@ -33,7 +38,31 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         load.setOnClickListener(this);
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //MainMenu is handling this as CreateMenuPopup is a fragment and hence its onActivity is not called for whatever reason
+        if(requestCode == CreateMenuPopUp.FILE_SELECT_CODE){
+            if(resultCode == RESULT_OK){
+                String path = data.getDataString();
+                String title = path.substring(path.lastIndexOf("/")+1).replace(".ser", "");
+                System.out.println(path);
+                System.out.println(title);
+                if(ProjectManager.inputCheck(title, getFilesDir().getAbsolutePath() + File.separator + "workspaces")) {
+                    try {
+                        ProjectManager.loadProject(data.getDataString()); //TODO useless path
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "File not compatible, please load a VincaApp file", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "There is already a file with that name", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
 
+    }
 
     @Override
     public void onClick(View v) {

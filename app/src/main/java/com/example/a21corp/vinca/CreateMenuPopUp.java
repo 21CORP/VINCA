@@ -29,7 +29,7 @@ public class CreateMenuPopUp extends DialogFragment {
     EditText projectName;
     private String dirPath;
     private File projDir;
-    private static final int FILE_SELECT_CODE = 1;
+    public static final int FILE_SELECT_CODE = 1;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -96,30 +96,7 @@ public class CreateMenuPopUp extends DialogFragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == FILE_SELECT_CODE){
-            if(resultCode == RESULT_OK){
-                String path = data.getDataString();
-                String title = path.substring(path.lastIndexOf("/")+1).replace(".ser", "");
-                System.out.println(path);
-                System.out.println(title);
-                if(ProjectManager.inputCheck(title, dirPath)) {
-                    try {
-                        ProjectManager.loadProject(data.getDataString()); //TODO useless path
-                    } catch (Exception e) {
-                        Toast.makeText(getActivity().getApplicationContext(), "File not compatible, please load a VincaApp file", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-                }
-                else{
-                    Toast.makeText(getActivity().getApplicationContext(), "There is already a file with that name", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
 
-    }
 }
 
 

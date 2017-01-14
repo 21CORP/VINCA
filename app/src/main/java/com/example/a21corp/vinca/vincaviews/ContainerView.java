@@ -103,7 +103,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         int index = parent.containerList.size() - 1;
         index = getIndex(parent, index);
         //project.setParent(vincaElement, parent, index);
-        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, project));
     }
 
     @Override
@@ -113,7 +113,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         int index = parent.containerList.indexOf(element);
         index = getIndex(parent, index);
         //project.setParent(vincaElement, parent, index);
-        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, project));
     }
 
     @Override
@@ -124,7 +124,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         int index = parent.containerList.indexOf(nodeParent);
         index = getIndex(parent, index);
         //project.setParent(vincaElement, parent, index);
-        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, vincaElement.parent.containerList.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, parent, vincaElement.parent, index, project));
     }
 
     private int getIndex(Container parent, int index) {
@@ -148,7 +148,8 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
         try {
             Element newElement = (Element) VincaElement.create(view.getVincaElement().type);
             //project.setParent(newElement, vincaElement, vincaElement.containerList.size());
-            Historian.getInstance().storeAndExecute(new MoveCommand(newElement, vincaElement, null, vincaElement.containerList.size(), null, project));
+            Historian.getInstance().storeAndExecute(new MoveCommand(newElement, vincaElement, null
+                    , vincaElement.containerList.size(), project));
         } catch (ClassCastException e) {
             //Containers may only hold Elements. Attempted to add something else
             e.printStackTrace();
@@ -158,14 +159,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     @Override
     public void remove() {
         Container parent = vincaElement.parent;
-        int index;
-        if (parent == null) {
-            index = project.workspace.projects.indexOf(vincaElement);
-        }
-        else {
-            index = vincaElement.parent.containerList.indexOf(vincaElement);
-        }
-        DeleteCommand delCmd = new DeleteCommand(vincaElement, parent, index, project);
+        DeleteCommand delCmd = new DeleteCommand(vincaElement, parent, project);
         Historian.getInstance().storeAndExecute(delCmd);
     }
 

@@ -65,13 +65,13 @@ public class NodeView extends FrameLayout implements VincaElementView, View.OnCl
         Node node = view.getVincaElement();
         VincaActivity vincaActivity = node.parent;
         //project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
-        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), vincaElement.parent.nodes.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), project));
     }
 
     public void setParent(ActivityElementView view) {
         VincaActivity vincaActivity = view.getVincaElement();
         //project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
-        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), vincaElement.parent.nodes.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), project));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NodeView extends FrameLayout implements VincaElementView, View.OnCl
     @Override
     public void remove() {
         //project.remove(vincaElement);
-        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, vincaElement.parent.nodes.indexOf(vincaElement), project));
+        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, project));
     }
 
     @Override

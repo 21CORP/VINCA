@@ -74,7 +74,7 @@ public class ActivityElementView extends ElementView {
         try {
             Node newElement = (Node) VincaElement.create(view.getVincaElement().type);
             Historian.getInstance().storeAndExecute(new MoveCommand(newElement
-                    , vincaElement, null, vincaElement.nodes.size(), null, project));
+                    , vincaElement, null, vincaElement.nodes.size(), project));
         } catch (ClassCastException e) {
             super.addGhost(view);
         }

@@ -16,8 +16,16 @@ public class DeleteCommand implements Command{
     int oldIndex;
 
     public DeleteCommand(VincaElement element, Element oldParent
-            , int oldIndex, WorkspaceController workspaceController){
+            , WorkspaceController workspaceController){
         this.oldCursor = workspaceController.getCursor();
+
+        int oldIndex;
+        if (oldParent == null) {
+            oldIndex = workspaceController.workspace.projects.indexOf(element);
+        }
+        else {
+            oldIndex = element.parent.containerList.indexOf(element);
+        }
         this.oldIndex = oldIndex;
         this.element = element;
         this.oldParent = oldParent;

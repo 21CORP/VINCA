@@ -2,6 +2,7 @@ package com.example.a21corp.vinca.Editor;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.RestrictTo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -15,13 +16,12 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
-import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.elements.Container;
@@ -48,7 +48,8 @@ public class EditorActivity extends AppCompatActivity
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
-    public HorizontalScrollView scrollView;
+    public HorizontalScrollView hScroll;
+    public ScrollView vScroll;
     public LinearLayout elementPanel;
 
     private Historian historian;
@@ -85,9 +86,49 @@ public class EditorActivity extends AppCompatActivity
 
         initiateEditor();
         initiateWorkspace(savedInstanceState);
+        initiateScrollViews();
         trashBin.setOnDragListener(new TrashBin(this));
         historian = Historian.getInstance();
 
+    }
+
+    private void initiateScrollViews() {
+        vScroll.setOnTouchListener(new View.OnTouchListener() { //inner scroll listener
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        hScroll.setOnTouchListener(new View.OnTouchListener() { //outer scroll listener
+            private float mx, my, curX, curY;
+            private boolean started = false;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                curX = event.getX();
+                curY = event.getY();
+                int dx = (int) (mx - curX);
+                int dy = (int) (my - curY);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        if (started) {
+                            vScroll.scrollBy(0, dy);
+                            hScroll.scrollBy(dx, 0);
+                        } else {
+                            started = true;
+                        }
+                        mx = curX;
+                        my = curY;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        vScroll.scrollBy(0, dy);
+                        hScroll.scrollBy(dx, 0);
+                        started = false;
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -123,7 +164,8 @@ public class EditorActivity extends AppCompatActivity
     private void initiateEditor() {
         //Get references
         canvas = (LinearLayout) findViewById(R.id.canvas);
-        scrollView = (HorizontalScrollView) findViewById(R.id.scrollView);
+        hScroll = (HorizontalScrollView) findViewById(R.id.hScrollView);
+        vScroll = (ScrollView) findViewById(R.id.vScrollView);
         elementPanel = (LinearLayout) findViewById(R.id.panel);
 
         //Containers
@@ -190,7 +232,7 @@ public class EditorActivity extends AppCompatActivity
         undoButton.setOnClickListener(this);
         redoButton.setOnClickListener(this);
 
-        scrollView.setOnDragListener(this);
+        hScroll.setOnDragListener(this);
 
 
     }
@@ -310,7 +352,7 @@ public class EditorActivity extends AppCompatActivity
     public boolean onDrag(View v, DragEvent event) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DROP:
-                if (v == scrollView) {
+                if (v == hScroll) {
                     try {
                         VincaElementView draggedView = (VincaElementView) event.getLocalState();
                         Container element = (Container) draggedView.getVincaElement();

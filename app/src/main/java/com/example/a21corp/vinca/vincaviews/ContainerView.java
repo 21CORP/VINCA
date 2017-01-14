@@ -157,7 +157,16 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void remove() {
-        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, vincaElement.parent.containerList.indexOf(vincaElement), project));
+        Container parent = vincaElement.parent;
+        int index;
+        if (parent == null) {
+            index = project.workspace.projects.indexOf(vincaElement);
+        }
+        else {
+            index = vincaElement.parent.containerList.indexOf(vincaElement);
+        }
+        DeleteCommand delCmd = new DeleteCommand(vincaElement, parent, index, project);
+        Historian.getInstance().storeAndExecute(delCmd);
     }
 
     @Override

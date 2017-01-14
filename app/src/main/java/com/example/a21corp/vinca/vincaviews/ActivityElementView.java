@@ -13,6 +13,7 @@ import com.example.a21corp.vinca.Editor.WorkspaceController;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;

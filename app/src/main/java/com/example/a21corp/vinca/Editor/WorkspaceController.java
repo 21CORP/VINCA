@@ -189,4 +189,8 @@ public class WorkspaceController implements Serializable {
         workspace.projects.add(element);
         notifyObservers();
     }
+
+    public Element getCursor() {
+        return workspace.getCursor();
+    }
 }

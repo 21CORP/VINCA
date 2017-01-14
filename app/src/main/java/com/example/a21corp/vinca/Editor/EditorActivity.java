@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.elements.Container;
@@ -199,7 +200,11 @@ public class EditorActivity extends AppCompatActivity
 
         if (view instanceof GhostEditorView) {
             //controller.addVincaElement(((GhostEditorView) view).getVincaElement());
-            Historian.getInstance().storeAndExecute(new CreateCommand(((GhostEditorView) view).getVincaElement(),controller));
+            VincaElement element = ((GhostEditorView) view).getVincaElement();
+            if (InputValidator.moveIsValid(element, controller.getCursor())) {
+                CreateCommand createCmd = new CreateCommand(element, controller);
+                Historian.getInstance().storeAndExecute(createCmd);
+            }
         }
 
         if(view == settings){

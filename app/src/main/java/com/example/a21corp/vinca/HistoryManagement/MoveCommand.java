@@ -10,6 +10,7 @@ import com.example.a21corp.vinca.elements.VincaElement;
  */
 
 public class MoveCommand implements Command {
+    Element oldCursor;
     VincaElement element;
     Element newParent;
     Element oldParent;
@@ -17,7 +18,9 @@ public class MoveCommand implements Command {
     Integer oldIndex;
     WorkspaceController workspaceController;
 
-    public MoveCommand(VincaElement element, Element newParent, Element oldParent, int newIndex, Integer oldIndex, WorkspaceController workspaceController){
+    public MoveCommand(VincaElement element, Element newParent, Element oldParent, int newIndex
+            , Integer oldIndex, WorkspaceController workspaceController){
+        this.oldCursor = workspaceController.getCursor();
         this.newIndex = newIndex;
         this.oldIndex = oldIndex;
         this.element = element;
@@ -39,5 +42,6 @@ public class MoveCommand implements Command {
         else {
             workspaceController.setParent(element, oldParent, oldIndex);
         }
+        workspaceController.setCursor(oldCursor);
     }
 }

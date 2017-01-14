@@ -142,11 +142,17 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
 
     @Override
     public void addGhost(GhostEditorView view) {
-        Container parent = vincaElement.parent;
-        VincaElement newElement = VincaElement.create(view.getVincaElement().type);
-        int index = parent.containerList.indexOf(vincaElement) + 1;
-        //project.setParent(newElement, parent, index);
-        Historian.getInstance().storeAndExecute(new MoveCommand(newElement, parent, newElement.parent, index, null, project));
+        try {
+            Container parent = vincaElement.parent;
+            Element newElement = (Element) VincaElement.create(view.getVincaElement().type);
+            int index = parent.containerList.indexOf(vincaElement) + 1;
+            //project.setParent(newElement, parent, index);
+            Historian.getInstance().storeAndExecute(new MoveCommand(newElement, parent, newElement.parent, index, null, project));
+        } catch (ClassCastException e) {
+            //Elements must be within Containers. Containers may only hold Elements
+            //Attempted to add something else
+            e.printStackTrace();
+        }
     }
 
     @Override

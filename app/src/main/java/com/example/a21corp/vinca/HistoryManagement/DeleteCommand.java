@@ -9,6 +9,7 @@ import com.example.a21corp.vinca.elements.VincaElement;
  */
 
 public class DeleteCommand implements Command{
+    Element oldCursor;
     VincaElement element;
     Element oldParent;
     WorkspaceController workspaceController;
@@ -16,6 +17,7 @@ public class DeleteCommand implements Command{
 
     public DeleteCommand(VincaElement element, Element oldParent
             , int oldIndex, WorkspaceController workspaceController){
+        this.oldCursor = workspaceController.getCursor();
         this.oldIndex = oldIndex;
         this.element = element;
         this.oldParent = oldParent;
@@ -30,5 +32,6 @@ public class DeleteCommand implements Command{
     @Override
     public void inverse(){
         workspaceController.setParent(element, oldParent, oldIndex);
+        workspaceController.setCursor(oldCursor);
     }
 }

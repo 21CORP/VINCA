@@ -10,6 +10,9 @@ import android.widget.ImageView;
 
 import com.example.a21corp.vinca.Editor.GhostEditorView;
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaActivity;
@@ -48,12 +51,12 @@ public class NodeView extends FrameLayout implements VincaElementView, View.OnCl
     }
 
     @Override
-    public void setParent(ContainerView container) {
+    public void setParent(ContainerView container) { //Not allowed by grammar
         //project.setParent(node, (Container)container.getVincaElement());
     }
 
     @Override
-    public void setParent(ElementView element) {
+    public void setParent(ElementView element) { //Not allowed by grammar
         //project.setParent(node, (Element)element.getVincaElement());
     }
 
@@ -61,22 +64,25 @@ public class NodeView extends FrameLayout implements VincaElementView, View.OnCl
     public void setParent(NodeView view) {
         Node node = view.getVincaElement();
         VincaActivity vincaActivity = node.parent;
-        project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
+        //project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), vincaElement.parent.nodes.indexOf(vincaElement), project));
     }
 
     public void setParent(ActivityElementView view) {
         VincaActivity vincaActivity = view.getVincaElement();
-        project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
+        //project.setParent(vincaElement, vincaActivity, vincaActivity.nodes.size());
+        Historian.getInstance().storeAndExecute(new MoveCommand(vincaElement, vincaActivity, vincaElement.parent, vincaActivity.nodes.size(), vincaElement.parent.nodes.indexOf(vincaElement), project));
     }
 
     @Override
-    public void addGhost(GhostEditorView view) {
+    public void addGhost(GhostEditorView view) { //Not allowed by grammar
 
     }
 
     @Override
     public void remove() {
-        project.remove(vincaElement);
+        //project.remove(vincaElement);
+        Historian.getInstance().storeAndExecute(new DeleteCommand(vincaElement, vincaElement.parent, vincaElement.parent.nodes.indexOf(vincaElement), project));
     }
 
     @Override

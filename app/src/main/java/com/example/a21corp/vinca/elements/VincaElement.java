@@ -70,4 +70,8 @@ public class VincaElement implements Serializable{
             this.type = type;
         }
     }
+
+    public VincaElement getParent() {
+        return parent;
+    }
 }

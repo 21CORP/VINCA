@@ -15,4 +15,8 @@ public class Node extends VincaElement implements Serializable {
     protected Node(int elementType) {
         super(elementType);
     }
+
+    public VincaActivity getParent() {
+        return parent;
+    }
 }

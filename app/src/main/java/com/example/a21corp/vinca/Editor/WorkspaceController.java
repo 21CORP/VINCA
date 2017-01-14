@@ -149,10 +149,20 @@ public class WorkspaceController implements Serializable {
         }
         parent.nodes.add(index, node);
         node.parent = parent;
-        notifyObservers();
     }
 
     public void remove(VincaElement vincaElement) {
+        if (vincaElement instanceof Node) {
+            remove((Node) vincaElement);
+        }
+        else {
+            remove((Element) vincaElement);
+        }
+        notifyObservers();
+    }
+
+    private void remove(Element vincaElement) {
+        //This call will do nothing and return false if vincaElement is not in the list
         if (workspace.projects.remove(vincaElement)) {
             //The deleted element was a root-element
             if (workspace.projects.isEmpty()) {
@@ -160,14 +170,13 @@ public class WorkspaceController implements Serializable {
             }
         }
         else {
-            if (vincaElement.parent != null) {
+            if (vincaElement.getParent() != null) {
                 vincaElement.parent.containerList.remove(vincaElement);
             }
         }
-        notifyObservers();
     }
 
-    public void remove(Node node) {
+    private void remove(Node node) {
         node.parent.nodes.remove(node);
     }
 

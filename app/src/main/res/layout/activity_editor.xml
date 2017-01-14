@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_editor"
@@ -7,12 +7,9 @@
     android:layout_height="match_parent"
     tools:context="com.example.a21corp.vinca.Editor.EditorActivity"
     android:background="@color/White"
-    android:rowCount="2"
-    android:columnCount="2"
     tools:ignore="HardcodedText"
     android:orientation="vertical"
-    android:focusableInTouchMode="true"
-    >
+    android:focusableInTouchMode="true">
 
     <TableRow
         android:id="@+id/top_bar"
@@ -20,18 +17,6 @@
         android:layout_height="wrap_content"
         android:gravity="start|center_vertical"
         android:background="@color/background_material_light_1">
-
-
-       <!--<ImageButton
-            android:contentDescription="Return to main menu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="?android:attr/homeAsUpIndicator"
-            android:id="@+id/button_return"
-            android:layout_weight="1" />
-            -->
-
-
 
         <EditText
             android:text="Project Skeleton"
@@ -51,10 +36,7 @@
             app:srcCompat="@drawable/save"
             android:id="@+id/saveas"
             android:background="@color/background_material_light_1"
-
-
             android:layout_width="40dp" />
-
 
         <TextView
             android:text="Saving..."
@@ -64,24 +46,10 @@
             android:layout_weight="2"
             android:textColor="@color/primary_text_light" />
 
-        <!--
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_revert"
-                    android:id="@+id/undo" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_menu_rotate"
-                    android:id="@+id/redo" />
-        -->
         <ImageButton
             app:srcCompat="@drawable/undo"
             android:id="@+id/buttonUndo"
             android:background="@color/background_material_light_1"
-
             android:layout_width="40dp"
             android:layout_height="60dp" />
 
@@ -93,48 +61,80 @@
             android:background="@color/background_material_light_1"
             android:layout_height="60dp" />
 
-
-
         <ImageButton
             android:contentDescription="Delete"
             android:layout_width="60dp"
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@drawable/trashbin"
             android:id="@+id/trashbin"
-            android:background="@color/background_material_light_1"
-            />
+            android:background="@color/background_material_light_1" />
+
         <ImageButton
             android:contentDescription="Settings"
             android:layout_width="@dimen/symbol_max_size"
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@drawable/settings"
             android:id="@+id/settings"
-            android:background="@color/background_material_light_1"
-
-
-
-            />
-
-
+            android:background="@color/background_material_light_1" />
 
     </TableRow>
 
+    <View
+        android:id="@+id/top_bar_end"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_toEndOf="@id/top_bar"
+        android:layout_below="@id/top_bar"/>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/panel_container"
+        android:layout_toStartOf="@id/top_bar_end"
+        android:layout_below="@id/top_bar_end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/background_material_light_2"
+        android:orientation="vertical"
+        android:gravity="center">
 
-        <HorizontalScrollView
-            android:id="@+id/hScrollView"
-            android:layout_width="0dp"
+        <ScrollView
+            android:id="@+id/panel_scroller"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:layerType="software">
+            android:background="@color/background_material_light_2">
 
-            <ScrollView
-                android:id="@+id/vScrollView"
+            <LinearLayout
+                android:id="@+id/panel"
+                android:gravity="top|center_horizontal"
+                android:layout_gravity="center"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_toStartOf="@id/panel_container"
+        android:layout_below="@id/top_bar"
+        android:id="@+id/hScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:scrollbarStyle="outsideOverlay"
+        android:fillViewport="true" >
+
+        <ScrollView
+            android:id="@+id/vScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="outsideOverlay"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -142,41 +142,14 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:background="#FFFFFF">
 
                 </LinearLayout>
 
-            </ScrollView>
+            </LinearLayout>
 
-        </HorizontalScrollView>
+        </ScrollView>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/background_material_light_2"
-            android:orientation="vertical"
-            android:gravity="center">
+    </HorizontalScrollView>
 
-            <ScrollView
-            android:id="@+id/panel_scroller"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/background_material_light_2">
-
-                <LinearLayout
-                    android:id="@+id/panel"
-                    android:gravity="top|center_horizontal"
-                    android:layout_gravity="center"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </LinearLayout>
-
-            </ScrollView>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

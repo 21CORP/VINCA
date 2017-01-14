@@ -89,7 +89,7 @@ public class CreateMenuPopUp extends DialogFragment {
         intent.setType("*/*"); //TODO change to "*/*.ser" when we know it works
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
-            startActivityForResult(intent, FILE_SELECT_CODE);
+            getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
         }
         catch(Exception e){
             e.printStackTrace();

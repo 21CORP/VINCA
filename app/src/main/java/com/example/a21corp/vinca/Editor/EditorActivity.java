@@ -2,7 +2,6 @@ package com.example.a21corp.vinca.Editor;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.RestrictTo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -20,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.AutoSaver;
+import com.example.a21corp.vinca.HistoryManagement.AddProjectCommand;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.R;
@@ -357,7 +357,8 @@ public class EditorActivity extends AppCompatActivity
                         VincaElementView draggedView = (VincaElementView) event.getLocalState();
                         Container element = (Container) draggedView.getVincaElement();
                         if (element.type == VincaElement.ELEMENT_PROJECT) {
-                            controller.addProject(element);
+                            AddProjectCommand addProjectCmd = new AddProjectCommand(element, controller);
+                            Historian.getInstance().storeAndExecute(addProjectCmd);
                         }
                     } catch (ClassCastException e) {
                         e.printStackTrace();

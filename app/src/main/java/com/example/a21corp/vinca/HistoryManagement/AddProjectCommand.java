@@ -1,34 +1,33 @@
 package com.example.a21corp.vinca.HistoryManagement;
 
 import com.example.a21corp.vinca.Editor.WorkspaceController;
+import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.VincaElement;
 
 /**
- * Created by Thomas on 04-01-2017.
+ * Created by ymuslu on 14-01-2017.
  */
 
-public class CreateCommand implements Command{
-    Element cursor;
-    VincaElement element;
+public class AddProjectCommand implements Command {
+    Element oldCursor;
+    Container element;
     WorkspaceController workspaceController;
 
-    public CreateCommand(VincaElement element, WorkspaceController workspaceController){
-        this.cursor = workspaceController.getCursor();
+    public AddProjectCommand(Container element, WorkspaceController workspaceController){
+        this.oldCursor = workspaceController.getCursor();
         this.element = element;
         this.workspaceController = workspaceController;
     }
 
     @Override
     public void execute(){
-        workspaceController.setCursor(cursor);
-        workspaceController.addVincaElement(element);
+        workspaceController.addProject(element);
     }
 
     @Override
     public void inverse(){
         workspaceController.remove(element);
-        workspaceController.setCursor(cursor);
+        workspaceController.setCursor(oldCursor);
     }
-
 }

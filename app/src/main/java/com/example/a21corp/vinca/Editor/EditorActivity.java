@@ -2,9 +2,11 @@ package com.example.a21corp.vinca.Editor;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.text.Html;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
@@ -20,12 +22,18 @@ import android.widget.TextView;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.HistoryManagement.AddProjectCommand;
+import com.example.a21corp.vinca.HistoryManagement.CopyCommand;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
+import com.example.a21corp.vinca.HistoryManagement.CutCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
+import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
+import com.example.a21corp.vinca.HistoryManagement.PasteCommand;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
+import com.example.a21corp.vinca.elements.Node;
+import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
@@ -44,7 +52,7 @@ public class EditorActivity extends AppCompatActivity
     private GhostEditorView  pauseView, decisionView;
     private GhostEditorView processView, projectView, iterateView;
     private ImageButton saveButton, undoButton, redoButton, settings;
-    private ImageButton trashBin;
+    private ImageButton trashBin, copyButton, cutBotton, pasteButton;
     private EditText projectNameBar;
     private TextView saveStatusBar;
     public LinearLayout canvas;
@@ -126,7 +134,7 @@ public class EditorActivity extends AppCompatActivity
                         started = false;
                         break;
                 }
-                return true;
+                return false;
             }
         });
     }
@@ -188,16 +196,16 @@ public class EditorActivity extends AppCompatActivity
         elementPanel.addView(processView);
         elementPanel.addView(projectView);
 
-
-
-        //undoView = findViewById(R.id.undo);
-        //redoView = findViewById(R.id.redo);
+        //MISC Views
         saveButton = (ImageButton) findViewById(R.id.saveas) ;
         settings = (ImageButton) findViewById(R.id.settings);
-        // backButton = (ImageButton) findViewById(R.id.button_return);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
         saveStatusBar = (TextView) findViewById(R.id.text_save_status);
+        copyButton = (ImageButton) findViewById(R.id.buttonCopy);
+        cutBotton = (ImageButton) findViewById(R.id.buttonCut);
+        pasteButton = (ImageButton) findViewById(R.id.buttonPaste);
+
         //Listen to VINCA symbols
         projectView.setOnTouchListener(this);
         projectView.setOnClickListener(this);
@@ -217,8 +225,9 @@ public class EditorActivity extends AppCompatActivity
         methodView.setOnClickListener(this);
 
         //Listen to misc. buttons
-        //undoView.setOnClickListener(this);
-        //redoView.setOnClickListener(this);
+        copyButton.setOnClickListener(this);
+        cutBotton.setOnClickListener(this);
+        pasteButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
         settings.setOnClickListener(this);
@@ -262,6 +271,42 @@ public class EditorActivity extends AppCompatActivity
         if(view == redoButton){
             historian.redo();
         }
+        if(view == copyButton){
+            copy();
+        }
+        if (view == cutBotton) {
+            cut();
+        }
+        if (view == pasteButton) {
+            paste();
+        }
+    }
+
+    private void paste() {
+        int index;
+        Element cursor = controller.getCursor();
+        if (cursor instanceof Container) {
+            index = ((Container) cursor).containerList.size();
+        }
+        else if (cursor instanceof VincaActivity) {
+            index = ((VincaActivity) cursor).nodes.size();
+            cursor = cursor.getParent();
+        }
+        else {
+            return;
+        }
+        historian.storeAndExecute(new PasteCommand(cursor, index, controller));
+    }
+
+    private void cut() {
+        VincaElement element = controller.getCursor();
+        Element parent = element.getParent();
+        historian.storeAndExecute(new CutCommand(element, parent, controller));
+    }
+
+    private void copy() {
+        VincaElement element = controller.getCursor();
+        historian.storeAndExecute(new CopyCommand(element, controller));
     }
 
     @Override
@@ -357,8 +402,9 @@ public class EditorActivity extends AppCompatActivity
                         VincaElementView draggedView = (VincaElementView) event.getLocalState();
                         Container element = (Container) draggedView.getVincaElement();
                         if (element.type == VincaElement.ELEMENT_PROJECT) {
-                            AddProjectCommand addProjectCmd = new AddProjectCommand(element, controller);
-                            Historian.getInstance().storeAndExecute(addProjectCmd);
+                            Container parent = element.parent;
+                            Historian.getInstance().storeAndExecute
+                                    (new AddProjectCommand(element, parent, controller));
                         }
                     } catch (ClassCastException e) {
                         e.printStackTrace();

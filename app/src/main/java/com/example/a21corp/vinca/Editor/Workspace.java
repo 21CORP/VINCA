@@ -17,6 +17,7 @@ public class Workspace implements Serializable {
     private String title;
     public ArrayList<Container> projects = new ArrayList<Container>();
     public Element cursor;
+    private VincaElement clipboard;
 
     public Workspace(String title, ArrayList<Container> projects) {
         this.title = title;
@@ -45,5 +46,14 @@ public class Workspace implements Serializable {
             cursor = projects.get(0);
         }
         return cursor;
+    }
+
+    public VincaElement getClipboard() {
+        return clipboard;
+    }
+
+
+    public void setClipboard(VincaElement clipboard) {
+        this.clipboard = clipboard;
     }
 }

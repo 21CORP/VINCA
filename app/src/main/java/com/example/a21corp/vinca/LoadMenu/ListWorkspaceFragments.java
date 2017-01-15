@@ -67,6 +67,7 @@ public class ListWorkspaceFragments extends ListFragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                //TODO: Input validation
                 ((FolderAdapter)getListAdapter()).FilterDirectory(newText);
                 return true;
             }

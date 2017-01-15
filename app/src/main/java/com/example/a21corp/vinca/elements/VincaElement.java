@@ -71,7 +71,44 @@ public class VincaElement implements Serializable{
         }
     }
 
-    public VincaElement getParent() {
+    public Element getParent() {
         return parent;
+    }
+
+    public static VincaElement makeCopy(VincaElement element) {
+        if (element instanceof Container) {
+            return makeCopy(cloneContainer((Container) element), element);
+        }
+        else if (element instanceof VincaActivity) {
+            return makeCopy(cloneVincaActivity((VincaActivity) element), element);
+        }
+        else {
+            return makeCopy(create(element.type), element);
+        }
+    }
+
+    private static Container cloneContainer(Container container) {
+        Container clone = (Container) create(container.type);
+        clone.isOpen = container.isOpen;
+        for (Element element : container.containerList) {
+            clone.containerList.add((Element) makeCopy(element));
+        }
+        return (Container) makeCopy(clone, container);
+    }
+
+    private static VincaActivity cloneVincaActivity(VincaActivity element) {
+        VincaActivity clone = (VincaActivity) create(element.type);
+        for (Node node : element.nodes) {
+            clone.nodes.add((Node) makeCopy(node));
+        }
+        return (VincaActivity) makeCopy(clone, element);
+    }
+
+    private static VincaElement makeCopy(VincaElement clone, VincaElement element) {
+        clone.title = element.title;
+        clone.description = element.description;
+        clone.symbol = element.symbol;
+        clone.type = element.type;
+        return clone;
     }
 }

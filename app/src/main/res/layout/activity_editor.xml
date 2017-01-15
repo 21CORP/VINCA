@@ -31,12 +31,58 @@
             android:layout_width="20dp" />
 
         <ImageButton
+            app:srcCompat="@drawable/undo"
+            android:id="@+id/buttonUndo"
+            android:background="@color/background_material_light_1"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:tint="#FFFFFF" />
+
+        <ImageButton
+            app:srcCompat="@drawable/redo"
+            android:text="Button_redo"
+            android:layout_width="40dp"
+            android:id="@+id/buttonRedo"
+            android:background="@color/background_material_light_1"
+            android:layout_height="60dp"
+            android:tint="#FFFFFF" />
+
+        <ImageButton
+            app:srcCompat="?attr/actionModeCopyDrawable"
+            android:text="Button_copy"
+            android:layout_width="40dp"
+            android:id="@+id/buttonCopy"
+            android:background="@color/background_material_light_1"
+            android:layout_height="60dp"
+            android:filterTouchesWhenObscured="true"
+            android:tint="#FFFFFF" />
+
+        <ImageButton
+            app:srcCompat="?attr/actionModeCutDrawable"
+            android:text="Button_cut"
+            android:layout_width="40dp"
+            android:id="@+id/buttonCut"
+            android:background="@color/background_material_light_1"
+            android:layout_height="60dp"
+            android:tint="#FFFFFF" />
+
+        <ImageButton
+            app:srcCompat="?attr/actionModePasteDrawable"
+            android:text="Button_oaste"
+            android:layout_width="40dp"
+            android:id="@+id/buttonPaste"
+            android:background="@color/background_material_light_1"
+            android:layout_height="60dp"
+            android:tint="#FFFFFF" />
+
+        <ImageButton
             android:contentDescription="Save as"
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@drawable/save"
             android:id="@+id/saveas"
             android:background="@color/background_material_light_1"
-            android:layout_width="40dp" />
+            android:layout_width="40dp"
+            android:tint="#FFFFFF" />
 
         <TextView
             android:text="Saving..."
@@ -47,27 +93,13 @@
             android:textColor="@color/primary_text_light" />
 
         <ImageButton
-            app:srcCompat="@drawable/undo"
-            android:id="@+id/buttonUndo"
-            android:background="@color/background_material_light_1"
-            android:layout_width="40dp"
-            android:layout_height="60dp" />
-
-        <ImageButton
-            app:srcCompat="@drawable/redo"
-            android:text="Button_redo"
-            android:layout_width="40dp"
-            android:id="@+id/buttonRedo"
-            android:background="@color/background_material_light_1"
-            android:layout_height="60dp" />
-
-        <ImageButton
             android:contentDescription="Delete"
             android:layout_width="60dp"
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@drawable/trashbin"
             android:id="@+id/trashbin"
-            android:background="@color/background_material_light_1" />
+            android:background="@color/background_material_light_1"
+            android:tint="#FFFFFF" />
 
         <ImageButton
             android:contentDescription="Settings"
@@ -75,7 +107,8 @@
             android:layout_height="@dimen/symbol_max_size"
             app:srcCompat="@drawable/settings"
             android:id="@+id/settings"
-            android:background="@color/background_material_light_1" />
+            android:background="@color/background_material_light_1"
+            android:tint="#FFFFFF" />
 
     </TableRow>
 

@@ -200,4 +200,18 @@ public class WorkspaceController implements Serializable {
     public Element getCursor() {
         return workspace.getCursor();
     }
+
+    public VincaElement getClipboard() {
+        return workspace.getClipboard();
+    }
+
+    public VincaElement setClipboard(VincaElement element) {
+        VincaElement clone = VincaElement.makeCopy(element);
+        workspace.setClipboard(clone);
+        return clone;
+    }
+
+    public void setClipboardRaw(VincaElement element) {
+        workspace.setClipboard(element);
+    }
 }

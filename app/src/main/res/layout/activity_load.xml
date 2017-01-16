@@ -49,19 +49,13 @@
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:gravity="center">
-                <TextView
-                    android:id="@android:id/empty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No selection"
-                    android:gravity="center"/>
-
-                   <Button
-                       android:text="Load"
+               <ImageView
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:id="@+id/button_loadSelectedProject"
-                       android:textColor="#000000"/>
+                       app:srcCompat="@drawable/vincalogotemp"
+                       android:layout_centerVertical="true"
+                       android:layout_centerHorizontal="true"
+                       android:id="@+id/vincaIcon" />
                </LinearLayout>
            </FrameLayout>
 

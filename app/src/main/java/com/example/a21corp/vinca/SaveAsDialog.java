@@ -99,10 +99,6 @@ private EditText newProjName;
                      negativeButton.setTextColor(getResources().getColor(R.color.background_material_light_2, null));
 
                  }
-                 else{
-                     positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1));
-
-                 }
              }
          });
 

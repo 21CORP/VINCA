@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,11 +96,10 @@ private EditText newProjName;
              public void onShow(final DialogInterface dialog) {
                  Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
                  Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                 if (Build.VERSION.SDK_INT >= 23) {
-                     positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
-                     negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
-
-                 }
+                 //positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                 //negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
+                 positiveButton.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.background_material_light_1));
+                 negativeButton.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.cancelColor));
              }
          });
 

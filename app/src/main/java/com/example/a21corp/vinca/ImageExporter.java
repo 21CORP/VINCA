@@ -22,12 +22,10 @@ import java.io.IOException;
 
 public class ImageExporter {
 
-    private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
-
     public void viewToJPG(Activity act, View view, String title) {
         //Time taken to draw image
         Long start = SystemClock.currentThreadTimeMillis();
-        if (!checkPermissionForWriting(act)) {
+        if (!MainMenu.checkPermissionForWriting(act)) {
             Log.d("ImageExporter", "No permission to save in Gallery!");
             return; //TODO Billedet skal gemmes hvis vi får tilladelse til at gemme i galleriet
         }
@@ -39,28 +37,6 @@ public class ImageExporter {
         }
         Long total = SystemClock.currentThreadTimeMillis() - start;
         Log.d("ImageExporter", "Saving image took " + total + " ms");
-    }
-
-    private boolean checkPermissionForWriting(Activity act) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            int permissionCheck =
-                    act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                if (act.shouldShowRequestPermissionRationale
-                        (android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                } else {
-                    act.requestPermissions
-                            (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}
-                                    , WRITE_EXTERNAL_STORAGE_STATE);
-                }
-                if (act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    return true;
-                }
-                return false;
-            }
-        }
-        return true;
     }
 
     private File saveBitMap(Activity act, View view, String title){

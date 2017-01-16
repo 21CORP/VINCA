@@ -22,11 +22,17 @@ import java.io.File;
 
 public class AutoSaver{
 
+    private final EditorActivity editorActivity;
+    private final Workspace workspace;
+    private final String dir;
     public CountDownTimer timer;
     private Historian historian;
     private long interval = 5000;
 
     public AutoSaver(final EditorActivity editorActivity, final Workspace workspace, final String dir){
+        this.workspace = workspace;
+        this.dir = dir;
+        this.editorActivity = editorActivity;
         historian = Historian.getInstance();
         System.out.println("new Autosaver!");
         timer = new CountDownTimer(interval, 1000) {
@@ -46,11 +52,15 @@ public class AutoSaver{
                 }
                 else{
                     //Log.d("Autosave", deltaTime + ", Save time!");
-                    editorActivity.setSaveStatusBar(true);
-                    ProjectManager.saveProject(workspace, dir);
+                    save();
                 }
                 timer.start();
             }
         }.start();
+    }
+
+    public void save() {
+        editorActivity.setSaveStatusBar(true);
+        ProjectManager.saveProject(workspace, dir);
     }
 }

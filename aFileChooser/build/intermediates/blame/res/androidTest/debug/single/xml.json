@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\mimetypes.xml",
+        "source": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\xml\\mimetypes.xml"
+    },
+    {
         "merged": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\mimetypes.xml",
         "source": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\xml\\mimetypes.xml"
     }

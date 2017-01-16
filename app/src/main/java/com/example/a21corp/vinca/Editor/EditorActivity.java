@@ -145,6 +145,7 @@ public class EditorActivity extends AppCompatActivity
             autoSaver.timer.cancel();
         }
         autoSaver = new AutoSaver(this, controller.workspace, dirPath);
+        autoSaver.save();
         super.onStart();
     }
 
@@ -158,7 +159,8 @@ public class EditorActivity extends AppCompatActivity
         }
         Workspace workspace;
         try {
-            workspace = ProjectManager.loadProject(dirPath + "/" + title + ".ser");
+            String loadPath = getIntent().getExtras().getString("dirPath", dirPath);
+            workspace = ProjectManager.loadProject(loadPath + "/" + title + ".ser");
         } catch (Exception e) {
             e.printStackTrace();
             workspace = ProjectManager.createProject(title);

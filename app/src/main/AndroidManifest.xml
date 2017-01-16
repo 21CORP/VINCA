@@ -16,9 +16,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".LoadActivity"
-                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,6 +24,9 @@
                 <data android:scheme="content" />
                 <data android:mimeType="application/octet-stream" />
             </intent-filter>
+        </activity>
+        <activity android:name=".LoadActivity"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT" />

@@ -4,6 +4,10 @@
         "source": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_file.png"
     },
     {
+        "merged": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_provider.png",
+        "source": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_provider.png"
+    },
+    {
         "merged": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_chooser.png",
         "source": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_chooser.png"
     },
@@ -12,7 +16,19 @@
         "source": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_provider.png"
     },
     {
+        "merged": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_chooser.png",
+        "source": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_chooser.png"
+    },
+    {
+        "merged": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_folder.png",
+        "source": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_folder.png"
+    },
+    {
         "merged": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_folder.png",
         "source": "C:\\Users\\ymuslu\\Desktop\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_folder.png"
+    },
+    {
+        "merged": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ic_file.png",
+        "source": "C:\\Users\\Oliver\\AndroidStudioProjects\\VINCA\\aFileChooser\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_file.png"
     }
 ]

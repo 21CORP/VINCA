@@ -26,6 +26,9 @@ public abstract class ProjectManager {
             absoluteFilePath = absoluteFilePath + fileExtension;
         }
         Workspace workspace = (Workspace) Serialization.load(absoluteFilePath);
+        String title = absoluteFilePath.substring(absoluteFilePath.lastIndexOf("/") + 1
+                ,absoluteFilePath.lastIndexOf(".ser"));
+        workspace.setTitle(title);
         return workspace;
     }
 

@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -78,8 +80,24 @@ public class CreateMenuPopUp extends DialogFragment {
                         importFile();
                     }
                 });
+        final AlertDialog dialog = builder.create();
 
-        return builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                Button neutralButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEUTRAL);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                    neutralButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                    negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
+
+                }
+            }
+        });
+
+        return dialog;
     }
 
     public void importFile() {

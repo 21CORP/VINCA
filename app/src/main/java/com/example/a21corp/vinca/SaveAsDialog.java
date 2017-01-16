@@ -96,7 +96,7 @@ private EditText newProjName;
                  Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
                  if (Build.VERSION.SDK_INT >= 23) {
                      positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
-                     negativeButton.setTextColor(getResources().getColor(R.color.background_material_light_2, null));
+                     negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
 
                  }
              }

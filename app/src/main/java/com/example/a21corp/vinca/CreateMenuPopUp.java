@@ -14,10 +14,9 @@ import android.widget.Toast;
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
 import com.example.a21corp.vinca.Editor.Workspace;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.File;
-
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -84,9 +83,16 @@ public class CreateMenuPopUp extends DialogFragment {
     }
 
     public void importFile() {
+        Intent getContentIntent = FileUtils.createGetContentIntent();
+
+        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+        startActivityForResult(intent, FILE_SELECT_CODE);
+        /**
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*"); //TODO change to "*/*.ser" when we know it works
+        **/
+         //intent.setType("*/*"); //TODO change to "*/*.ser" when we know it works
+        /**
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
             getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
@@ -94,6 +100,7 @@ public class CreateMenuPopUp extends DialogFragment {
         catch(Exception e){
             e.printStackTrace();
         }
+        **/
     }
 
 

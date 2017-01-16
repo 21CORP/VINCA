@@ -15,16 +15,16 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
 
-    private Workspace ws;
+    private Workspace workspace;
 
     @Before
     public void createWorkspace(){
-       ws = ProjectManager.createProject("Testproject");
+       workspace = ProjectManager.createProject("Testproject");
     }
 
     @Test
     public void correctWorkspaceName() throws Exception {
-        assertEquals("Testproject", ws.getTitle());
+        assertEquals("Testproject", workspace.getTitle());
     }
 
 

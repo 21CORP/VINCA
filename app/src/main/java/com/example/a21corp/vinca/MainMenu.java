@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -39,13 +40,12 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main_menu2);
         logo = (ImageView) findViewById(R.id.logoImage);
-        Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
-        logo.startAnimation(rotateLogo);
+
         create = (Button) findViewById(R.id.newProjectButton);
         create.setOnClickListener(this);
         load = (Button) findViewById(R.id.loadMenuButton);
         load.setOnClickListener(this);
-
+        checkForAnim();
         Uri data = getIntent().getData();
         if (data != null) {
             uriToFile(data);
@@ -144,5 +144,17 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             }
         }
         return true;
+    }
+
+    public void checkForAnim(){
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.activity_main_menu);
+        if(linearLayout.getTag() != null) {
+            String ori = (String) linearLayout.getTag();
+            if(!ori.equals("land")){
+                Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
+                logo.startAnimation(rotateLogo);
+                System.out.println("Jep");
+            }
+        }
     }
 }

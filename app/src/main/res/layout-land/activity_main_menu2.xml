@@ -9,12 +9,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:tag="port"
+    android:tag="land"
     tools:context="com.example.a21corp.vinca.MainMenu"
     android:orientation="horizontal"
     android:background="@color/colorPrimary"
     >
-
 
     <LinearLayout
         android:orientation="vertical"
@@ -29,17 +28,9 @@
             android:id="@+id/titleImage"
             android:layout_gravity="center"/>
 
-        <ImageView
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/vincalogotemp"
-            android:id="@+id/logoImage"
-            android:layout_width="108dp"
-            android:layout_gravity="center"/>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <Button
                 style="@style/MyButton"
                 android:text="New Project"
@@ -48,19 +39,6 @@
                 android:id="@+id/newProjectButton"
                 android:layout_centerInParent="true"
 
-                android:textAllCaps="false" />
-
-            <Button
-                style="@style/MyButton"
-                android:text="Load Project"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-
-                android:id="@+id/loadMenuButton"
-                android:layout_below="@+id/newProjectButton"
-                android:layout_alignLeft="@+id/newProjectButton"
-                android:layout_alignStart="@+id/newProjectButton"
-                android:layout_marginTop="48dp"
                 android:textAllCaps="false" />
 
             <TextView
@@ -73,10 +51,20 @@
                 android:textSize="14sp"
                 android:typeface="normal"
                 android:textColor="@color/primary_text_light"
+                android:layout_marginTop="18dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="38dp" />
+                android:layout_alignParentStart="true" />
+
+            <Button
+                style="@style/MyButton"
+                android:text="Load Project"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/loadMenuButton"
+                android:textAllCaps="false"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/newProjectButton" />
 
 
         </RelativeLayout>

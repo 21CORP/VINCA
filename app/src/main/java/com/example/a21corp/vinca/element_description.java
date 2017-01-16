@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -63,7 +64,23 @@ public class element_description extends DialogFragment{
 
                 });
         setRetainInstance(true);
-        return builder.create();
+        final AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                    negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
+
+                }
+            }
+        });
+
+
+        return dialog;
     }
 
     public void setElement(VincaElement element){

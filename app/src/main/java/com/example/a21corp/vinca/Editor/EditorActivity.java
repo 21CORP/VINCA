@@ -21,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.AutoSaver;
+import com.example.a21corp.vinca.AutosaveObserver;
 import com.example.a21corp.vinca.HistoryManagement.AddProjectCommand;
 import com.example.a21corp.vinca.HistoryManagement.CopyCommand;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
@@ -44,7 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class EditorActivity extends AppCompatActivity
-        implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener
+        implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener, AutosaveObserver
         , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, PopupMenu.OnMenuItemClickListener {
     private WorkspaceController controller;
     private GhostEditorView methodView;
@@ -62,15 +63,9 @@ public class EditorActivity extends AppCompatActivity
 
     private Historian historian;
 
-    //flyttes til andet sted? JA
     private String dirPath;
     private File projDir;
-
-    //test
-
-    //test end
     private AutoSaver autoSaver;
-    private Date timeLastSaved;
 
 
     @Override
@@ -97,6 +92,12 @@ public class EditorActivity extends AppCompatActivity
         initiateScrollViews();
         trashBin.setOnDragListener(new TrashBin(this));
         historian = Historian.getInstance();
+
+        if(autoSaver == null){
+            autoSaver = new AutoSaver(controller.workspace, dirPath);
+            autoSaver.observerList.add(this);
+        }
+        autoSaver.save();
 
     }
 
@@ -139,15 +140,6 @@ public class EditorActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    protected void onStart(){
-        if(autoSaver != null){
-            autoSaver.timer.cancel();
-        }
-        autoSaver = new AutoSaver(this, controller.workspace, dirPath);
-        super.onStart();
-    }
-
     private void initiateWorkspace(Bundle savedInstanceState) {
         String title;
         if (savedInstanceState == null) {
@@ -158,7 +150,8 @@ public class EditorActivity extends AppCompatActivity
         }
         Workspace workspace;
         try {
-            workspace = ProjectManager.loadProject(dirPath + "/" + title + ".ser");
+            String loadPath = getIntent().getExtras().getString("dirPath", dirPath);
+            workspace = ProjectManager.loadProject(loadPath + "/" + title + ".ser");
         } catch (Exception e) {
             e.printStackTrace();
             workspace = ProjectManager.createProject(title);
@@ -355,18 +348,6 @@ public class EditorActivity extends AppCompatActivity
         }
     }
 
-    public void setSaveStatusBar(Boolean status){
-        if(status){
-            saveStatusBar.setText("Saving...");
-            timeLastSaved = Calendar.getInstance().getTime();
-        }
-        else{
-            if (timeLastSaved != null) {
-                saveStatusBar.setText("Saved on " + timeLastSaved);
-            }
-        }
-    }
-
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         String title = projectNameBar.getText().toString();
@@ -427,7 +408,7 @@ public class EditorActivity extends AppCompatActivity
     }
     @Override
     protected void onStop(){
-        ProjectManager.saveProject(controller.workspace, dirPath);
+        autoSaver.save();
         autoSaver.timer.cancel();
         super.onStop();
     }
@@ -493,5 +474,15 @@ public class EditorActivity extends AppCompatActivity
 
         return true;
 
+    }
+
+    @Override
+    public void saveStatus(boolean status) {
+        if(status){
+            saveStatusBar.setText("Saving...");
+            }
+        else{
+            saveStatusBar.setText("Saved");
+        }
     }
 }

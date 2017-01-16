@@ -194,7 +194,9 @@ public class WorkspaceController implements Serializable {
     }
 
     public void addProject(Container element) {
-        addProject(element, workspace.projects.size());
+        int index = workspace.projects.size();
+        index = workspace.projects.contains(element) ? index : index - 1;
+        addProject(element, index);
     }
 
     public Element getCursor() {

@@ -1,5 +1,7 @@
 package com.example.a21corp.vinca;
 
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.v4.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.example.a21corp.vinca.AndroidUtilities.FolderAdapter;
 import com.example.a21corp.vinca.AndroidUtilities.OnFileSelectedListener;
@@ -26,21 +29,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class LoadActivity extends AppCompatActivity implements View.OnClickListener, OnFileSelectedListener {
+public class LoadActivity extends AppCompatActivity implements OnFileSelectedListener {
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     private FolderAdapter listadapter;
     private FrameLayout workspacePreviewHolder;
-    private Button loadButton;
+    ImageView placeholderImage;
     private String title;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
         handleSearchIntent(getIntent());
         workspacePreviewHolder = (FrameLayout)findViewById(R.id.LoadActivityWorkspaceFragment);
-        loadButton = (Button) findViewById(R.id.button_loadSelectedProject);
-        loadButton.setOnClickListener(this);
+        placeholderImage = (ImageView)findViewById(R.id.vincaIcon);
+        //Converts the icon to gray scale
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        placeholderImage.getDrawable().setColorFilter(filter);
+        if(getSupportFragmentManager().findFragmentByTag("ProjectSummary") != null)
+        {
+            placeholderImage.setVisibility(View.GONE);
+        }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Log.d("LoadActivity", "Created");
@@ -80,19 +90,6 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
         handleSearchIntent(intent);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == loadButton) {
-            Intent editor = new Intent(this, EditorActivity.class);
-            editor.putExtra("title", title);
-            startActivity(editor);
-            overridePendingTransition( R.anim.slide_up_in, R.anim.slide_up_out);
-        }
-        else {
-            CreateMenuPopUp p = new CreateMenuPopUp();
-            p.show(getFragmentManager(), "pop");
-        }
-    }
     private Bundle createBundle(File f){
         Bundle newBundle = new Bundle();
         String name = f.getName();
@@ -108,11 +105,12 @@ public class LoadActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSelected(File f) {
         title = f.getName();
+        placeholderImage.setVisibility(View.GONE);
         title = title.substring(0, title.length() - 4);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment newWorkspacePreview = new LoadActivity_WorkspaceFragment();
         newWorkspacePreview.setArguments(createBundle(f));
-        fragmentTransaction.replace(R.id.LoadActivityWorkspaceFragment, newWorkspacePreview);
+        fragmentTransaction.replace(R.id.LoadActivityWorkspaceFragment, newWorkspacePreview, "ProjectSummary");
         fragmentTransaction.commit();
         Log.v("LoadActivity", "Added fragment");
 

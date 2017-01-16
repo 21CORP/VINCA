@@ -15,6 +15,7 @@ import com.example.a21corp.vinca.Editor.Workspace;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Thomas on 06-01-2017.
@@ -22,35 +23,50 @@ import java.io.File;
 
 public class AutoSaver{
 
+    private final Workspace workspace;
+    private final String dir;
     public CountDownTimer timer;
     private Historian historian;
     private long interval = 5000;
+    private boolean started;
+    public ArrayList<AutosaveObserver> observerList = new ArrayList<AutosaveObserver>();
 
-    public AutoSaver(final EditorActivity editorActivity, final Workspace workspace, final String dir){
+    public AutoSaver(final Workspace workspace, final String dir){
+        this.workspace = workspace;
+        this.dir = dir;
         historian = Historian.getInstance();
+        historian.autoSaver = this;
         System.out.println("new Autosaver!");
         timer = new CountDownTimer(interval, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
               //  Log.d("Autosave","time left: " + (historian.timeSinceChange - millisUntilFinished));
-                editorActivity.setSaveStatusBar(false);
             }
 
             @Override
             public void onFinish() {
-                Long deltaTime = (SystemClock.uptimeMillis() - historian.timeSinceChange);
-                //System.out.println("nowTime: " + SystemClock.uptimeMillis());
-                //System.out.println("historianTime: " + historian.timeSinceChange);
-                if(deltaTime >= interval) {
-                    //Log.d("Autosave", deltaTime + ", no fun...");
-                }
-                else{
-                    //Log.d("Autosave", deltaTime + ", Save time!");
-                    editorActivity.setSaveStatusBar(true);
-                    ProjectManager.saveProject(workspace, dir);
-                }
-                timer.start();
+                save();
+                started = false;
             }
-        }.start();
+        };
+    }
+
+    public void save() {
+        ProjectManager.saveProject(workspace, dir);
+        notifyObservers(false);
+    }
+
+    public void start(){
+        if(!started) {
+            timer.start();
+            started = true;
+            notifyObservers(true);
+        }
+    }
+
+    private void notifyObservers(boolean status) {
+        for (AutosaveObserver observer : observerList) {
+            observer.saveStatus(status);
+        }
     }
 }

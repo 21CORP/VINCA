@@ -3,21 +3,25 @@ package com.example.a21corp.vinca;
 import  android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 import com.example.a21corp.vinca.Editor.ProjectManager;
 import com.example.a21corp.vinca.Editor.Workspace;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.File;
-
-import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -79,24 +83,37 @@ public class CreateMenuPopUp extends DialogFragment {
                         importFile();
                     }
                 });
+        final AlertDialog dialog = builder.create();
 
-        return builder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
+                Button neutralButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEUTRAL);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                    neutralButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
+                    negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
+
+                }
+            }
+        });
+
+        return dialog;
     }
 
     public void importFile() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*"); //TODO change to "*/*.ser" when we know it works
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        try {
-            getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        Intent getContentIntent = FileUtils.createGetContentIntent();
+        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+        getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("CreateMenu", "onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
 
 

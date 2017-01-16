@@ -9,17 +9,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:tag="port"
     tools:context="com.example.a21corp.vinca.MainMenu"
     android:orientation="horizontal"
     android:background="@color/colorPrimary"
     >
 
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-    </View>
 
     <LinearLayout
         android:orientation="vertical"
@@ -87,11 +82,5 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-    </View>
 
 </LinearLayout>

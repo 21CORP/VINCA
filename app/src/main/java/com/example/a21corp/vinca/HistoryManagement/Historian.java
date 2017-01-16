@@ -4,6 +4,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.util.TimeUtils;
 
+import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.VincaElement;
 
@@ -17,9 +18,10 @@ import java.util.Stack;
 
 public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     private static Historian instance;
-    public long timeSinceChange = SystemClock.uptimeMillis();
     private Stack<Command> historyStack = new Stack<Command>();
     private Stack<Command> redoStack= new Stack<Command>();
+    public AutoSaver autoSaver;
+
     private Historian() {}
 
     public static Historian getInstance() {
@@ -32,10 +34,12 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
     public void storeAndExecute(Command cmd){
         historyStack.push(cmd);
         cmd.execute();
-        timeSinceChange = SystemClock.uptimeMillis();
         redoStack.clear();
         Log.d("Autosave", cmd.getClass().getSimpleName() + "added to history");
         //Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
+        if(autoSaver != null){
+            autoSaver.start();
+        }
     }
 
     public void undo(){
@@ -43,6 +47,9 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
             historyStack.peek().inverse();
             redoStack.push(historyStack.peek());
             historyStack.pop();
+                if(autoSaver != null){
+                    autoSaver.start();
+                }
         }
         //System.out.println("historyStack: " + historyStack.toString());
         //System.out.println("redoStack: " + redoStack.toString());
@@ -53,6 +60,9 @@ public void redo(){
         redoStack.peek().execute();
         historyStack.push(redoStack.peek());
         redoStack.pop();
+            if(autoSaver != null){
+                autoSaver.start();
+            }
         }
         //System.out.println("historyStack: " + historyStack.toString());
         //System.out.println("redoStack: " + redoStack.toString());

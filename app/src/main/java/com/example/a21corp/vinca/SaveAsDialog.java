@@ -8,11 +8,14 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -82,9 +85,18 @@ private EditText newProjName;
                      }
 
                  });
+         final AlertDialog dialog = builder.create();
+
+         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+             @Override
+             public void onShow(final DialogInterface dialog) {
+                 Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                 positiveButton.setBackgroundColor(Color.BLUE);
+             }
+         });
 
 
-         return builder.create();
+         return dialog;
      }
 
 

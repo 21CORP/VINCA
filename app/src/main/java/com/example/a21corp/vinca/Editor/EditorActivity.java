@@ -50,7 +50,7 @@ import java.util.Date;
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener, AutosaveObserver
         , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, PopupMenu.OnMenuItemClickListener {
-    private WorkspaceController controller;
+    public WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
     private GhostEditorView  pauseView, decisionView;
@@ -93,7 +93,7 @@ public class EditorActivity extends AppCompatActivity
         initiateEditor();
         initiateWorkspace(savedInstanceState);
         initiateScrollViews();
-        trashBin.setOnDragListener(new TrashBin(this));
+        new TrashBin(this, trashBin);
         historian = Historian.getInstance();
 
         if(autoSaver == null){

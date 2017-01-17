@@ -142,9 +142,13 @@ public class WorkspaceController implements Serializable {
 
     private void setParent(Element element, Container parent, int index)
     {
+        boolean isCursor = workspace.cursor == element;
         remove(element);
         parent.containerList.add(index, element);
         element.parent = parent;
+        if (isCursor) {
+            setCursor(element);
+        }
     }
 
     private void setParent(Node node, VincaActivity parent, int index) {
@@ -211,13 +215,15 @@ public class WorkspaceController implements Serializable {
     }
 
     public void addProject(Container element, int index) {
-        if (workspace.projects.contains(element)) {
-            //Element was already a root-level project
-            index = index - 1;
-        }
+        boolean isCursor = workspace.cursor == element;
         remove(element);
         workspace.projects.add(index, element);
-        notifyObservers();
+        if (isCursor) {
+            setCursor(element);
+        }
+        else {
+            notifyObservers();
+        }
     }
 
     public void addProject(Container element) {

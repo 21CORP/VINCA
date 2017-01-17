@@ -8,4 +8,5 @@
     <dimen name="symbol_mid_size">40dp</dimen>
     <dimen name="symbol_small_size">20dp</dimen>
     <dimen name="large_outer_margin">40dp</dimen>
+    <dimen name="hitBox">10dp</dimen>
 </resources>

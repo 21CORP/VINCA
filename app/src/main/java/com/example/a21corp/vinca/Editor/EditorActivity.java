@@ -2,20 +2,21 @@ package com.example.a21corp.vinca.Editor;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
-import android.text.Html;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,7 +29,6 @@ import com.example.a21corp.vinca.HistoryManagement.CopyCommand;
 import com.example.a21corp.vinca.HistoryManagement.CreateCommand;
 import com.example.a21corp.vinca.HistoryManagement.CutCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
-import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.HistoryManagement.PasteCommand;
 import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
@@ -36,7 +36,6 @@ import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
-import com.example.a21corp.vinca.elements.Node;
 import com.example.a21corp.vinca.elements.VincaActivity;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.ContainerView;
@@ -44,12 +43,17 @@ import com.example.a21corp.vinca.vincaviews.VincaElementView;
 import com.example.a21corp.vinca.vincaviews.VincaViewFabricator;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
 
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener, AutosaveObserver
         , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, PopupMenu.OnMenuItemClickListener {
+
+    private final int topHitBoxID = 9999;
+    private final int botHitBoxID = 3333;
+    private final int upperHitBoxID = 999;
+    private final int combinedID = 666;
+    private final int lowerHitBoxID = 333;
+
     public WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
@@ -236,6 +240,7 @@ public class EditorActivity extends AppCompatActivity
         redoButton.setOnClickListener(this);
 
         hScroll.setOnDragListener(this);
+        canvas.setOrientation(LinearLayout.VERTICAL);
 
 
     }
@@ -374,14 +379,75 @@ public class EditorActivity extends AppCompatActivity
     public void updateCanvas() {
         this.canvas.removeAllViews();
         VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.WRAP_CONTENT
+                        , LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        LinearLayout.LayoutParams hitBoxLP = new LinearLayout.LayoutParams
+                (ViewGroup.LayoutParams.MATCH_PARENT
+                        , (int) getResources().getDimension(R.dimen.hitBox));
+
+        LinearLayout.LayoutParams combinedLP = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT
+                        , ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        LinearLayout viewOfAllProjects = new LinearLayout(this);
+        viewOfAllProjects.setOrientation(LinearLayout.VERTICAL);
         for (Container vincaRoot : controller.workspace.projects) {
-            View root = fabricator.getVincaView(vincaRoot);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                    (LinearLayout.LayoutParams.WRAP_CONTENT
-                            , LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout root = (LinearLayout) fabricator.getVincaView(vincaRoot);
             root.setLayoutParams(lp);
-            this.canvas.addView(root);
+
+            ImageView topHitBox = new ImageView(this);
+            topHitBox.setBackgroundColor(Color.RED);
+            topHitBox.setLayoutParams(hitBoxLP);
+            topHitBox.setId(upperHitBoxID);
+            topHitBox.setOnDragListener(this);
+
+
+            ImageView botHitBox = new ImageView(this);
+            botHitBox.setBackgroundColor(Color.RED);
+            botHitBox.setLayoutParams(hitBoxLP);
+            botHitBox.setId(lowerHitBoxID);
+            botHitBox.setOnDragListener(this);
+
+            LinearLayout combined = new LinearLayout(this);
+            combined.setOrientation(LinearLayout.VERTICAL);
+
+            combined.addView(topHitBox);
+            combined.addView(root);
+            combined.addView(botHitBox);
+            combined.setLayoutParams(combinedLP);
+            combined.setGravity(Gravity.CENTER_VERTICAL);
+
+            viewOfAllProjects.addView(combined);
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
+                (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layoutParams.weight = 1;
+        ImageView topHitBox = new ImageView(this);
+        ImageView botHitBox = new ImageView(this);
+
+        topHitBox.setBackgroundColor(Color.YELLOW);
+        botHitBox.setBackgroundColor(Color.YELLOW);
+
+        topHitBox.setId(topHitBoxID);
+        botHitBox.setId(botHitBoxID);
+
+        viewOfAllProjects.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        this.canvas.addView(topHitBox);
+        this.canvas.addView(viewOfAllProjects);
+        this.canvas.addView(botHitBox);
+
+        topHitBox.setLayoutParams(layoutParams);
+        botHitBox.setLayoutParams(layoutParams);
+
+        topHitBox.setOnDragListener(this);
+        botHitBox.setOnDragListener(this);
+
+        this.canvas.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        this.canvas.setGravity(Gravity.CENTER);
         this.canvas.invalidate();
     }
 
@@ -389,17 +455,55 @@ public class EditorActivity extends AppCompatActivity
     public boolean onDrag(View v, DragEvent event) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DROP:
-                if (v == hScroll) {
-                    try {
-                        VincaElementView draggedView = (VincaElementView) event.getLocalState();
-                        Container element = (Container) draggedView.getVincaElement();
+                VincaElementView draggedVEV;
+                Container element;
+                try {
+                    draggedVEV = (VincaElementView) event.getLocalState();
+                    element = (Container) draggedVEV.getVincaElement();
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
+                    break;
+                }
+                if (v.getId() == topHitBoxID) {
                         if (element.type == VincaElement.ELEMENT_PROJECT) {
                             Container parent = element.parent;
+                            int index = 0;
                             Historian.getInstance().storeAndExecute
-                                    (new AddProjectCommand(element, parent, controller));
+                                    (new AddProjectCommand(element, parent, index, controller));
                         }
-                    } catch (ClassCastException e) {
-                        e.printStackTrace();
+                }
+                else if (v.getId() == botHitBoxID || v == hScroll) {
+                    if (element.type == VincaElement.ELEMENT_PROJECT) {
+                        Container parent = element.parent;
+                        int index = controller.workspace.projects.size();
+                        if (controller.workspace.projects.contains(element)) {
+                            index = index - 1;
+                        }
+                        Historian.getInstance().storeAndExecute
+                                (new AddProjectCommand(element, parent, index, controller));
+                    }
+                }
+                else {
+                    if (((View) v.getParent()).getId() == combinedID && element.type == VincaElement.ELEMENT_PROJECT) {
+                        LinearLayout combinedLayout = (LinearLayout) v.getParent();
+                        ContainerView root = (ContainerView) combinedLayout.getChildAt(1);
+                        if (root == draggedVEV) {
+                            break;
+                        }
+                        int index = controller.workspace.projects.indexOf(root.getVincaElement());
+                        if (controller.workspace.projects.contains(draggedVEV.getVincaElement())) {
+                            int oldIndex = controller.workspace.projects.indexOf(draggedVEV.getVincaElement());
+                            if (oldIndex < index) {
+                                index = index - 1;
+                            }
+                        }
+                        if (v.getId() == lowerHitBoxID) {
+                            index = index + 1;
+                        }
+                        index = Math.max(0, index);
+                        index = Math.min(controller.workspace.projects.size(), index);
+                        Container parent = element.parent;
+                        historian.storeAndExecute(new AddProjectCommand(element, parent, index, controller));
                     }
                 }
 

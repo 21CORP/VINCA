@@ -16,7 +16,7 @@ public class MoveCommand implements Command {
     Element newParent;
     Element oldParent;
     int newIndex;
-    Integer oldIndex;
+    int oldIndex = -1;
     WorkspaceController workspaceController;
 
     public MoveCommand(VincaElement element, Element newParent, Element oldParent, int newIndex
@@ -48,6 +48,10 @@ public class MoveCommand implements Command {
     public void inverse(){
         if(oldParent == null){
             workspaceController.remove(element);
+            if (oldIndex > -1) {
+                //No parent but an index exists, must previously have been root-level project
+                workspaceController.addProject((Container) element, oldIndex);
+            }
         }
         else {
             workspaceController.setParent(element, oldParent, oldIndex);

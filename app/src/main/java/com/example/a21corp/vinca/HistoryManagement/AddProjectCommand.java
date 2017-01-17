@@ -10,36 +10,39 @@ import com.example.a21corp.vinca.elements.VincaElement;
  */
 
 public class AddProjectCommand implements Command {
+    private int oldIndex;
     private int index;
     private Container parent;
     private Element oldCursor;
     private Container element;
     WorkspaceController workspaceController;
 
-    public AddProjectCommand(Container element, Container parent
+    public AddProjectCommand(Container element, Container parent, int index
             , WorkspaceController workspaceController){
         this.parent = parent;
         this.oldCursor = workspaceController.getCursor();
         this.element = element;
         this.workspaceController = workspaceController;
+        this.index = index;
         if (parent != null) {
-            index = parent.containerList.indexOf(element);
+            oldIndex = parent.containerList.indexOf(element);
+            oldIndex = Math.max(oldIndex, workspaceController.workspace.projects.indexOf(element));
         }
         else {
-            index = workspaceController.workspace.projects.size();
+            oldIndex = workspaceController.workspace.projects.size();
         }
     }
 
     @Override
     public void execute(){
-        workspaceController.addProject(element);
+        workspaceController.addProject(element, index);
     }
 
     @Override
     public void inverse(){
         workspaceController.remove(element);
         if (parent != null) {
-            workspaceController.setParent(element, parent, index);
+            workspaceController.setParent(element, parent, oldIndex);
         }
         workspaceController.setCursor(oldCursor);
     }

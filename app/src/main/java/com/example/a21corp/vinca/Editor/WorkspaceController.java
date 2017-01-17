@@ -166,13 +166,6 @@ public class WorkspaceController implements Serializable {
     }
 
     private void remove(Element vincaElement) {
-        if (containsCursor(vincaElement)) {
-            Element cursor = vincaElement.parent;
-            if (cursor == null) {
-                cursor = workspace.projects.get(0);
-            }
-            setCursor(cursor);
-        }
         //This call will do nothing and return false if vincaElement is not in the list
         if (workspace.projects.remove(vincaElement)) {
             //The deleted element was a root-element
@@ -184,6 +177,13 @@ public class WorkspaceController implements Serializable {
             if (vincaElement.getParent() != null) {
                 vincaElement.parent.containerList.remove(vincaElement);
             }
+        }
+        if (containsCursor(vincaElement)) {
+            Element cursor = vincaElement.parent;
+            if (cursor == null) {
+                cursor = workspace.projects.get(0);
+            }
+            setCursor(cursor);
         }
     }
 

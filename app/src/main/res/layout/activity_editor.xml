@@ -75,15 +75,6 @@
             android:layout_height="60dp"
             android:tint="#FFFFFF" />
 
-        <ImageButton
-            android:contentDescription="Save as"
-            android:layout_height="@dimen/symbol_max_size"
-            app:srcCompat="@drawable/save"
-            android:id="@+id/saveas"
-            android:background="@color/background_material_light_1"
-            android:layout_width="40dp"
-            android:tint="#FFFFFF" />
-
         <TextView
             android:text="Saving..."
             android:layout_width="10dp"

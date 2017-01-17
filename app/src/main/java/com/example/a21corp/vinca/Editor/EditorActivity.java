@@ -193,7 +193,6 @@ public class EditorActivity extends AppCompatActivity
         elementPanel.addView(projectView);
 
         //MISC Views
-        saveButton = (ImageButton) findViewById(R.id.saveas) ;
         settings = (ImageButton) findViewById(R.id.settings);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
@@ -224,7 +223,6 @@ public class EditorActivity extends AppCompatActivity
         copyButton.setOnClickListener(this);
         cutBotton.setOnClickListener(this);
         pasteButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
 
         settings.setOnClickListener(this);
         //backButton.setOnClickListener(this);

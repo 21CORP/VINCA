@@ -82,16 +82,6 @@
             android:layout_height="wrap_content"
             android:tint="#FFFFFF" />
 
-        <ImageButton
-            android:contentDescription="Save as"
-
-            app:srcCompat="@drawable/save"
-            android:id="@+id/saveas"
-            android:background="@color/background_material_light_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="#FFFFFF" />
-
         <TextView
             android:text="Saving..."
             android:layout_width="wrap_content"

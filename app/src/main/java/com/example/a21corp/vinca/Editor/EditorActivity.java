@@ -29,6 +29,7 @@ import com.example.a21corp.vinca.HistoryManagement.CutCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.HistoryManagement.PasteCommand;
+import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
 import com.example.a21corp.vinca.elements.Container;
@@ -410,38 +411,26 @@ public class EditorActivity extends AppCompatActivity
     protected void onStop(){
         autoSaver.save();
         autoSaver.timer.cancel();
+
+        LinearLayout view = getExportableView();
+        ImageExporter imgExp = new ImageExporter();
+        String imgPath = dirPath.substring(0, dirPath.lastIndexOf("/")) + "/previews";
+        File imgDir = new File(imgPath);
+        imgExp.viewToJPG(this, view, controller.getWorkspaceTitle(), imgDir);
+
         super.onStop();
     }
 
     public void canvasToJPG() {
-        if (controller == null) {
+        LinearLayout viewToExport = getExportableView();
+
+        if (viewToExport == null) {
             return;
         }
-        Element cursor = controller.workspace.getCursor();
-        controller.setCursor(null);
-
-        LinearLayout viewToExport = new LinearLayout(this);
-        viewToExport.setOrientation(LinearLayout.VERTICAL);
-        viewToExport.setBackgroundColor(Color.WHITE);
-
-        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
-        for (Container vincaRoot : controller.workspace.projects) {
-            View root = fabricator.getVincaView(vincaRoot);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                    (LinearLayout.LayoutParams.WRAP_CONTENT
-                            , LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(20, 0, 20, 0);
-            root.setLayoutParams(lp);
-            viewToExport.addView(root);
-        }
-
-        viewToExport.getChildAt(0).setBackgroundColor(0);
 
         ExportDialog exportDialog = new ExportDialog();
         exportDialog.setExportTarget(this, viewToExport, controller.getWorkspaceTitle());
         exportDialog.show(getFragmentManager(), "Export as");
-
-        controller.setCursor(cursor);
     }
 
     @Override
@@ -484,5 +473,33 @@ public class EditorActivity extends AppCompatActivity
         else{
             saveStatusBar.setText("Saved");
         }
+    }
+
+    public LinearLayout getExportableView() {
+        if (controller == null) {
+            return null;
+        }
+        Element cursor = controller.workspace.getCursor();
+        controller.setCursor(null);
+
+        LinearLayout viewToExport = new LinearLayout(this);
+        viewToExport.setOrientation(LinearLayout.VERTICAL);
+        viewToExport.setBackgroundColor(Color.WHITE);
+
+        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
+        for (Container vincaRoot : controller.workspace.projects) {
+            View root = fabricator.getVincaView(vincaRoot);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT
+                            , LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(20, 0, 20, 0);
+            root.setLayoutParams(lp);
+            viewToExport.addView(root);
+        }
+
+        viewToExport.getChildAt(0).setBackgroundColor(0);
+        controller.setCursor(cursor);
+
+        return viewToExport;
     }
 }

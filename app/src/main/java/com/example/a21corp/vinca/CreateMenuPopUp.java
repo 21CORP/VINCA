@@ -1,11 +1,13 @@
 package com.example.a21corp.vinca;
 
+import android.app.Activity;
 import  android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +31,8 @@ import java.io.File;
  */
 
 public class CreateMenuPopUp extends DialogFragment {
+
+    private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
 
     EditText projectName;
     private String dirPath;
@@ -104,15 +108,39 @@ public class CreateMenuPopUp extends DialogFragment {
     }
 
     public void importFile() {
-        Intent getContentIntent = FileUtils.createGetContentIntent();
-        Intent intent = Intent.createChooser(getContentIntent, "Select a file");
-        getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
+        if (checkPermissionForWriting(getActivity())) {
+            Intent getContentIntent = FileUtils.createGetContentIntent();
+            Intent intent = Intent.createChooser(getContentIntent, "Select a file");
+            getActivity().startActivityForResult(intent, FILE_SELECT_CODE);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("CreateMenu", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public boolean checkPermissionForWriting(Activity act) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int permissionCheck =
+                    act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if (act.shouldShowRequestPermissionRationale
+                        (android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                } else {
+                    act.requestPermissions
+                            (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}
+                                    , WRITE_EXTERNAL_STORAGE_STATE);
+                }
+                if (act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        return true;
     }
 }
 

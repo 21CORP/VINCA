@@ -92,6 +92,8 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
 
     private Bundle createBundle(File f){
         Bundle newBundle = new Bundle();
+        String path = f.getAbsolutePath();
+        path = path.substring(0, path.lastIndexOf("/"));
         String name = f.getName();
         name = name.substring(0, name.length() - 4);
         String size = Long.toString(f.length()/1024); //Kilobytes
@@ -99,6 +101,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
         newBundle.putString("created", "Unknown");
         newBundle.putString("edited",dateFormatter.format(new Date(f.lastModified())));
         newBundle.putString("size", size + " kB");
+        newBundle.putString("path", path);
         return newBundle;
     }
 

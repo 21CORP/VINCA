@@ -86,6 +86,7 @@ public class WorkspaceController implements Serializable {
         workspace.setTitle(title);
         if (ProjectManager.saveProject(workspace, path)) {
             ProjectManager.removeProject(oldTitle, path);
+            //TODO: Remove old preview file
         }
     }
 

@@ -22,14 +22,22 @@ import java.io.IOException;
 
 public class ImageExporter {
 
+    private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
+
     public void viewToJPG(Activity act, View view, String title) {
+        File dir = new File(Environment.getExternalStoragePublicDirectory
+                (Environment.DIRECTORY_PICTURES),"VINCA");
+        viewToJPG(act, view, title, dir);
+    }
+
+    public void viewToJPG(Activity act, View view, String title, File dir) {
         //Time taken to draw image
         Long start = SystemClock.currentThreadTimeMillis();
-        if (!MainMenu.checkPermissionForWriting(act)) {
+        if (!checkPermissionForWriting(act)) {
             Log.d("ImageExporter", "No permission to save in Gallery!");
             return; //TODO Billedet skal gemmes hvis vi får tilladelse til at gemme i galleriet
         }
-        File file = saveBitMap(act, view, title);
+        File file = saveBitMap(act, view, title, dir);
         if (file != null) {
             Log.i("TAG", "Drawing saved to the gallery!");
         } else {
@@ -39,16 +47,14 @@ public class ImageExporter {
         Log.d("ImageExporter", "Saving image took " + total + " ms");
     }
 
-    private File saveBitMap(Activity act, View view, String title){
-        File pictureFileDir = new File(Environment.getExternalStoragePublicDirectory
-                (Environment.DIRECTORY_PICTURES),"VINCA");
-        if (!pictureFileDir.exists()) {
-            boolean isDirectoryCreated = pictureFileDir.mkdirs();
+    private File saveBitMap(Activity act, View view, String title, File dir){
+        if (!dir.exists()) {
+            boolean isDirectoryCreated = dir.mkdirs();
             if(!isDirectoryCreated)
                 Log.i("TAG", "Can't create directory to save the image");
             return null;
         }
-        String filename = pictureFileDir.getPath() + File.separator  + title + ".png";
+        String filename = dir.getPath() + File.separator  + title + ".png";
         File pictureFile = new File(filename);
         Bitmap bitmap =getBitmapFromView(view);
         if (bitmap == null) {
@@ -93,5 +99,27 @@ public class ImageExporter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkPermissionForWriting(Activity act) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            int permissionCheck =
+                    act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if (act.shouldShowRequestPermissionRationale
+                        (android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                } else {
+                    act.requestPermissions
+                            (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}
+                                    , WRITE_EXTERNAL_STORAGE_STATE);
+                }
+                if (act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                }
+                return false;
+            }
+        }
+        return true;
     }
 }

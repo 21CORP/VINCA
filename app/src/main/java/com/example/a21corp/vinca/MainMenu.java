@@ -87,7 +87,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         System.out.println(path);
         System.out.println(title);
         if(ProjectManager.inputCheck(title, getFilesDir().getAbsolutePath() + File.separator + "workspaces")) {
-            if (checkPermissionForWriting(this)) {
+            if (checkPermissionForWriting()) {
                 try {
                     Intent editor = new Intent(this, EditorActivity.class);
                     editor.putExtra("title", title);
@@ -124,19 +124,19 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    public static boolean checkPermissionForWriting(Activity act) {
+    public boolean checkPermissionForWriting() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             int permissionCheck =
-                    act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                if (act.shouldShowRequestPermissionRationale
+                if (this.shouldShowRequestPermissionRationale
                         (android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 } else {
-                    act.requestPermissions
+                    this.requestPermissions
                             (new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}
                                     , WRITE_EXTERNAL_STORAGE_STATE);
                 }
-                if (act.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) {
                     return true;
                 }

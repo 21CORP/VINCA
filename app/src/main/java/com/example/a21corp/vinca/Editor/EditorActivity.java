@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.AutosaveObserver;
@@ -277,6 +278,10 @@ public class EditorActivity extends AppCompatActivity
     }
 
     private void paste() {
+        if (controller.getClipboard() == null) {
+            Toast.makeText(this, "Nothing to paste", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int index;
         Element cursor = controller.getCursor();
         if (cursor instanceof Container) {
@@ -287,6 +292,7 @@ public class EditorActivity extends AppCompatActivity
             cursor = cursor.getParent();
         }
         else {
+            Toast.makeText(this, "Unable to paste", Toast.LENGTH_SHORT).show();
             return;
         }
         historian.storeAndExecute(new PasteCommand(cursor, index, controller));

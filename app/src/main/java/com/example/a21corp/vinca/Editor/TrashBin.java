@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 
+import com.example.a21corp.vinca.HistoryManagement.DeleteCommand;
+import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.elements.VincaElement;
 import com.example.a21corp.vinca.vincaviews.VincaElementView;
 
@@ -61,6 +63,7 @@ public class TrashBin implements View.OnClickListener, View.OnDragListener {
     @Override
     public void onClick(View view) {
         VincaElement cursor = editorActivity.controller.getCursor();
-        editorActivity.controller.remove(cursor);
+        Historian.getInstance().storeAndExecute
+                (new DeleteCommand(cursor, cursor.parent, editorActivity.controller));
     }
 }

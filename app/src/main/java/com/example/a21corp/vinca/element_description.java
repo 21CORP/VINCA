@@ -53,7 +53,7 @@ public class element_description extends DialogFragment{
         builder
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        EditDescriptionCommand edCmd = new EditDescriptionCommand(workElement, titleTV.getText().toString(), descTV.getText().toString());
+                        EditDescriptionCommand edCmd = new EditDescriptionCommand(workElement, titleTV.getText().toString(), descTV.getText().toString(), workElement.title, workElement.description);
                         Historian.getInstance().storeAndExecute(edCmd);
                     }
                 })

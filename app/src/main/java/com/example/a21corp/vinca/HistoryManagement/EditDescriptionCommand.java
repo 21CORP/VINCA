@@ -13,10 +13,12 @@ public class EditDescriptionCommand implements Command{
     String oldTitle;
     String oldDescription;
 
-    public EditDescriptionCommand(VincaElement element, String title, String description){
+    public EditDescriptionCommand(VincaElement element, String title, String description, String oldTitle, String oldDescription){
         this.element = element;
         this.title = title;
         this.description = description;
+        this.oldTitle = oldTitle;
+        this.oldDescription = oldDescription;
     }
 
     @Override

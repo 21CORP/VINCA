@@ -33,6 +33,7 @@ import com.example.a21corp.vinca.HistoryManagement.PasteCommand;
 import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
+import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
@@ -313,6 +314,11 @@ public class EditorActivity extends AppCompatActivity
     public boolean onLongClick(View view) {
         //PLACEHOLDER
         //TODO: REPLACE
+
+        element_description ed = new element_description();
+        ed.setElement(((VincaElementView) view).getVincaElement());
+        ed.show(getFragmentManager(), "elementDescription");
+
         if (view instanceof ContainerView) {
             controller.toggleOpenContainer(((ContainerView) view).getVincaElement());
 

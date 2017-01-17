@@ -23,6 +23,12 @@ import java.util.regex.Pattern;
 public class FolderAdapter extends BaseAdapter implements View.OnClickListener
 {
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
+    private static Comparator<File> lastModifiedComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            return (int)Math.signum(f2.lastModified() - f1.lastModified());
+        }
+    };
     private class ViewCache{
         public TextView titel;
         public TextView date;
@@ -48,6 +54,7 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
                                             }
                                         }
         );
+        Arrays.sort(directory, lastModifiedComparator);
         UpdateDirectory();
     }
     public void UpdateDirectory()
@@ -55,18 +62,14 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
         if(directory==null){
             directory = new File[0]; //Instead of null we pass on an empty array
         }
-        Arrays.sort(directory, new Comparator<File>() {
-            @Override
-            public int compare(File f1, File f2) {
-                return (int)Math.signum(f1.lastModified() - f2.lastModified());
-            }
-        });
+        Arrays.sort(directory, lastModifiedComparator);
         notifyDataSetChanged();
     }
     public FolderAdapter(File f)
     {
         sourceDir = f;
         directory = sourceDir.listFiles();
+        Arrays.sort(directory, lastModifiedComparator);
         UpdateDirectory();
     }
     @Override

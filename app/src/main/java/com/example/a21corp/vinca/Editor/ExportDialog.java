@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
+import com.example.a21corp.vinca.VincatoSVG;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,7 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
 
     private RadioButton svg, png,pdf,file;
     private Activity act;
+    private Workspace workspace;
     private View view;
     private String title;
     private EditText enterTitle;
@@ -81,8 +85,20 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
             Toast.makeText(getActivity(), "File exported to Gallery", Toast.LENGTH_LONG).show();
         }
         else if(svg.isChecked()){
-            //export to svg
+            if (act == null) {
+                Log.d("ExportDialog", "Attempting to export before calling setExportTarger()");
+                return;
+            }
+            title = enterTitle.getText().toString();
+            File f = VincatoSVG.getSVGFile(act, workspace.projects, title);
             Log.d("ExportDialog", "svg checked");
+            if(f == null){
+                Toast.makeText(getActivity(), "Failed to create svg", Toast.LENGTH_LONG).show();;
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Exported to gallery", Toast.LENGTH_LONG).show();
+            }
         }
         else if(file.isChecked()){
             //export to file
@@ -95,9 +111,10 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
         dismiss();
     }
 
-    public void setExportTarget(Activity act, View view, String title) {
+    public void setExportTarget(Activity act, View view, String title, Workspace workspace) {
         this.act = act;
         this.view = view;
         this.title = title;
+        this.workspace = workspace;
     }
 }

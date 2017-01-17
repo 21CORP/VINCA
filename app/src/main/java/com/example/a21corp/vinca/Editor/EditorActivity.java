@@ -438,7 +438,7 @@ public class EditorActivity extends AppCompatActivity
         viewToExport.getChildAt(0).setBackgroundColor(0);
 
         ExportDialog exportDialog = new ExportDialog();
-        exportDialog.setExportTarget(this, viewToExport, controller.getWorkspaceTitle());
+        exportDialog.setExportTarget(this, viewToExport, controller.getWorkspaceTitle(), controller.workspace);
         exportDialog.show(getFragmentManager(), "Export as");
 
         controller.setCursor(cursor);

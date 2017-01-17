@@ -408,7 +408,7 @@ public class EditorActivity extends AppCompatActivity
         return true;
     }
     @Override
-    protected void onStop(){
+    protected void onPause(){
         autoSaver.save();
         autoSaver.timer.cancel();
 
@@ -418,7 +418,7 @@ public class EditorActivity extends AppCompatActivity
         File imgDir = new File(imgPath);
         imgExp.viewToJPG(this, view, controller.getWorkspaceTitle(), imgDir);
 
-        super.onStop();
+        super.onPause();
     }
 
     public void canvasToJPG() {

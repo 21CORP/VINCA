@@ -188,6 +188,10 @@ public class WorkspaceController implements Serializable {
     }
 
     public void addProject(Container element, int index) {
+        if (workspace.projects.contains(element)) {
+            //Element was already a root-level project
+            index = index - 1;
+        }
         remove(element);
         workspace.projects.add(index, element);
         notifyObservers();
@@ -195,7 +199,6 @@ public class WorkspaceController implements Serializable {
 
     public void addProject(Container element) {
         int index = workspace.projects.size();
-        index = workspace.projects.contains(element) ? index : index - 1;
         addProject(element, index);
     }
 

@@ -2,6 +2,8 @@ package com.example.a21corp.vinca;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.Editor.EditorActivity;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,6 +32,8 @@ public class LoadActivity_WorkspaceFragment extends Fragment implements View.OnC
     private TextView created;
     private TextView edited;
     private TextView size;
+    private Button loadButton;
+    private ImageView preview;
 
     public LoadActivity_WorkspaceFragment() {
     }
@@ -46,9 +52,29 @@ public class LoadActivity_WorkspaceFragment extends Fragment implements View.OnC
         created = (TextView)view.findViewById(R.id.LoadActivityWorkspaceCreated);
         edited = (TextView)view.findViewById(R.id.LoadActivityWorkspaceEdited);
         size = (TextView)view.findViewById(R.id.LoadActivityWorkspaceSize);
-        Button loadButton = (Button) view.findViewById(R.id.button_loadSelectedProject);
+        preview = (ImageView) view.findViewById(R.id.preview);
+        loadButton = (Button) view.findViewById(R.id.button_loadSelectedProject);
         loadButton.setOnClickListener(this);
         updateFragment();
+    }
+
+    private void showPreview(String title) {
+        if (title == null) {
+            return;
+        }
+        Bundle state = getArguments();
+        String path = state.getString("path", null);
+
+        if (path == null) {
+            return;
+        }
+        if (path.endsWith("/workspaces")) {
+            path = path.substring(0, path.lastIndexOf("/")) + "/previews";
+        }
+        File image = new File(path + "/" + title + ".png");
+        if (image.exists()) {
+            preview.setImageURI(Uri.fromFile(image));
+        }
     }
 
     private void updateFragment()
@@ -58,11 +84,12 @@ public class LoadActivity_WorkspaceFragment extends Fragment implements View.OnC
         created.setText(state.getString("created", "Unknown"));
         edited.setText(state.getString("edited", "Unknown"));
         size.setText(state.getString("size", "Unknown"));
+        showPreview(state.getString("title", null));
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_loadSelectedProject) {
+        if (v == loadButton) {
             Intent editor = new Intent(getActivity(), EditorActivity.class);
             editor.putExtra("title", title.getText());
             getActivity().startActivity(editor);

@@ -86,6 +86,7 @@ public class WorkspaceController implements Serializable {
         workspace.setTitle(title);
         if (ProjectManager.saveProject(workspace, path)) {
             ProjectManager.removeProject(oldTitle, path);
+            //TODO: Remove old preview file
         }
     }
 
@@ -177,6 +178,28 @@ public class WorkspaceController implements Serializable {
                 vincaElement.parent.containerList.remove(vincaElement);
             }
         }
+        if (containsCursor(vincaElement)) {
+            Element cursor = vincaElement.parent;
+            if (cursor == null) {
+                cursor = workspace.projects.get(0);
+            }
+            setCursor(cursor);
+        }
+    }
+
+    private boolean containsCursor(Element vincaElement) {
+        Element cursor = workspace.cursor;
+        if (cursor == vincaElement) {
+            return true;
+        }
+        if (vincaElement instanceof Container) {
+            for (Element child : ((Container) vincaElement).containerList) {
+                if (cursor == child) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void remove(Node node) {
@@ -188,6 +211,10 @@ public class WorkspaceController implements Serializable {
     }
 
     public void addProject(Container element, int index) {
+        if (workspace.projects.contains(element)) {
+            //Element was already a root-level project
+            index = index - 1;
+        }
         remove(element);
         workspace.projects.add(index, element);
         notifyObservers();
@@ -195,7 +222,6 @@ public class WorkspaceController implements Serializable {
 
     public void addProject(Container element) {
         int index = workspace.projects.size();
-        index = workspace.projects.contains(element) ? index : index - 1;
         addProject(element, index);
     }
 

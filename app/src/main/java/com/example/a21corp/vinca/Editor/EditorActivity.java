@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AutoSaver;
 import com.example.a21corp.vinca.AutosaveObserver;
@@ -29,8 +30,10 @@ import com.example.a21corp.vinca.HistoryManagement.CutCommand;
 import com.example.a21corp.vinca.HistoryManagement.Historian;
 import com.example.a21corp.vinca.HistoryManagement.MoveCommand;
 import com.example.a21corp.vinca.HistoryManagement.PasteCommand;
+import com.example.a21corp.vinca.ImageExporter;
 import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.SaveAsDialog;
+import com.example.a21corp.vinca.element_description;
 import com.example.a21corp.vinca.elements.Container;
 import com.example.a21corp.vinca.elements.Element;
 import com.example.a21corp.vinca.elements.Node;
@@ -47,7 +50,7 @@ import java.util.Date;
 public class EditorActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener, AutosaveObserver
         , View.OnTouchListener, TextView.OnEditorActionListener, WorkspaceObserver, PopupMenu.OnMenuItemClickListener {
-    private WorkspaceController controller;
+    public WorkspaceController controller;
     private GhostEditorView methodView;
     private GhostEditorView activityView;
     private GhostEditorView  pauseView, decisionView;
@@ -90,7 +93,7 @@ public class EditorActivity extends AppCompatActivity
         initiateEditor();
         initiateWorkspace(savedInstanceState);
         initiateScrollViews();
-        trashBin.setOnDragListener(new TrashBin(this));
+        new TrashBin(this, trashBin);
         historian = Historian.getInstance();
 
         if(autoSaver == null){
@@ -190,7 +193,6 @@ public class EditorActivity extends AppCompatActivity
         elementPanel.addView(projectView);
 
         //MISC Views
-        saveButton = (ImageButton) findViewById(R.id.saveas) ;
         settings = (ImageButton) findViewById(R.id.settings);
         trashBin = (ImageButton) findViewById(R.id.trashbin);
         projectNameBar = (EditText) findViewById(R.id.text_project_name);
@@ -221,7 +223,6 @@ public class EditorActivity extends AppCompatActivity
         copyButton.setOnClickListener(this);
         cutBotton.setOnClickListener(this);
         pasteButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
 
         settings.setOnClickListener(this);
         //backButton.setOnClickListener(this);
@@ -276,6 +277,10 @@ public class EditorActivity extends AppCompatActivity
     }
 
     private void paste() {
+        if (controller.getClipboard() == null) {
+            Toast.makeText(this, "Nothing to paste", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int index;
         Element cursor = controller.getCursor();
         if (cursor instanceof Container) {
@@ -286,6 +291,7 @@ public class EditorActivity extends AppCompatActivity
             cursor = cursor.getParent();
         }
         else {
+            Toast.makeText(this, "Unable to paste", Toast.LENGTH_SHORT).show();
             return;
         }
         historian.storeAndExecute(new PasteCommand(cursor, index, controller));
@@ -306,6 +312,11 @@ public class EditorActivity extends AppCompatActivity
     public boolean onLongClick(View view) {
         //PLACEHOLDER
         //TODO: REPLACE
+
+        element_description ed = new element_description();
+        ed.setElement(((VincaElementView) view).getVincaElement());
+        ed.show(getFragmentManager(), "elementDescription");
+
         if (view instanceof ContainerView) {
             controller.toggleOpenContainer(((ContainerView) view).getVincaElement());
 
@@ -407,41 +418,29 @@ public class EditorActivity extends AppCompatActivity
         return true;
     }
     @Override
-    protected void onStop(){
+    protected void onPause(){
         autoSaver.save();
         autoSaver.timer.cancel();
-        super.onStop();
+
+        LinearLayout view = getExportableView();
+        ImageExporter imgExp = new ImageExporter();
+        String imgPath = dirPath.substring(0, dirPath.lastIndexOf("/")) + "/previews";
+        File imgDir = new File(imgPath);
+        imgExp.viewToJPG(this, view, controller.getWorkspaceTitle(), imgDir);
+
+        super.onPause();
     }
 
     public void canvasToJPG() {
-        if (controller == null) {
+        LinearLayout viewToExport = getExportableView();
+
+        if (viewToExport == null) {
             return;
         }
-        Element cursor = controller.workspace.getCursor();
-        controller.setCursor(null);
-
-        LinearLayout viewToExport = new LinearLayout(this);
-        viewToExport.setOrientation(LinearLayout.VERTICAL);
-        viewToExport.setBackgroundColor(Color.WHITE);
-
-        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
-        for (Container vincaRoot : controller.workspace.projects) {
-            View root = fabricator.getVincaView(vincaRoot);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                    (LinearLayout.LayoutParams.WRAP_CONTENT
-                            , LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(20, 0, 20, 0);
-            root.setLayoutParams(lp);
-            viewToExport.addView(root);
-        }
-
-        viewToExport.getChildAt(0).setBackgroundColor(0);
 
         ExportDialog exportDialog = new ExportDialog();
         exportDialog.setExportTarget(this, viewToExport, controller.getWorkspaceTitle(), controller.workspace);
         exportDialog.show(getFragmentManager(), "Export as");
-
-        controller.setCursor(cursor);
     }
 
     @Override
@@ -484,5 +483,33 @@ public class EditorActivity extends AppCompatActivity
         else{
             saveStatusBar.setText("Saved");
         }
+    }
+
+    public LinearLayout getExportableView() {
+        if (controller == null) {
+            return null;
+        }
+        Element cursor = controller.workspace.getCursor();
+        controller.setCursor(null);
+
+        LinearLayout viewToExport = new LinearLayout(this);
+        viewToExport.setOrientation(LinearLayout.VERTICAL);
+        viewToExport.setBackgroundColor(Color.WHITE);
+
+        VincaViewFabricator fabricator = new VincaViewFabricator(this, controller);
+        for (Container vincaRoot : controller.workspace.projects) {
+            View root = fabricator.getVincaView(vincaRoot);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                    (LinearLayout.LayoutParams.WRAP_CONTENT
+                            , LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(20, 0, 20, 0);
+            root.setLayoutParams(lp);
+            viewToExport.addView(root);
+        }
+
+        viewToExport.getChildAt(0).setBackgroundColor(0);
+        controller.setCursor(cursor);
+
+        return viewToExport;
     }
 }

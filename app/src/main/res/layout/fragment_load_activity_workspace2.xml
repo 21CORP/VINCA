@@ -14,17 +14,15 @@
         android:layout_marginTop="23dp"
         android:id="@+id/LoadActivityWorkspaceTitle"
         android:textAlignment="center"
-        android:textSize="36sp"
+        android:textSize="34sp"
         />
 
-<LinearLayout
-    android:layout_centerHorizontal="true"
-    android:orientation="horizontal"
-    android:layout_gravity="center_horizontal"
+<TableLayout
     android:layout_below="@id/LoadActivityWorkspaceTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <TableRow>
 
     <TextView
         android:textStyle="bold"
@@ -37,34 +35,36 @@
         android:text="Created"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-
         android:id="@+id/LoadActivityWorkspaceCreated" />
+    </TableRow>
 
-
+<TableRow>
     <TextView
         android:text="Edited"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
-        android:padding="10dp"
+
         />
 
     <TextView
         android:text="Edited"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/LoadActivityWorkspaceEdited" />
 
+</TableRow>
+
+
+    <TableRow>
     <TextView
         android:text="Size"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView9"
-        android:padding="10dp"
+
         />
 
     <TextView
@@ -74,10 +74,10 @@
         android:text="size" />
 
 
+    </TableRow>
 
 
-
-</LinearLayout>
+</TableLayout>
 
     <Button
         android:text="Load"

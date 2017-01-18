@@ -3,6 +3,8 @@ package com.example.a21corp.vinca;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.net.Uri;
 import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +53,16 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             uriToFile(data);
         }
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(1);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        logo.getDrawable().setColorFilter(filter);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("MainMenu", "onActivityResult");

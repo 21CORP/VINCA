@@ -28,39 +28,9 @@
             android:id="@+id/titleImage"
             android:layout_gravity="center"/>
 
-        <ImageView
-            app:srcCompat="@drawable/logo"
-            android:id="@+id/logoImage"
-            android:layout_width="200dp"
-            android:layout_gravity="center"
-            android:layout_height="200dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <Button
-                style="@style/MyButton"
-                android:text="New Project"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/newProjectButton"
-                android:layout_centerInParent="true"
-
-                android:textAllCaps="false" />
-
-            <Button
-                style="@style/MyButton"
-                android:text="Load Project"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-
-                android:id="@+id/loadMenuButton"
-                android:layout_below="@+id/newProjectButton"
-                android:layout_alignLeft="@+id/newProjectButton"
-                android:layout_alignStart="@+id/newProjectButton"
-                android:layout_marginTop="48dp"
-                android:textAllCaps="false" />
 
             <TextView
                 android:text="Visuelt alfabet for innovations- og læringsprocesser"
@@ -72,10 +42,43 @@
                 android:textSize="14sp"
                 android:typeface="normal"
                 android:textColor="@color/primary_text_light"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
+                android:layout_above="@+id/newProjectButton"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="38dp" />
+                android:layout_marginBottom="72dp" />
+
+            <Button
+                style="@style/MyButton"
+                android:text="Load Project"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/loadMenuButton"
+                android:textAllCaps="false"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/newProjectButton"
+                android:layout_marginBottom="61dp" />
+
+            <Button
+                style="@style/MyButton"
+                android:text="New Project"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectButton"
+
+                android:textAllCaps="false"
+                android:layout_above="@+id/loadMenuButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="82dp" />
+
+            <ImageView
+                app:srcCompat="@drawable/logo"
+                android:id="@+id/logoImage"
+                android:layout_width="200dp"
+                android:layout_gravity="center"
+                android:layout_height="200dp"
+                android:layout_above="@+id/subTitle"
+                android:layout_alignStart="@+id/newProjectButton"
+                android:layout_marginBottom="142dp" />
 
 
         </RelativeLayout>

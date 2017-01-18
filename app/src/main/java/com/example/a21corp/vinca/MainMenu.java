@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainMenu extends AppCompatActivity implements View.OnClickListener{
+public class MainMenu extends AppCompatActivity implements View.OnClickListener {
 
     private static final int WRITE_EXTERNAL_STORAGE_STATE = 255;
 
@@ -47,7 +47,10 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         create.setOnClickListener(this);
         load = (Button) findViewById(R.id.loadMenuButton);
         load.setOnClickListener(this);
-        checkForAnim();
+        if(checkForLayout()){
+            Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
+            logo.startAnimation(rotateLogo);
+        }
         Uri data = getIntent().getData();
         if (data != null) {
             uriToFile(data);
@@ -55,12 +58,14 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(1);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        logo.getDrawable().setColorFilter(filter);
+        if(checkForLayout()) {
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(1);
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+            logo.getDrawable().setColorFilter(filter);
+        }
     }
 
     @Override
@@ -68,8 +73,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         Log.d("MainMenu", "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         //MainMenu is handling this as CreateMenuPopup is a fragment and hence its onActivity is not called for whatever reason
-        if(requestCode == CreateMenuPopUp.FILE_SELECT_CODE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == CreateMenuPopUp.FILE_SELECT_CODE) {
+            if (resultCode == RESULT_OK) {
 
                 final Uri uri = data.getData();
                 uriToFile(uri);
@@ -94,11 +99,11 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
-        String title = path.substring(path.lastIndexOf("/")+1).replace(".ser", "");
+        String title = path.substring(path.lastIndexOf("/") + 1).replace(".ser", "");
         path = path.substring(0, path.lastIndexOf("/"));
         System.out.println(path);
         System.out.println(title);
-        if(ProjectManager.inputCheck(title, getFilesDir().getAbsolutePath() + File.separator + "workspaces")) {
+        if (ProjectManager.inputCheck(title, getFilesDir().getAbsolutePath() + File.separator + "workspaces")) {
             if (checkPermissionForWriting()) {
                 try {
                     Intent editor = new Intent(this, EditorActivity.class);
@@ -111,25 +116,24 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                     e.printStackTrace();
                 }
             }
-        }
-        else{
+        } else {
             Toast.makeText(getApplicationContext(), "There is already a file with that name", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.newProjectButton:{
+        switch (v.getId()) {
+            case R.id.newProjectButton: {
                 CreateMenuPopUp p = new CreateMenuPopUp();
-                p.show(getFragmentManager(),"pop");
+                p.show(getFragmentManager(), "pop");
 
                 break;
             }
-            case R.id.loadMenuButton:{
+            case R.id.loadMenuButton: {
                 startActivity(new Intent(this, LoadActivity.class));
                 //overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
-                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             }
 
@@ -158,15 +162,16 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
         return true;
     }
 
-    public void checkForAnim(){
+
+
+    public boolean checkForLayout() {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.activity_main_menu);
-        if(linearLayout.getTag() != null) {
+        if (linearLayout.getTag() != null) {
             String ori = (String) linearLayout.getTag();
-            if(!ori.equals("land")){
-                Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
-                logo.startAnimation(rotateLogo);
-                System.out.println("Jep");
+            if (ori.equals("land")) {
+                return false;
             }
         }
+        return true;
     }
 }

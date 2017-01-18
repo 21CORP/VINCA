@@ -42,7 +42,7 @@
 
        <RadioButton
            android:text="PNG"
-           android:padding="24dp"
+
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/export_png"
@@ -52,7 +52,7 @@
 
        <RadioButton
            android:text="SVG"
-           android:padding="24dp"
+
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/export_svg"
@@ -62,7 +62,7 @@
        <RadioButton
            android:enabled="false"
            android:text="File"
-           android:padding="24dp"
+
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/export_file"
@@ -72,7 +72,7 @@
        <RadioButton
            android:enabled="false"
            android:text="PDF"
-           android:padding="24dp"
+
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/export_pdf"

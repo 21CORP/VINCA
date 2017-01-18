@@ -16,7 +16,7 @@ public class Container extends Element implements Serializable {
     protected Container(int elementType) {
         super(elementType);
        // isCursor = false;
-        isOpen = false;
+        isOpen = true;
         parent = null;
     }
 }

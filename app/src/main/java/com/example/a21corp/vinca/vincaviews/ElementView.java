@@ -161,7 +161,7 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     }
 
     public void highlight() {
-        view.setBackgroundColor(Color.GREEN);
+        view.setBackgroundResource(R.color.cursorColor);
     }
 
     public void dehighlight() {
@@ -169,7 +169,7 @@ public class ElementView extends FrameLayout implements VincaElementView, View.O
     }
 
     private void draghighlight() {
-        view.setBackgroundColor(Color.GRAY);
+        view.setBackgroundResource(R.color.dragColor);
     }
 
     private void dragdehighlight() {

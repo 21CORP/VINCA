@@ -141,10 +141,18 @@ public class VincaViewFabricator {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < element.containerList.size(); i++) {
-            View child = getVincaView(element.containerList.get(i));
-            //child.setOnTouchListener(editor);
-            newView.add(child);
+        if (element.isOpen) {
+            for (int i = 0; i < element.containerList.size(); i++) {
+                View child = getVincaView(element.containerList.get(i));
+                //child.setOnTouchListener(editor);
+                newView.add(child);
+            }
+        }
+        else {
+            //TODO: Placeholder - replace when proper symbols exist!
+            ImageView collapsed = new ImageView(context);
+            collapsed.setImageResource(android.R.drawable.ic_dialog_info);
+            newView.add(collapsed);
         }
         ContainerView viewToReturn = newView.getView();
         return viewToReturn;

@@ -103,6 +103,9 @@ public class WorkspaceController implements Serializable {
     private void addElement(Element element) {
         VincaElement cursor = workspace.getCursor();
         if (cursor instanceof Container) {
+            if (!((Container) cursor).isOpen) {
+                toggleOpenContainer((Container) cursor);
+            }
             setParent(element, (Container) cursor, ((Container) cursor).containerList.size());
         }
         else {
@@ -129,6 +132,9 @@ public class WorkspaceController implements Serializable {
             addProject((Container) vincaElement, index);
         }
         if (vincaElement instanceof Element && parent instanceof Container) {
+            if (!((Container) parent).isOpen) {
+                toggleOpenContainer((Container) parent);
+            }
             setParent((Element) vincaElement, (Container) parent, index);
         }
         else if (vincaElement instanceof Node && parent instanceof VincaActivity) {

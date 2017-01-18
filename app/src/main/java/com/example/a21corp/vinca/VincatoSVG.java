@@ -53,7 +53,7 @@ public class VincatoSVG {
         try {
             FileWriter stream = new FileWriter(dst);
             Resources resources = act.getResources();
-            BufferedReader in = new BufferedReader( new InputStreamReader(resources.openRawResource(R.raw.vincadefs)));
+            BufferedReader in = new BufferedReader( new InputStreamReader(resources.openRawResource(R.raw.vinca_defs)));
             String line; //Copy the template into the file
             while((line = in.readLine()) != null)
             {

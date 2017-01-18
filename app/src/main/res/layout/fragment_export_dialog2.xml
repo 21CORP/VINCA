@@ -60,7 +60,6 @@
            android:buttonTint="@color/background_material_light_1"/>
 
        <RadioButton
-           android:enabled="false"
            android:text="File"
 
            android:layout_width="wrap_content"

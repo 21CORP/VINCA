@@ -69,7 +69,6 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
     {
         sourceDir = f;
         directory = sourceDir.listFiles();
-        Arrays.sort(directory, lastModifiedComparator);
         UpdateDirectory();
     }
     @Override

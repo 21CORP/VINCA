@@ -103,6 +103,9 @@ public class WorkspaceController implements Serializable {
     private void addElement(Element element) {
         VincaElement cursor = workspace.getCursor();
         if (cursor instanceof Container) {
+            if (!((Container) cursor).isOpen) {
+                toggleOpenContainer((Container) cursor);
+            }
             setParent(element, (Container) cursor, ((Container) cursor).containerList.size());
         }
         else {
@@ -129,6 +132,9 @@ public class WorkspaceController implements Serializable {
             addProject((Container) vincaElement, index);
         }
         if (vincaElement instanceof Element && parent instanceof Container) {
+            if (!((Container) parent).isOpen) {
+                toggleOpenContainer((Container) parent);
+            }
             setParent((Element) vincaElement, (Container) parent, index);
         }
         else if (vincaElement instanceof Node && parent instanceof VincaActivity) {
@@ -166,13 +172,6 @@ public class WorkspaceController implements Serializable {
     }
 
     private void remove(Element vincaElement) {
-        if (containsCursor(vincaElement)) {
-            Element cursor = vincaElement.parent;
-            if (cursor == null) {
-                cursor = workspace.projects.get(0);
-            }
-            setCursor(cursor);
-        }
         //This call will do nothing and return false if vincaElement is not in the list
         if (workspace.projects.remove(vincaElement)) {
             //The deleted element was a root-element
@@ -184,6 +183,13 @@ public class WorkspaceController implements Serializable {
             if (vincaElement.getParent() != null) {
                 vincaElement.parent.containerList.remove(vincaElement);
             }
+        }
+        if (containsCursor(vincaElement)) {
+            Element cursor = vincaElement.parent;
+            if (cursor == null) {
+                cursor = workspace.projects.get(0);
+            }
+            setCursor(cursor);
         }
     }
 

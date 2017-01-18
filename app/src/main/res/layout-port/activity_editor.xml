@@ -28,10 +28,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_project_name"
             android:gravity="center_vertical"
-            android:layout_weight="7"
-            android:layout_width="wrap_content" />
+            android:layout_weight="5"
+            android:layout_width="200dp" />
 
         <ImageButton
+            android:padding="10dp"
             app:srcCompat="@drawable/undo"
             android:id="@+id/buttonUndo"
             android:background="@color/background_material_light_1"
@@ -40,6 +41,7 @@
             android:tint="#FFFFFF" />
 
         <ImageButton
+            android:padding="10dp"
             app:srcCompat="@drawable/redo"
             android:text="Button_redo"
 
@@ -51,6 +53,7 @@
             android:tint="#FFFFFF" />
 
         <ImageButton
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="?attr/actionModeCopyDrawable"
@@ -63,6 +66,7 @@
             android:tint="#FFFFFF" />
 
         <ImageButton
+            android:padding="10dp"
             app:srcCompat="?attr/actionModeCutDrawable"
             android:text="Button_cut"
 
@@ -73,6 +77,7 @@
             android:tint="#FFFFFF" />
 
         <ImageButton
+            android:padding="10dp"
             app:srcCompat="?attr/actionModePasteDrawable"
             android:text="Button_oaste"
 
@@ -83,6 +88,7 @@
             android:tint="#FFFFFF" />
 
         <TextView
+            android:padding="10dp"
             android:text="Saving..."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,6 +98,7 @@
             android:textColor="@color/primary_text_light" />
 
         <ImageButton
+            android:padding="10dp"
             android:contentDescription="Delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +108,7 @@
             android:tint="#FFFFFF" />
 
         <ImageButton
+            android:padding="10dp"
             android:contentDescription="Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

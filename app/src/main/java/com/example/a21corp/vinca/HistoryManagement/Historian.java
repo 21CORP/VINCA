@@ -35,7 +35,7 @@ public class Historian { //https://en.wikipedia.org/wiki/Command_pattern#Java
         historyStack.push(cmd);
         cmd.execute();
         redoStack.clear();
-        Log.d("Autosave", cmd.getClass().getSimpleName() + "added to history");
+        //Log.d("Autosave", cmd.getClass().getSimpleName() + "added to history");
         //Log.d("Autosave - timestamp", Long.toString(timeSinceChange));
         if(autoSaver != null){
             autoSaver.start();

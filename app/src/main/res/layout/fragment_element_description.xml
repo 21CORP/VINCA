@@ -29,6 +29,7 @@
             android:ems="10"
             android:id="@+id/TitleEditView"
             android:hint=" Enter Title Here"
+            android:backgroundTint="@color/colorPrimary"
             android:textColor="?android:attr/textColorSecondary" />
 
 
@@ -49,6 +50,7 @@
             android:layout_below = "@id/DescriptionTextView"
             android:text=" "
             android:ems="10"
+            android:backgroundTint="@color/colorPrimary"
             android:id="@+id/DescriptionEditView"
             android:hint="Enter Description"
             android:textColor="?android:attr/textColorSecondary" />

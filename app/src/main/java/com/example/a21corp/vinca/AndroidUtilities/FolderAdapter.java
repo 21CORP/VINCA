@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.a21corp.vinca.R;
@@ -20,8 +22,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FolderAdapter extends BaseAdapter implements View.OnClickListener
-{
+public class FolderAdapter extends BaseAdapter implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     private static Comparator<File> lastModifiedComparator = new Comparator<File>() {
         @Override
@@ -29,6 +30,18 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
             return (int)Math.signum(f2.lastModified() - f1.lastModified());
         }
     };
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        File selected;
+        if((selected = (File)((View)buttonView.getParent()).getTag(R.id.FILE_ENTRY_ID))!=null){
+            if(listener == null){
+                return;
+            }
+            listener.OnFileCheckedChanged(selected, isChecked);
+        }
+    }
+
     private class ViewCache{
         public TextView titel;
         public TextView date;
@@ -93,6 +106,8 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
             cache = new ViewCache();
             cache.titel = (TextView)convertView.findViewById(R.id.elementName);
             cache.date = (TextView)convertView.findViewById(R.id.elementDate);
+            CheckBox box = (CheckBox)convertView.findViewById(R.id.select);
+            box.setOnCheckedChangeListener(this);
             convertView.setOnClickListener(this);
             convertView.setTag(R.id.VIEW_CACHE_DATA, cache);
         }

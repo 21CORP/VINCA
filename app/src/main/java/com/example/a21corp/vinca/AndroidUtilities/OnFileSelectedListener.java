@@ -8,4 +8,5 @@ import java.io.File;
 
 public interface OnFileSelectedListener {
     public void onSelected(File f);
+    public void OnFileCheckedChanged(File f, boolean checked);
 }

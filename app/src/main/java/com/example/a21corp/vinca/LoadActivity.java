@@ -12,11 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.a21corp.vinca.AndroidUtilities.FolderAdapter;
 import com.example.a21corp.vinca.AndroidUtilities.OnFileSelectedListener;
@@ -26,15 +29,19 @@ import com.example.a21corp.vinca.LoadMenu.ListWorkspaceFragments;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
-public class LoadActivity extends AppCompatActivity implements OnFileSelectedListener {
+public class LoadActivity extends AppCompatActivity implements OnFileSelectedListener, ActionMode.Callback {
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yy h:mm");
     private FolderAdapter listadapter;
+    private List<File> selectedFiles = new ArrayList<>();
     private FrameLayout workspacePreviewHolder;
     ImageView placeholderImage;
     private String title;
+    private ActionMode acmode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +60,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
         }
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Log.d("LoadActivity", "Created");
     }
 
@@ -62,6 +70,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
                 (ListWorkspaceFragments) getSupportFragmentManager()
                 .findFragmentById(R.id.LoadActivityWorkspaceList);
         projectList.updateFileList();
+        listadapter = (FolderAdapter)projectList.getListAdapter();
         super.onResume();
     }
 
@@ -95,7 +104,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
         String path = f.getAbsolutePath();
         path = path.substring(0, path.lastIndexOf("/"));
         String name = f.getName();
-        name = name.substring(0, name.length() - 4);
+        name = name.replace(".ser", "");
         String size = Long.toString(f.length()/1024); //Kilobytes
         newBundle.putString("title", name);
         newBundle.putString("created", "Unknown");
@@ -109,7 +118,6 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
     public void onSelected(File f) {
         title = f.getName();
         placeholderImage.setVisibility(View.GONE);
-        title = title.substring(0, title.length() - 4);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment newWorkspacePreview = new LoadActivity_WorkspaceFragment();
         newWorkspacePreview.setArguments(createBundle(f));
@@ -120,9 +128,64 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
     }
 
     @Override
+    public void OnFileCheckedChanged(File f, boolean checked) {
+        if(selectedFiles.isEmpty())
+        {
+            acmode = startActionMode(this);
+        }
+        if(checked){
+            selectedFiles.add(f);
+        }
+        else
+        {
+            selectedFiles.remove(f);
+        }
+        if(selectedFiles.isEmpty() && acmode != null)
+        {
+           acmode.finish();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_right);
+
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.loadmenucab, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        int amount = selectedFiles.size();
+        if(item.getItemId()==R.id.delete_workspace)
+        {
+            for (int i = 0; i < selectedFiles.size(); i++)
+            {
+                File c = selectedFiles.get(i);
+                File preview = new File(c.getParentFile() + "/previews" + c.getName().replace(".ser", ".png"));
+                preview.delete();
+                c.delete();
+
+            }
+            listadapter.FilterDirectory(""); // Refreshes the directory
+            Toast.makeText(this, "Deleted " + amount + " items", Toast.LENGTH_LONG);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
 
     }
 }

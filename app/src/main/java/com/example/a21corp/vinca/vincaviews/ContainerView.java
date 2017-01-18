@@ -3,6 +3,7 @@ package com.example.a21corp.vinca.vincaviews;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -56,11 +57,17 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        project.setCursor(vincaElement);
+        if (vincaElement == project.workspace.cursor) {
+            project.toggleOpenContainer(vincaElement);
+            Log.d("ContainerView", "Container is now " + (vincaElement.isOpen ? "open" : "closed"));
+        }
+        else {
+            project.setCursor(vincaElement);
 
-        System.out.println("Animate!");
-        Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
-        v.startAnimation(pressAnimation);
+            System.out.println("Animate!");
+            Animation pressAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.shakeanim);
+            v.startAnimation(pressAnimation);
+        }
     }
 
     @Override
@@ -170,7 +177,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     }
 
     public void highlight() {
-        setBackgroundColor(Color.GREEN);
+        setBackgroundResource(R.color.cursorColor);
     }
 
     public void dehighlight() {
@@ -178,7 +185,7 @@ public abstract class ContainerView extends LinearLayout implements View.OnClick
     }
 
     private void draghighlight() {
-        setBackgroundColor(Color.GRAY);
+        setBackgroundResource(R.color.dragColor);
     }
 
     private void dragdehighlight() {

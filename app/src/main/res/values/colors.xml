@@ -7,6 +7,7 @@
     <color name="background_material_light_1">#4564af</color>
     <color name="background_material_light_2">#d5d6d6</color>
     <color name="White">#ffffff</color>
-    <color name="cursorColor">#ffd700</color>
+    <color name="cursorColor">#d5d6d6</color>
+    <color name="dragColor">#4564af</color>
     <color name="cancelColor">#8a000000</color>
 </resources>

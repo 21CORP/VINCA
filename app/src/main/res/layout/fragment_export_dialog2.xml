@@ -40,6 +40,15 @@
        android:orientation="horizontal"
        >
 
+       <RadioButton
+           android:text="PNG"
+           android:padding="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/export_png"
+           android:layout_weight="1"
+           android:layout_below="@+id/export_pdf"
+           android:buttonTint="@color/background_material_light_1"/>
 
        <RadioButton
            android:text="SVG"
@@ -51,6 +60,7 @@
            android:buttonTint="@color/background_material_light_1"/>
 
        <RadioButton
+           android:enabled="false"
            android:text="File"
            android:padding="24dp"
            android:layout_width="wrap_content"
@@ -60,6 +70,7 @@
            android:buttonTint="@color/background_material_light_1"/>
 
        <RadioButton
+           android:enabled="false"
            android:text="PDF"
            android:padding="24dp"
            android:layout_width="wrap_content"
@@ -70,15 +81,7 @@
            android:layout_toStartOf="@+id/button_perform_export"
            android:buttonTint="@color/background_material_light_1"/>
 
-       <RadioButton
-           android:text="PNG"
-           android:padding="24dp"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:id="@+id/export_png"
-           android:layout_weight="1"
-           android:layout_below="@+id/export_pdf"
-           android:buttonTint="@color/background_material_light_1"/>
+
 
 
    </RadioGroup>

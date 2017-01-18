@@ -54,7 +54,6 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
                                             }
                                         }
         );
-        Arrays.sort(directory, lastModifiedComparator);
         UpdateDirectory();
     }
     public void UpdateDirectory()
@@ -73,7 +72,7 @@ public class FolderAdapter extends BaseAdapter implements View.OnClickListener
     }
     @Override
     public int getCount() {
-        return directory.length;
+        return directory == null ? 0 : directory.length;
     }
 
     @Override

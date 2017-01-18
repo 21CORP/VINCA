@@ -3,6 +3,7 @@ package com.example.a21corp.vinca;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.net.Uri;
@@ -47,6 +48,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         create.setOnClickListener(this);
         load = (Button) findViewById(R.id.loadMenuButton);
         load.setOnClickListener(this);
+
         if(checkForLayout()){
             Animation rotateLogo = AnimationUtils.loadAnimation(this, R.anim.main_menu_rotate);
             logo.startAnimation(rotateLogo);
@@ -57,6 +59,23 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+    public void onResume()
+    {
+        super.onResume();
+
+        File projDir = new File( getFilesDir().getAbsolutePath() + File.separator + "workspaces");
+        if(!projDir.exists() || projDir.list() == null)
+        {
+            Log.d("MainMenu", "Exists: " + projDir.exists() + " has files " + (projDir.list() != null));
+            load.setEnabled(false);
+            load.setBackgroundColor(Color.GRAY);
+        }
+        else
+        {
+            load.setEnabled(true);
+            load.setBackgroundColor(Color.WHITE);
+        }
+    }
     @Override
     public void onStart() {
         super.onStart();

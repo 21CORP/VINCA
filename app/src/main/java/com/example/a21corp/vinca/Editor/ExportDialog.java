@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.example.a21corp.vinca.R;
 import com.example.a21corp.vinca.VincatoSVG;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,6 +105,28 @@ public class ExportDialog extends DialogFragment implements View.OnClickListener
         else if(file.isChecked()){
             //export to file
             Log.d("ExportDialog", "file checked");
+            File dir = Environment.getExternalStorageDirectory();
+            if(!dir.canWrite())
+            {
+                Log.d("Export", "Failed to open extern directory " + Environment.getExternalStorageState());
+                Toast.makeText(getActivity(), "Storage unavailable", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                File exportDir = new File(dir, "VINCA");
+                try
+                {
+                    exportDir.mkdir();
+                    ProjectManager.saveProject(workspace,exportDir.getAbsolutePath());
+                    Toast.makeText(getActivity(), "File saved " + workspace.getTitle(), Toast.LENGTH_LONG).show();
+                }
+                catch(SecurityException e)
+                {
+                    Toast.makeText(getActivity(), "Insufficient permissions", Toast.LENGTH_LONG).show();
+                }
+            }
+
+
         }
         else if(pdf.isChecked()){
             //export to pdf

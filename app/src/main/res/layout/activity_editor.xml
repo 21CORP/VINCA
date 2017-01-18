@@ -14,7 +14,7 @@
     <TableRow
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:gravity="start|center_vertical"
         android:background="@color/background_material_light_1">
 
@@ -130,7 +130,6 @@
             <LinearLayout
                 android:id="@+id/panel"
                 android:gravity="top|center_horizontal"
-                android:layout_gravity="center"
                 android:orientation="vertical"
                 android:layout_marginLeft="15dp"
                 android:layout_below="@id/top_bar"

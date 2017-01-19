@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,12 +96,10 @@ public class CreateMenuPopUp extends DialogFragment {
                 Button positiveButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_POSITIVE);
                 Button negativeButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
                 Button neutralButton = ((AlertDialog)dialog).getButton(DialogInterface.BUTTON_NEUTRAL);
-                if (Build.VERSION.SDK_INT >= 23) {
-                    positiveButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
-                    neutralButton.setTextColor(getResources().getColor(R.color.background_material_light_1, null));
-                    negativeButton.setTextColor(getResources().getColor(R.color.cancelColor, null));
 
-                }
+                positiveButton.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.background_material_light_1));
+                neutralButton.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.background_material_light_1));
+                negativeButton.setTextColor(ContextCompat.getColor(getActivity().getApplicationContext(), R.color.cancelColor));
             }
         });
 

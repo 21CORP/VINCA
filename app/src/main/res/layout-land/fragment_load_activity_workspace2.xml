@@ -100,7 +100,9 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_width="200dp"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_below="@id/tableLayout"
+        />
 
 
 </RelativeLayout>

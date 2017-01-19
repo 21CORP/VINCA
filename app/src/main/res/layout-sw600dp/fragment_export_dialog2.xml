@@ -85,18 +85,6 @@
 
    </RadioGroup>
 
-<Button
-    android:text="Export"
-    style="@style/MyButton"
-    android:layout_width="171dp"
-    android:layout_height="wrap_content"
-    android:id="@+id/button_perform_export"
-    android:layout_below="@+id/export_name"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="16dp"
-    android:fontFamily="sans-serif-medium"
-    android:textAllCaps="false" />
-
 
   <EditText
       android:id="@+id/export_name"

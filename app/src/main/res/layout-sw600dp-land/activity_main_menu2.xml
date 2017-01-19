@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/newProjectButton"
                 android:layout_centerInParent="true"
-
+                android:layout_above="@+id/loadMenuButton"
+                android:layout_marginBottom="16dp"
                 android:textAllCaps="false" />
 
             <TextView

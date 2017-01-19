@@ -31,16 +31,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <Button
-                style="@style/MyButton"
-                android:text="New Project"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/newProjectButton"
-                android:layout_centerInParent="true"
-
-                android:textAllCaps="false" />
-
             <TextView
                 android:text="Visuelt alfabet for innovations- og læringsprocesser"
                 android:layout_width="match_parent"
@@ -54,6 +44,17 @@
                 android:layout_marginTop="18dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />
+            <Button
+                style="@style/MyButton"
+                android:text="New Project"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectButton"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="16dp"
+                android:textAllCaps="false" />
+
+
 
             <Button
                 style="@style/MyButton"
@@ -63,7 +64,7 @@
 
                 android:id="@+id/loadMenuButton"
                 android:textAllCaps="false"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/newProjectButton"
                 android:layout_alignStart="@+id/newProjectButton" />
 
 

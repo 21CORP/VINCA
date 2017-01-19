@@ -49,6 +49,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
     private String title;
     private Toolbar bar;
     private ActionMode acmode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

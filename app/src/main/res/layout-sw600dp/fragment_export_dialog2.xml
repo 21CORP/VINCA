@@ -1,0 +1,113 @@
+
+ <RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:background="@color/White">
+
+    <TextView
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/backgroundExport"
+        android:height="60dp"
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp"
+        android:text="Export"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+
+    <TextView
+        android:id="@+id/chooseformat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Export format"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_below="@+id/backgroundExport"
+        android:layout_alignParentStart="true"/>
+
+   <RadioGroup
+       android:id="@+id/radiogroup"
+       android:layout_below="@id/chooseformat"
+       android:gravity="center_vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       >
+
+       <RadioButton
+           android:text="PNG"
+           android:padding="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/export_png"
+           android:layout_weight="1"
+           android:layout_below="@+id/export_pdf"
+           android:buttonTint="@color/background_material_light_1"/>
+
+       <RadioButton
+           android:text="SVG"
+           android:padding="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/export_svg"
+           android:layout_weight="1"
+           android:buttonTint="@color/background_material_light_1"/>
+
+       <RadioButton
+           android:text="File"
+           android:padding="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/export_file"
+           android:layout_weight="1"
+           android:buttonTint="@color/background_material_light_1"/>
+
+       <RadioButton
+           android:enabled="false"
+           android:text="PDF"
+           android:padding="24dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/export_pdf"
+           android:layout_weight="1"
+           android:layout_below="@+id/chooseformat"
+           android:layout_toStartOf="@+id/button_perform_export"
+           android:buttonTint="@color/background_material_light_1"/>
+
+
+
+
+   </RadioGroup>
+
+<Button
+    android:text="Export"
+    style="@style/MyButton"
+    android:layout_width="171dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/button_perform_export"
+    android:layout_below="@+id/export_name"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="16dp"
+    android:fontFamily="sans-serif-medium"
+    android:textAllCaps="false" />
+
+
+  <EditText
+      android:id="@+id/export_name"
+      android:hint="Name of exported file"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ems="10"
+      android:backgroundTint="#303f9f"
+      android:textColor="#000000"
+      android:inputType="textCapSentences"
+      android:layout_below="@+id/radiogroup"
+/>
+
+</RelativeLayout>

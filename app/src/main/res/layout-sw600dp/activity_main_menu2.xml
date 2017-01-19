@@ -28,23 +28,32 @@
             android:id="@+id/titleImage"
             android:layout_gravity="center"/>
 
+        <ImageView
+            app:srcCompat="@drawable/logo"
+            android:id="@+id/logoImage"
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_height="200dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:text="Visuelt alfabet for innovations- og læringsprocesser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/subTitle"
+            android:textAlignment="center"
+            android:textStyle="normal|bold"
+            android:textSize="14sp"
+            android:typeface="normal"
+            android:textColor="@color/primary_text_light"
+        />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:text="Visuelt alfabet for innovations- og læringsprocesser"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/subTitle"
-                android:textAlignment="center"
-                android:textStyle="normal|bold"
-                android:textSize="14sp"
-                android:typeface="normal"
-                android:textColor="@color/primary_text_light"
-                android:layout_above="@+id/newProjectButton"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="72dp" />
+
 
             <Button
                 style="@style/MyButton"
@@ -70,15 +79,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="16dp" />
 
-            <ImageView
-                app:srcCompat="@drawable/logo"
-                android:id="@+id/logoImage"
-                android:layout_width="200dp"
-                android:layout_gravity="center"
-                android:layout_height="200dp"
-                android:layout_above="@+id/subTitle"
-                android:layout_alignStart="@+id/newProjectButton"
-                android:layout_marginBottom="142dp" />
+
 
 
         </RelativeLayout>

@@ -47,6 +47,7 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
     private FrameLayout workspacePreviewHolder;
     ImageView placeholderImage;
     private String title;
+    private Toolbar bar;
     private ActionMode acmode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
         {
             placeholderImage.setVisibility(View.GONE);
         }
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        bar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(bar);
 
         Log.d("LoadActivity", "Created");
     }
@@ -167,7 +168,8 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
+        bar.setVisibility(View.GONE);
+        return true;
     }
 
     @Override
@@ -228,6 +230,6 @@ public class LoadActivity extends AppCompatActivity implements OnFileSelectedLis
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-
+        bar.setVisibility(View.VISIBLE);
     }
 }

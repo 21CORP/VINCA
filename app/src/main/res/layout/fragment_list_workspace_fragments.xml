@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.a21corp.vinca.LoadMenu.ListWorkspaceFragments">
     <ListView
+        android:contentDescription="loadList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@android:id/list" />
+        android:id="@android:id/list"/>
     <ListView
         android:layout_width="match_parent"
         android:id="@android:id/empty"
